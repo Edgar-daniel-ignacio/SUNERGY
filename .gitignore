@@ -1,16 +1,40 @@
+# Entornos virtuales y de IDE
 .idea/
 .vscode/
 venv/
 .venv/
 env/
 __pycache__/
+*.pyc
+
+# Variables de entorno y credenciales sensibles (NUNCA subir a GitHub)
+.env
+.env.*
+!.env.example
+
+# Archivos temporales del sistema operativo
+.DS_Store
+*/.DS_Store
+**/.DS_Store
+
+# Bases de datos y archivos de datos propietarios
+*.xlsx
+*.xls
+*.csv
+*.tsv
+*.h5
+*.hdf5
+*.mat
+*.db
+*.sqlite
+*.sqlite3
+Explanation
+
+# Archivos multimedia y reportes
 cell_images/
 exportToHTML/
 *.ipynb
-*.csv
-*.tsv
 *.png
 *.jpg
 *.jpeg
 *.log
-.env

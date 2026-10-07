@@ -128,8 +128,25 @@ source venv/bin/activate  # En Windows: venv\Scripts\activate
 Instala las bibliotecas requeridas:
 
 ```bash
-pip install dash dash-bootstrap-components dash-leaflet pvlib plotly cufflinks pandas numpy scipy openpyxl
+pip install dash dash-bootstrap-components dash-leaflet pvlib plotly cufflinks pandas numpy scipy openpyxl python-dotenv timezonefinder pytz
 ```
+
+### Configuración de Credenciales API (NREL / NSRDB)
+
+Para consultar datos climáticos satelitales en tiempo real, genera un archivo `.env` en la raíz del proyecto a partir de la plantilla:
+
+```bash
+cp .env.example .env
+```
+
+Edita `.env` e ingresa tus credenciales gratuitas de NREL ([solicítalas aquí](https://developer.nlr.gov) o [aquí](https://developer.nrel.gov)):
+
+```env
+NREL_API_KEY=tu_api_key_aqui
+NREL_API_EMAIL=tu_correo@ejemplo.com
+```
+
+> 🔒 **Privacidad y Seguridad**: El archivo `.env` así como los archivos de datos propietarios (`*.xlsx`, `*.csv`, `*.h5`) están estrictamente excluidos en `.gitignore` para garantizar que tus credenciales y bases de datos permanezcan privadas y seguras en tu equipo local.
 
 ---
 
