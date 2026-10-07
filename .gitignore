@@ -1,0 +1,16 @@
+.idea/
+.vscode/
+venv/
+.venv/
+env/
+__pycache__/
+cell_images/
+exportToHTML/
+*.ipynb
+*.csv
+*.tsv
+*.png
+*.jpg
+*.jpeg
+*.log
+.env
