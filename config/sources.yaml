@@ -1,0 +1,33 @@
+# Consumer: scripts/check_repository.py via sunergy.configuration.
+# Metadata only. Requests and model assumptions are not configured here.
+sources:
+  - id: supplied_thesis_summary
+    status: available_evidence
+    location: docs/evidence/pv_physics_engine_evidence_summary_for_agent_research_equations_fixed.md
+    description: User-supplied thesis-derived summary, not the original thesis; attribution/hash in provenance.json.
+    consumer: docs/evidence.md and repository evidence integrity check
+    refresh: Never replace silently; retain the original and record any new evidence separately.
+  - id: legacy_checkout
+    status: available_evidence
+    location: legacy/
+    description: Read-only source evidence at the inspected revision; byte inventory retained.
+    consumer: docs/reproduction.md and future isolated independent capture
+    refresh: Explicit baseline revision selection; never reset the local checkout.
+  - id: legacy_module_workbook
+    status: missing
+    location: Libro1.xlsx
+    description: Active selectors read a CWD workbook; edition, hash and redistribution rights unknown.
+    consumer: Planned legacy catalog replay; no modern retrieval implemented.
+    refresh: Obtain reviewed snapshot and source metadata before capture.
+  - id: weather_snapshots
+    status: planned
+    location: NSRDB PSM weather exports (no snapshot supplied)
+    description: Preserve raw data, metadata, request/time conventions and content hash; credentials server-side.
+    consumer: Planned weather adapter and annual replay; absent from current runtime.
+    refresh: Explicit acquisition only; saved runs keep their original snapshot.
+  - id: pvlib_sam_catalog
+    status: planned
+    location: pvlib retrieve_sam bundled CSV or explicit file/URL
+    description: Future alternative to manual specs; not the observed legacy workbook source or a live database API.
+    consumer: Planned catalog adapter; current reader only checks local snapshot bytes.
+    refresh: Explicit versioned snapshot acquisition with pvlib version, retrieval date, license and hash.

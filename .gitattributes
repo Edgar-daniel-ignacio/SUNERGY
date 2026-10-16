@@ -1,0 +1,5 @@
+# Preserve the observed legacy CRLF bytes on every checkout; no source rewrite.
+legacy/** text eol=crlf
+
+# User-supplied evidence is byte-preserved regardless of host Git defaults.
+docs/evidence/pv_physics_engine_evidence_summary_for_agent_research_equations_fixed.md -text

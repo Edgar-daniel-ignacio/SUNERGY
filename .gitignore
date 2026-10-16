@@ -28,7 +28,6 @@ __pycache__/
 *.db
 *.sqlite
 *.sqlite3
-Explanation
 
 # Archivos multimedia y reportes
 cell_images/
@@ -38,3 +37,24 @@ exportToHTML/
 *.jpg
 *.jpeg
 *.log
+
+# New application environments, caches, private data and generated outputs
+.cache/
+.local/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+node_modules/
+.next/
+.npm-cache/
+*.tsbuildinfo
+coverage/
+.coverage
+
+# Only deliberate, reviewed, redistributable small regression fixtures may opt in.
+!tests/fixtures/**/*.csv
+!tests/fixtures/**/*.tsv
+!tests/fixtures/**/*.json

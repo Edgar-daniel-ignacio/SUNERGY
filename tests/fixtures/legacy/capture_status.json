@@ -1,0 +1,16 @@
+{
+  "status": "missing_reference_outputs",
+  "inspected_revision": "ef92cd12fd2c40854c24c1fe7cded9ba351de7df",
+  "proposed_first_capture": "Input_File_DIV_Mac_Informe.IV_R (Lambert W, 100-point grid)",
+  "missing": [
+    "independently captured legacy inputs and numerical outputs",
+    "historical Python and dependency environment, including pvlib and NREL-PySAM/SSC",
+    "reviewed exact module values, coefficient units, solver settings and grid",
+    "quantity-specific parity tolerances with reviewed numerical rationale",
+    "Libro1.xlsx catalog edition, source, license and content hash for catalog cases",
+    "weather and measurement snapshots for annual or correction cases"
+  ],
+  "parity": "not_run",
+  "scientific_verification": "not_performed",
+  "note": "No golden numerical outputs are present. Synthetic test values exercise comparator plumbing only."
+}

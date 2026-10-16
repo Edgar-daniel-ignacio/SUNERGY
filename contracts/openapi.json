@@ -1,0 +1,474 @@
+{
+  "components": {
+    "schemas": {
+      "CapabilityResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "calibration": {
+            "const": "not_implemented",
+            "default": "not_implemented",
+            "title": "Calibration",
+            "type": "string"
+          },
+          "legacy_reproduction": {
+            "const": "missing_reference_outputs",
+            "default": "missing_reference_outputs",
+            "title": "Legacy Reproduction",
+            "type": "string"
+          },
+          "measurement_comparison": {
+            "const": "not_implemented",
+            "default": "not_implemented",
+            "title": "Measurement Comparison",
+            "type": "string"
+          },
+          "module_iv": {
+            "const": "not_implemented",
+            "default": "not_implemented",
+            "title": "Module Iv",
+            "type": "string"
+          },
+          "scientific_verification": {
+            "const": "not_performed",
+            "default": "not_performed",
+            "title": "Scientific Verification",
+            "type": "string"
+          }
+        },
+        "title": "CapabilityResponse",
+        "type": "object"
+      },
+      "CatalogModule": {
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "const": "catalog",
+            "title": "Kind",
+            "type": "string"
+          },
+          "source_record": {
+            "$ref": "#/components/schemas/SourceRecord"
+          }
+        },
+        "required": [
+          "kind",
+          "source_record"
+        ],
+        "title": "CatalogModule",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HealthResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "service": {
+            "const": "sunergy",
+            "default": "sunergy",
+            "title": "Service",
+            "type": "string"
+          },
+          "status": {
+            "const": "ok",
+            "default": "ok",
+            "title": "Status",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version"
+        ],
+        "title": "HealthResponse",
+        "type": "object"
+      },
+      "ManualModule": {
+        "additionalProperties": false,
+        "properties": {
+          "alpha_sc_a_per_c": {
+            "description": "Absolute Isc temperature coefficient, A/°C",
+            "title": "Alpha Sc A Per C",
+            "type": "number"
+          },
+          "beta_voc_v_per_c": {
+            "description": "Absolute Voc temperature coefficient, V/°C",
+            "title": "Beta Voc V Per C",
+            "type": "number"
+          },
+          "cell_type": {
+            "enum": [
+              "monoSi",
+              "multiSi",
+              "polySi",
+              "cis",
+              "cigs",
+              "cdte",
+              "amorphous"
+            ],
+            "title": "Cell Type",
+            "type": "string"
+          },
+          "cells_in_series": {
+            "exclusiveMinimum": 0.0,
+            "title": "Cells In Series",
+            "type": "integer"
+          },
+          "gamma_pmp_percent_per_c": {
+            "description": "Pmp coefficient, percent/°C, not Vmp",
+            "title": "Gamma Pmp Percent Per C",
+            "type": "number"
+          },
+          "i_mp_a": {
+            "exclusiveMinimum": 0.0,
+            "title": "I Mp A",
+            "type": "number"
+          },
+          "i_sc_a": {
+            "exclusiveMinimum": 0.0,
+            "title": "I Sc A",
+            "type": "number"
+          },
+          "kind": {
+            "const": "manual",
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name",
+            "type": "string"
+          },
+          "reference_cell_temperature_c": {
+            "exclusiveMinimum": -273.15,
+            "title": "Reference Cell Temperature C",
+            "type": "number"
+          },
+          "reference_irradiance_w_m2": {
+            "exclusiveMinimum": 0.0,
+            "title": "Reference Irradiance W M2",
+            "type": "number"
+          },
+          "source_record": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SourceRecord"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "v_mp_v": {
+            "exclusiveMinimum": 0.0,
+            "title": "V Mp V",
+            "type": "number"
+          },
+          "v_oc_v": {
+            "exclusiveMinimum": 0.0,
+            "title": "V Oc V",
+            "type": "number"
+          }
+        },
+        "required": [
+          "kind",
+          "name",
+          "cell_type",
+          "cells_in_series",
+          "v_mp_v",
+          "i_mp_a",
+          "v_oc_v",
+          "i_sc_a",
+          "alpha_sc_a_per_c",
+          "beta_voc_v_per_c",
+          "gamma_pmp_percent_per_c",
+          "reference_irradiance_w_m2",
+          "reference_cell_temperature_c"
+        ],
+        "title": "ManualModule",
+        "type": "object"
+      },
+      "ModuleIVRequest": {
+        "additionalProperties": false,
+        "description": "Reserved point-simulation boundary; no model is implemented yet.",
+        "properties": {
+          "model_id": {
+            "description": "Explicit versioned selection; no production default",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Model Id",
+            "type": "string"
+          },
+          "module": {
+            "discriminator": {
+              "mapping": {
+                "catalog": "#/components/schemas/CatalogModule",
+                "manual": "#/components/schemas/ManualModule"
+              },
+              "propertyName": "kind"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ManualModule"
+              },
+              {
+                "$ref": "#/components/schemas/CatalogModule"
+              }
+            ],
+            "title": "Module"
+          },
+          "operating_point": {
+            "$ref": "#/components/schemas/OperatingPoint"
+          },
+          "site": {
+            "$ref": "#/components/schemas/Site"
+          }
+        },
+        "required": [
+          "site",
+          "module",
+          "operating_point",
+          "model_id"
+        ],
+        "title": "ModuleIVRequest",
+        "type": "object"
+      },
+      "OperatingPoint": {
+        "additionalProperties": false,
+        "properties": {
+          "cell_temperature_c": {
+            "description": "Cell, not ambient temperature",
+            "exclusiveMinimum": -273.15,
+            "title": "Cell Temperature C",
+            "type": "number"
+          },
+          "effective_irradiance_w_m2": {
+            "description": "Effective in-plane irradiance",
+            "minimum": 0.0,
+            "title": "Effective Irradiance W M2",
+            "type": "number"
+          }
+        },
+        "required": [
+          "effective_irradiance_w_m2",
+          "cell_temperature_c"
+        ],
+        "title": "OperatingPoint",
+        "type": "object"
+      },
+      "Site": {
+        "additionalProperties": false,
+        "properties": {
+          "latitude_deg": {
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Latitude Deg",
+            "type": "number"
+          },
+          "longitude_deg": {
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Longitude Deg",
+            "type": "number"
+          },
+          "timezone": {
+            "description": "IANA zone; no inferred current UTC offset",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Timezone",
+            "type": "string"
+          }
+        },
+        "required": [
+          "latitude_deg",
+          "longitude_deg",
+          "timezone"
+        ],
+        "title": "Site",
+        "type": "object"
+      },
+      "SourceRecord": {
+        "additionalProperties": false,
+        "properties": {
+          "record_id": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Record Id",
+            "type": "string"
+          },
+          "snapshot_sha256": {
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Snapshot Sha256",
+            "type": "string"
+          },
+          "source_id": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Source Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id",
+          "snapshot_sha256",
+          "record_id"
+        ],
+        "title": "SourceRecord",
+        "type": "object"
+      },
+      "UnavailableResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "const": "module_iv_not_implemented",
+            "default": "module_iv_not_implemented",
+            "title": "Code",
+            "type": "string"
+          },
+          "message": {
+            "default": "Module I–V simulation awaits independent legacy capture and implementation.",
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "title": "UnavailableResponse",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "SUNERGY scaffold",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/capabilities": {
+      "get": {
+        "operationId": "getCapabilities",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CapabilityResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Capabilities"
+      }
+    },
+    "/api/v1/module-iv": {
+      "post": {
+        "operationId": "requestModuleIV",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModuleIVRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnavailableResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Post Module Iv"
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Health"
+      }
+    }
+  }
+}

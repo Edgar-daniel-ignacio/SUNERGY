@@ -1,0 +1,132 @@
+{
+  "source_revision": "ef92cd12fd2c40854c24c1fe7cded9ba351de7df",
+  "captured_on": "2026-10-15",
+  "note": "Pre-implementation byte inventory. Includes existing untracked legacy README and environment-template copies; no code execution.",
+  "files": [
+    {
+      "path": "legacy/.env.example",
+      "sha256": "f7bc6e896f56def42356b374c74083ab362ffb4222b801eee1259f703487af42",
+      "bytes": 334
+    },
+    {
+      "path": "legacy/123.py",
+      "sha256": "a3c4ad9d0e621a3b67e2dcd7839308871df6feea208354181733caa2a5f8552b",
+      "bytes": 3544
+    },
+    {
+      "path": "legacy/Clima_Car.py",
+      "sha256": "22af2b0ae8353fcf516a78a0706c3a85fea07e9d019d274fe69ee9180ddd9130",
+      "bytes": 1101
+    },
+    {
+      "path": "legacy/comprobacion de tablas..py",
+      "sha256": "7f00d1b8e85ce7459ed6d956a162bbf6889e5657171249f9bc77a64f66330289",
+      "bytes": 2056
+    },
+    {
+      "path": "legacy/CurvaIV.py",
+      "sha256": "d60c182d315d820d1a42028519ab11c67b4ba53cd02cb11676ea17c9a085e99b",
+      "bytes": 3116
+    },
+    {
+      "path": "legacy/Funcion_Deep.py",
+      "sha256": "134615bbebceaea6b1a592190b68d8743416a1b57d73c423b93c32558d0a4073",
+      "bytes": 3816
+    },
+    {
+      "path": "legacy/GIU_Final_1_2 2-b.py",
+      "sha256": "a3a56f25aeb778a9eadcadc195e22e15624f994c94c04cefa6ffd792cb157a5b",
+      "bytes": 341415
+    },
+    {
+      "path": "legacy/GIU_Final_1_2_C.py",
+      "sha256": "7984a76d9d9dce9427510df60db824bf285fce456aa8c1b60dd1d45618331690",
+      "bytes": 333762
+    },
+    {
+      "path": "legacy/GIU_Final_1_3.py",
+      "sha256": "c4bcf6b7081e19a183b2dcc6af0bd250dc64a0b245245e76b07ee524ad357efd",
+      "bytes": 333643
+    },
+    {
+      "path": "legacy/GIU_Final_1.py",
+      "sha256": "0c660b22e9f5223f50765c238f0da798d0ca38167e22d1a85ff2076d2be88062",
+      "bytes": 291695
+    },
+    {
+      "path": "legacy/GIU_Final_Presetacion.py",
+      "sha256": "5dc146f6a9aea9c38a5a211f9cea9a83296b18677b52e496c55eacf7769f58a0",
+      "bytes": 344895
+    },
+    {
+      "path": "legacy/GIU.py",
+      "sha256": "d3bf9affe69e936ce41943f2f16b180b707ee886b27fd5a637f1ec9c180d2ae6",
+      "bytes": 12821
+    },
+    {
+      "path": "legacy/Input_File_DIV_Mac_C.py",
+      "sha256": "bb9c1cf1554d16d1df5577a1cded929120c5c87791c1e1a63a475662eb118e0d",
+      "bytes": 334941
+    },
+    {
+      "path": "legacy/Input_File_DIV_Mac_Informe.py",
+      "sha256": "4c4ed36d0f8d1cd4cecfd1794ce0b99803aa8470bb0a7f3c096b992967d6702c",
+      "bytes": 358480
+    },
+    {
+      "path": "legacy/Input_File_DIV_Mac.py",
+      "sha256": "12d0218249874d9935a81e8f6dabc315803603fa2814adbf761da97265b8f475",
+      "bytes": 295748
+    },
+    {
+      "path": "legacy/Input_File_DIV_Mac2.py",
+      "sha256": "a7a848bdd0892e11813a19870f70c7f31bf2904ef688905a00cf767154c698d3",
+      "bytes": 309205
+    },
+    {
+      "path": "legacy/Input_File_DIV_Mac2b.py",
+      "sha256": "b5143f2dd852092190f51b8e77c1940522eb21fb1adaf1c0f02a713c69ac7b35",
+      "bytes": 340837
+    },
+    {
+      "path": "legacy/Input_File_DIV.py",
+      "sha256": "bd47f7d8d118262fa3a121ece2885961fdba5dbef12ea235aa10df1c6b87c3bc",
+      "bytes": 258976
+    },
+    {
+      "path": "legacy/main.py",
+      "sha256": "54c55b42f160988fbfb41f2d444772bfd1819128935c8c980f7fdfa3a73c6c2e",
+      "bytes": 1352
+    },
+    {
+      "path": "legacy/Modules_Data_Base.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "legacy/Parametros_Electricos.py",
+      "sha256": "54bc85c0aabc14ef8516070ee98858adfc1d26ba9a447575d97ddea73de62dec",
+      "bytes": 10268
+    },
+    {
+      "path": "legacy/Posicion_Solar.py",
+      "sha256": "3f046f47c32b89e4210e251680626c86d3688e7d75fdc7511a1d663cb127602b",
+      "bytes": 10719
+    },
+    {
+      "path": "legacy/Primer_Funcion_Clima.py",
+      "sha256": "366c09e38fd74e1a0cd352082937813f7839baed5cf4e4df7d8be4f89c549b23",
+      "bytes": 7694
+    },
+    {
+      "path": "legacy/README.md",
+      "sha256": "87aac741d3d247a41beeff985b01a6f5aaf2708e28b9f8f1fd39b2781ead7eb1",
+      "bytes": 10012
+    },
+    {
+      "path": "legacy/Temperaturas.py",
+      "sha256": "34b0405c800b893f4fa7ada2e9b6810fe695523667772e630b01aac8108b98fd",
+      "bytes": 2514
+    }
+  ]
+}

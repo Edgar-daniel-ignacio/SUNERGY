@@ -1,0 +1,6 @@
+# Consumer: sunergy.configuration; scripts/check_repository.py validates declarations.
+evidence: docs/evidence
+regression_fixtures: tests/fixtures/legacy
+private_uploads: .local/private  # planned ingestion; originals must be preserved
+cache: .local/cache  # planned acquisition cache; never an authoritative snapshot
+runs: .local/runs  # create_run_directory allocates isolated per-run directories
