@@ -60,7 +60,19 @@ npm --prefix frontend run api:check
 npm --prefix frontend run lint
 npm --prefix frontend run typecheck
 npm --prefix frontend run build
+uv run --locked --offline python scripts/smoke_test.py
+uv run --locked --offline python scripts/smoke_test.py --frontend
 ```
+
+The smoke commands launch and stop their own loopback processes on temporary
+ports. The frontend variant requires `npm ci` and a completed frontend build;
+it checks the actual FastAPI/Next health proxy and its 503 response after backend
+shutdown. CI runs backend, frontend and launch checks on both Windows and Ubuntu,
+with matrix fail-fast disabled so both platform results remain visible.
+
+Ruff checks application Python/stubs and `pyproject.toml`. Installed skill examples,
+reviewed evidence and legacy code remain outside its scope, including when an
+excluded file is passed explicitly. CI retains non-mutating formatting checks.
 
 After Pydantic/API changes, regenerate both tracked contract artifacts:
 

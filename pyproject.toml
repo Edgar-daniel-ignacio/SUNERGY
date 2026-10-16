@@ -39,7 +39,18 @@ addopts = "-ra"
 target-version = "py312"
 line-length = 100
 src = ["backend/src"]
-extend-exclude = ["legacy", "frontend", ".cache", ".local"]
+# Application Python/config only; installed skill examples are external guidance.
+include = ["*.py", "*.pyi", "pyproject.toml"]
+extend-exclude = [
+  "legacy",
+  "frontend",
+  ".agents/skills",
+  ".claude/skills",
+  "docs/evidence",
+  ".cache",
+  ".local",
+]
+force-exclude = true
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
