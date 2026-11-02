@@ -29,7 +29,7 @@ idioma: es (el resto de `docs/` esta en ingles; traducible si se prefiere)
 | 3 | **91 % de `electric_parameters@4182` es duplicado exacto** | 1.619 de 1.774 líneas, en 44 grupos y 166 bloques |
 | 4 | **4,2 % es código desconectado** | 6 funciones, 564 líneas, de 109 totales |
 | 5 | **12 `dcc.Store` y 2 huérfanos** | `selected-rows-store` no tiene ni escritor ni lector; `Prueba` se escribe y nadie lo lee |
-| 6 | **84 bloques de cálculo y 113 `return` escritos a mano** | 28 bloques `if Seleccion ==` × 3 `if Metodo ==`, dentro de 3 modos de placa y 2 contextos de módulo |
+| 6 | **7 combinaciones térmicas × 3 métodos × 3 tipos de placa, escritas una por una** | en vez de configurarse, cada combinación tiene su bloque de código: 84 bloques y 113 salidas distintas, escritos a mano |
 | 7 | **13 defectos verificados, 4 de ellos rompen el dato** | ver [`06-lo-que-esta-roto.md`](06-lo-que-esta-roto.md) |
 
 El diagnóstico de una línea: **el problema no es el dominio, es la copia.** La física está bien
