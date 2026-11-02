@@ -66,7 +66,7 @@ módulo de prueba (`Pot=250`, `Vm=30.12`, `Voc=37.85`, …) y seis casos de irra
 |---|---|---|
 | `clima` (callback) | panel `853-936` | orquesta la descarga y devuelve 7 salidas |
 | `Clima` | `Primer_Funcion_Clima.py:64-183` | descarga NREL (PSM4 si existe, si no PSM3) |
-| `obtener_utc_de_coordenadas` | `Primer_Funcion_Clima.py:35-38` | desfase horario **de hoy**, no del año analizado |
+| `obtener_utc_de_coordenadas` | `Primer_Funcion_Clima.py:24-40` | desfase horario **de hoy**, no del año analizado |
 | `table_e`, `TMY` | módulo `167-276` | convierten `NDH` en tabla visible |
 | `creador_csv_clima` | módulo `828-855` | escribe `g_{año}_{n}.csv` y devuelve la lista de rutas |
 
@@ -95,9 +95,9 @@ existe y siempre se usa el fallback PSM3.
 
 | Función | Líneas | Qué hace |
 |---|---|---|
-| `Solar_pos` | `Posicion_Solar.py:36-114` | inclinación = latitud, azimut = 180 |
-| `Solar_pos_e` | `Posicion_Solar.py:116-194` | inclinación y azimut explícitos |
-| `clc` | `Clima_Car.py:1-39` | agrupa temperaturas mínimas/máximas por hora; **su resultado se descarta** |
+| `Solar_pos` | `Posicion_Solar.py:36-112` | inclinación = latitud, azimut = 180 |
+| `Solar_pos_e` | `Posicion_Solar.py:116-192` | inclinación y azimut explícitos |
+| `clc` | `Clima_Car.py:3-40` | agrupa temperaturas mínimas/máximas por hora; **su resultado se descarta** |
 
 **Quién manda a hablar.** `clima`, en el panel `904-912`, según `Posicion_Modulo` (`Pos_i` o `Pos_e`).
 
@@ -112,7 +112,7 @@ existe y siempre se usa el fallback PSM3.
 3. **`clc` se ejecuta para nada**: su resultado se tira en las dos ramas (panel `906` y `910`),
    y es un recorrido completo de todas las series.
 
-**Qué se rompe.** `AMi = 1/cos(zenit)` sin acotar (`Posicion_Solar.py:78`), así que al amanecer y al
+**Qué se rompe.** `AMi = 1/cos(zenit)` sin acotar (`Posicion_Solar.py:84`), así que al amanecer y al
 anochecer produce valores negativos o enormes. Aguas abajo se limpian los `inf` de `Voc`/`Vmax` y los
 `NaN` de `Pmax`, **pero no** los de `Isc0`, `Imax` ni `Gamma`.
 

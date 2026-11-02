@@ -1,0 +1,1260 @@
+{
+ "version": 1,
+ "generado": "2026-11-02",
+ "fuente": "legacy/ (GIU_Final_Presetacion.py + Input_File_DIV_Mac_Informe.py)",
+ "idioma": "es",
+ "estados": {
+  "S0": 29,
+  "S1": 3,
+  "S2": 0,
+  "S3": 3,
+  "S4": 16,
+  "S5": 2,
+  "S6": 14,
+  "S7": 18,
+  "S8": 24
+ },
+ "funciones": [
+  {
+   "name": "table",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 29,
+   "end": 37,
+   "lines": 9,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-001"
+  },
+  {
+   "name": "table_module",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 41,
+   "end": 69,
+   "lines": 29,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-002"
+  },
+  {
+   "name": "table_module_b",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 73,
+   "end": 100,
+   "lines": 28,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-003"
+  },
+  {
+   "name": "table_module_b2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 102,
+   "end": 129,
+   "lines": 28,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-004"
+  },
+  {
+   "name": "lat",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 132,
+   "end": 145,
+   "lines": 14,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-005"
+  },
+  {
+   "name": "lon",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 148,
+   "end": 161,
+   "lines": 14,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-006"
+  },
+  {
+   "name": "type_year",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 277,
+   "end": 294,
+   "lines": 18,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-007"
+  },
+  {
+   "name": "year_time",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 296,
+   "end": 314,
+   "lines": 19,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-008"
+  },
+  {
+   "name": "Pos_modulo",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 316,
+   "end": 343,
+   "lines": 28,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-009"
+  },
+  {
+   "name": "tilt",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 345,
+   "end": 353,
+   "lines": 9,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-010"
+  },
+  {
+   "name": "Azimuth",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 356,
+   "end": 364,
+   "lines": 9,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-011"
+  },
+  {
+   "name": "time_range",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 367,
+   "end": 383,
+   "lines": 17,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-012"
+  },
+  {
+   "name": "Dropdown_1",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 387,
+   "end": 405,
+   "lines": 19,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-013"
+  },
+  {
+   "name": "Dropdown_2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 407,
+   "end": 425,
+   "lines": 19,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-014"
+  },
+  {
+   "name": "Dropdown_3",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 427,
+   "end": 446,
+   "lines": 20,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-015"
+  },
+  {
+   "name": "Dropdown_4",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 448,
+   "end": 467,
+   "lines": 20,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-016"
+  },
+  {
+   "name": "Data_filter",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 474,
+   "end": 527,
+   "lines": 54,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-017"
+  },
+  {
+   "name": "filter_selector",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 532,
+   "end": 565,
+   "lines": 34,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-018"
+  },
+  {
+   "name": "creador_de_filtros",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 568,
+   "end": 661,
+   "lines": 94,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-019"
+  },
+  {
+   "name": "tabla_modulos_base",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 663,
+   "end": 705,
+   "lines": 43,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-020"
+  },
+  {
+   "name": "temperature_items",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 707,
+   "end": 721,
+   "lines": 15,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-021"
+  },
+  {
+   "name": "Feinman_options",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 723,
+   "end": 742,
+   "lines": 20,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-022"
+  },
+  {
+   "name": "NOCT_In",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 745,
+   "end": 760,
+   "lines": 16,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-023"
+  },
+  {
+   "name": "Sandia_options",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 762,
+   "end": 783,
+   "lines": 22,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-024"
+  },
+  {
+   "name": "Year_tabla",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 2880,
+   "end": 2896,
+   "lines": 17,
+   "state": "S0",
+   "status": "muerta",
+   "contracts": [],
+   "id": "F-025"
+  },
+  {
+   "name": "column_Pe",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 2898,
+   "end": 2939,
+   "lines": 42,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-026"
+  },
+  {
+   "name": "column_Pe_CEC",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 2942,
+   "end": 3031,
+   "lines": 90,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-027"
+  },
+  {
+   "name": "M_IV",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 3033,
+   "end": 3085,
+   "lines": 53,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-028"
+  },
+  {
+   "name": "correcion_IV",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7065,
+   "end": 7077,
+   "lines": 13,
+   "state": "S0",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-029"
+  },
+  {
+   "name": "table_e",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 167,
+   "end": 220,
+   "lines": 54,
+   "state": "S1",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-030"
+  },
+  {
+   "name": "TMY",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 223,
+   "end": 276,
+   "lines": 54,
+   "state": "S1",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-031"
+  },
+  {
+   "name": "creador_csv_clima",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 828,
+   "end": 855,
+   "lines": 28,
+   "state": "S1",
+   "status": "viva",
+   "contracts": [
+    "C-02"
+   ],
+   "id": "F-032"
+  },
+  {
+   "name": "Temperature_sandia",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 785,
+   "end": 800,
+   "lines": 16,
+   "state": "S3",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-033"
+  },
+  {
+   "name": "Temperature_feinman",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 805,
+   "end": 814,
+   "lines": 10,
+   "state": "S3",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-034"
+  },
+  {
+   "name": "Temperature_NOCT",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 817,
+   "end": 825,
+   "lines": 9,
+   "state": "S3",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-035"
+  },
+  {
+   "name": "creador_csv_PE",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 859,
+   "end": 884,
+   "lines": 26,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [
+    "C-03"
+   ],
+   "id": "F-036"
+  },
+  {
+   "name": "creador_csv_PE2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 886,
+   "end": 911,
+   "lines": 26,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [
+    "C-03"
+   ],
+   "id": "F-037"
+  },
+  {
+   "name": "Placa_Prueba",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 982,
+   "end": 1015,
+   "lines": 34,
+   "state": "S4",
+   "status": "rota",
+   "contracts": [
+    "C-06"
+   ],
+   "id": "F-038"
+  },
+  {
+   "name": "Placa_D1",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 1017,
+   "end": 1036,
+   "lines": 20,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [
+    "C-06"
+   ],
+   "id": "F-039"
+  },
+  {
+   "name": "Placa_D2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 1038,
+   "end": 1057,
+   "lines": 20,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [
+    "C-06"
+   ],
+   "id": "F-040"
+  },
+  {
+   "name": "df_creator",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 1059,
+   "end": 1129,
+   "lines": 71,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [
+    "C-02"
+   ],
+   "id": "F-041"
+  },
+  {
+   "name": "df_creator_PE",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 1131,
+   "end": 1205,
+   "lines": 75,
+   "state": "S4",
+   "status": "muerta",
+   "contracts": [
+    "C-03"
+   ],
+   "id": "F-042"
+  },
+  {
+   "name": "df_creator_1",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 1207,
+   "end": 1287,
+   "lines": 81,
+   "state": "S4",
+   "status": "rota",
+   "contracts": [
+    "C-03"
+   ],
+   "id": "F-043"
+  },
+  {
+   "name": "Factor_Idealidad",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 1291,
+   "end": 1374,
+   "lines": 84,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-044"
+  },
+  {
+   "name": "PE",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 1376,
+   "end": 1519,
+   "lines": 144,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-045"
+  },
+  {
+   "name": "PE_NOCT",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 1524,
+   "end": 2011,
+   "lines": 488,
+   "state": "S4",
+   "status": "rota",
+   "contracts": [],
+   "id": "F-046"
+  },
+  {
+   "name": "PE_t",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 2013,
+   "end": 2178,
+   "lines": 166,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-047"
+  },
+  {
+   "name": "PE_t_S",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 2180,
+   "end": 2318,
+   "lines": 139,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-048"
+  },
+  {
+   "name": "PE_t_S1",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 2320,
+   "end": 2457,
+   "lines": 138,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-049"
+  },
+  {
+   "name": "PE_1",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 2459,
+   "end": 2593,
+   "lines": 135,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-050"
+  },
+  {
+   "name": "PE_t1",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 2595,
+   "end": 2761,
+   "lines": 167,
+   "state": "S4",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-051"
+  },
+  {
+   "name": "resume_df",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 3100,
+   "end": 4149,
+   "lines": 1050,
+   "state": "S5",
+   "status": "rota",
+   "contracts": [],
+   "id": "F-052"
+  },
+  {
+   "name": "resume_IV",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 4675,
+   "end": 5603,
+   "lines": 929,
+   "state": "S5",
+   "status": "rota",
+   "contracts": [],
+   "id": "F-053"
+  },
+  {
+   "name": "table_PE1",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 2764,
+   "end": 2821,
+   "lines": 58,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-054"
+  },
+  {
+   "name": "table_PE2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 2823,
+   "end": 2878,
+   "lines": 56,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-055"
+  },
+  {
+   "name": "table_IV",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 4161,
+   "end": 4212,
+   "lines": 52,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-056"
+  },
+  {
+   "name": "table_IV2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 4214,
+   "end": 4265,
+   "lines": 52,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-057"
+  },
+  {
+   "name": "IV_R",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 4268,
+   "end": 4368,
+   "lines": 101,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-058"
+  },
+  {
+   "name": "IV_R1",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 4372,
+   "end": 4468,
+   "lines": 97,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-059"
+  },
+  {
+   "name": "IV_R2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 4471,
+   "end": 4564,
+   "lines": 94,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-060"
+  },
+  {
+   "name": "IV_R_VE",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 4566,
+   "end": 4671,
+   "lines": 106,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-061"
+  },
+  {
+   "name": "IV_CI",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 5607,
+   "end": 5768,
+   "lines": 162,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [
+    "C-05"
+   ],
+   "id": "F-062"
+  },
+  {
+   "name": "IV_sim",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 5771,
+   "end": 5815,
+   "lines": 45,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [
+    "C-05"
+   ],
+   "id": "F-063"
+  },
+  {
+   "name": "IV_CI2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 6651,
+   "end": 6866,
+   "lines": 216,
+   "state": "S6",
+   "status": "rota",
+   "contracts": [
+    "C-05"
+   ],
+   "id": "F-064"
+  },
+  {
+   "name": "table_final_IV",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 6869,
+   "end": 6932,
+   "lines": 64,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-065"
+  },
+  {
+   "name": "table_final_IVM",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 6934,
+   "end": 6997,
+   "lines": 64,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-066"
+  },
+  {
+   "name": "table_final_IVS",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 6999,
+   "end": 7062,
+   "lines": 64,
+   "state": "S6",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-067"
+  },
+  {
+   "name": "eliminar_archivo_anterior",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 955,
+   "end": 958,
+   "lines": 4,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-068"
+  },
+  {
+   "name": "guardar_archivo",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 962,
+   "end": 980,
+   "lines": 19,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [
+    "C-05"
+   ],
+   "id": "F-069"
+  },
+  {
+   "name": "IV_CI_cor",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 5819,
+   "end": 6648,
+   "lines": 830,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [
+    "C-05"
+   ],
+   "id": "F-070"
+  },
+  {
+   "name": "Rs_e",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7080,
+   "end": 7174,
+   "lines": 95,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-071"
+  },
+  {
+   "name": "find_k_sweep",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7177,
+   "end": 7208,
+   "lines": 32,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-072"
+  },
+  {
+   "name": "Temperature_coeffs",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7214,
+   "end": 7292,
+   "lines": 79,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-073"
+  },
+  {
+   "name": "linear_fit",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7294,
+   "end": 7301,
+   "lines": 8,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-074"
+  },
+  {
+   "name": "correction_IV",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7304,
+   "end": 7534,
+   "lines": 231,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-075"
+  },
+  {
+   "name": "get_corrected_IV_P2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7537,
+   "end": 7607,
+   "lines": 71,
+   "state": "S7",
+   "status": "muerta",
+   "contracts": [],
+   "id": "F-076"
+  },
+  {
+   "name": "correction_IV_s",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7609,
+   "end": 7800,
+   "lines": 192,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-077"
+  },
+  {
+   "name": "minimos",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7803,
+   "end": 7868,
+   "lines": 66,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-078"
+  },
+  {
+   "name": "minimos2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7870,
+   "end": 7971,
+   "lines": 102,
+   "state": "S7",
+   "status": "muerta",
+   "contracts": [],
+   "id": "F-079"
+  },
+  {
+   "name": "minimos_s",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 7974,
+   "end": 8052,
+   "lines": 79,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-080"
+  },
+  {
+   "name": "minimos_s2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 8054,
+   "end": 8136,
+   "lines": 83,
+   "state": "S7",
+   "status": "muerta",
+   "contracts": [],
+   "id": "F-081"
+  },
+  {
+   "name": "IV_CI_Corr",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 8140,
+   "end": 8355,
+   "lines": 216,
+   "state": "S7",
+   "status": "muerta",
+   "contracts": [],
+   "id": "F-082"
+  },
+  {
+   "name": "Bootstrap",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 8358,
+   "end": 8562,
+   "lines": 205,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-083"
+  },
+  {
+   "name": "Bootstrap2",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 8565,
+   "end": 8761,
+   "lines": 197,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-084"
+  },
+  {
+   "name": "Comprobacion",
+   "file": "Input_File_DIV_Mac_Informe.py",
+   "start": 8764,
+   "end": 8850,
+   "lines": 87,
+   "state": "S7",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-085"
+  },
+  {
+   "name": "toggle_inputs",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 675,
+   "end": 689,
+   "lines": 15,
+   "state": "S8",
+   "status": "rota",
+   "contracts": [],
+   "id": "F-086"
+  },
+  {
+   "name": "filter_data",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 698,
+   "end": 701,
+   "lines": 4,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-087"
+  },
+  {
+   "name": "shower_list",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 725,
+   "end": 730,
+   "lines": 6,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-088"
+  },
+  {
+   "name": "data_handler",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 753,
+   "end": 805,
+   "lines": 53,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-089"
+  },
+  {
+   "name": "angles_show",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 816,
+   "end": 823,
+   "lines": 8,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-090"
+  },
+  {
+   "name": "clima",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 853,
+   "end": 936,
+   "lines": 84,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [
+    "C-01"
+   ],
+   "id": "F-091"
+  },
+  {
+   "name": "update_year_dropdown_visibility",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 947,
+   "end": 950,
+   "lines": 4,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-092"
+  },
+  {
+   "name": "render_content",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 969,
+   "end": 1080,
+   "lines": 112,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-093"
+  },
+  {
+   "name": "update_map_center",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 1093,
+   "end": 1096,
+   "lines": 4,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-094"
+  },
+  {
+   "name": "use_ndh",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 1105,
+   "end": 1115,
+   "lines": 11,
+   "state": "S8",
+   "status": "rota",
+   "contracts": [
+    "C-02"
+   ],
+   "id": "F-095"
+  },
+  {
+   "name": "electric_parameters",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 1148,
+   "end": 1441,
+   "lines": 294,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [
+    "C-04"
+   ],
+   "id": "F-096"
+  },
+  {
+   "name": "Data_Base_selector",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 1460,
+   "end": 1478,
+   "lines": 19,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-097"
+  },
+  {
+   "name": "Graph_filter",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 1494,
+   "end": 1556,
+   "lines": 63,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-098"
+  },
+  {
+   "name": "update_graph",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 1568,
+   "end": 1712,
+   "lines": 145,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-099"
+  },
+  {
+   "name": "Voltaje_Corriente_Selector",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 1723,
+   "end": 1730,
+   "lines": 8,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-100"
+  },
+  {
+   "name": "Voltaje_Corriente_Selector",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 1742,
+   "end": 3683,
+   "lines": 1942,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-101"
+  },
+  {
+   "name": "Graph_filter_IV",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 3699,
+   "end": 3725,
+   "lines": 27,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-102"
+  },
+  {
+   "name": "IV_Corrct",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 3791,
+   "end": 3963,
+   "lines": 173,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [
+    "C-04"
+   ],
+   "id": "F-103"
+  },
+  {
+   "name": "Tabla_select",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 3981,
+   "end": 4001,
+   "lines": 21,
+   "state": "S8",
+   "status": "rota",
+   "contracts": [
+    "C-04"
+   ],
+   "id": "F-104"
+  },
+  {
+   "name": "Tabla_R_Boots",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 4045,
+   "end": 4127,
+   "lines": 83,
+   "state": "S8",
+   "status": "rota",
+   "contracts": [
+    "C-04"
+   ],
+   "id": "F-105"
+  },
+  {
+   "name": "electric_parameters",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 4182,
+   "end": 5955,
+   "lines": 1774,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [
+    "C-04"
+   ],
+   "id": "F-106"
+  },
+  {
+   "name": "add_row",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 5964,
+   "end": 5970,
+   "lines": 7,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-107"
+  },
+  {
+   "name": "parse_contents",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 5976,
+   "end": 6026,
+   "lines": 51,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-108"
+  },
+  {
+   "name": "update_output",
+   "file": "GIU_Final_Presetacion.py",
+   "start": 6035,
+   "end": 6038,
+   "lines": 4,
+   "state": "S8",
+   "status": "viva",
+   "contracts": [],
+   "id": "F-109"
+  }
+ ]
+}
