@@ -142,18 +142,18 @@ apoya en lo que dijo un modelo. Se apoya en una línea o en un script.**
 
 | Documento | Contenido | Estado |
 |---|---|---|
-| [00-convenciones](00-convenciones.md) | glosario, unidades, nombres de índice, convenciones de tiempo | pendiente |
-| [01-el-sistema-en-una-pagina](01-el-sistema-en-una-pagina.md) | el sistema completo en una página | en curso |
-| [02-historia-del-dato](02-historia-del-dato.md) | S0→S8, el espinazo | pendiente |
-| [03-contratos](03-contratos.md) | qué entra y qué sale en cada frontera | pendiente |
-| [04-inventario](04-inventario.md) | las 109 funciones con su estado real | pendiente |
-| [05-lo-que-no-sirve](05-lo-que-no-sirve.md) | duplicación, código muerto, ramas imposibles | pendiente |
-| [06-lo-que-esta-roto](06-lo-que-esta-roto.md) | los 13 defectos | pendiente |
-| [07-lo-que-falta](07-lo-que-falta.md) | lo nunca terminado y qué haría falta | pendiente |
-| [08-tesis-a-codigo](08-tesis-a-codigo.md) | de qué función sale cada figura del informe de licenciatura | pendiente |
-| [09-refactor-propuesto](09-refactor-propuesto.md) | de X líneas a Y, estado por estado | pendiente |
-| [10-decisiones-pendientes](10-decisiones-pendientes.md) | lo que hay que decidir antes de reescribir | pendiente |
-| [11-por-donde-empezar](11-por-donde-empezar.md) | congelado, arnés y orden de ataque | pendiente |
+| [00-convenciones](00-convenciones.md) | glosario, unidades, nombres de índice, convenciones de tiempo | completo |
+| [01-el-sistema-en-una-pagina](01-el-sistema-en-una-pagina.md) | el sistema completo en una página | completo |
+| [02-historia-del-dato](02-historia-del-dato.md) | S0→S8, el espinazo | completo |
+| [03-contratos](03-contratos.md) | qué entra y qué sale en cada frontera | completo |
+| [04-inventario](04-inventario.md) | las 109 funciones con su estado real | completo |
+| [05-lo-que-no-sirve](05-lo-que-no-sirve.md) | duplicación, código muerto, ramas imposibles | completo |
+| [06-lo-que-esta-roto](06-lo-que-esta-roto.md) | los 13 defectos | completo |
+| [07-lo-que-falta](07-lo-que-falta.md) | lo nunca terminado y qué haría falta | completo |
+| [08-tesis-a-codigo](08-tesis-a-codigo.md) | de qué función sale cada figura del informe de licenciatura | completo |
+| [09-refactor-propuesto](09-refactor-propuesto.md) | de X líneas a Y, estado por estado | completo |
+| [10-decisiones-pendientes](10-decisiones-pendientes.md) | lo que hay que decidir antes de reescribir | completo |
+| [11-por-donde-empezar](11-por-donde-empezar.md) | congelado, arnés y orden de ataque | completo |
 
 ---
 
