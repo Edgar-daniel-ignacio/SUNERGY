@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant U as Usuario
+    participant P as Panel (Dash)
+    participant C as IV_Corrct
+    participant X as IV_CI_cor
+    participant B as Bootstrap
+    U->>P: sube libro de mediciones
+    P->>P: guardar_archivo a Uploaded_.xlsx
+    U->>P: elige metodo CI y correction
+    P->>C: dispara callback
+    C->>X: corrige curvas a STC
+    X->>X: lee Info (4 de 12 columnas)
+    X->>X: correction_IV M2 / M2N
+    X-->>C: tablas corregidas
+    C-->>P: escribe Tablarm, Tablars, Tabla_Info
+    U->>P: pide curva representativa
+    P->>B: 3000 muestras, sin semilla
+    B-->>P: curva e intervalo al 95 por ciento

@@ -1,0 +1,15 @@
+flowchart TD
+    A["5 dimensiones del problema"] --> B["Modelos termicos: 7 combinaciones"]
+    A --> C["Metodo de curva: PE, VE, CI"]
+    A --> D["Origen de placa: SELEC, INSERT, CEC"]
+    A --> E["Modulos: 1 o 2"]
+    A --> F["Correccion: si o no"]
+    B --> G["84 bloques if Metodo ==<br/>28 bloques if Seleccion =="]
+    C --> G
+    D --> G
+    E --> G
+    G --> H["113 salidas escritas a mano"]
+    H --> I["Cobertura real: solo los caminos probados"]
+    J["Diseno propuesto"] --> K["Una tabla por dimension"]
+    K --> L["Un motor que las recorre"]
+    L --> M["Cobertura: todos los caminos"]

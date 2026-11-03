@@ -1,0 +1,22 @@
+flowchart LR
+    subgraph ENTRADA
+        S0["S0 Arranque y UI<br/>29 funciones"]
+        S1["S1 Clima NREL<br/>3 funciones"]
+    end
+    subgraph FISICA
+        S2["S2 Irradiancia POA<br/>muta NDH, no retorna"]
+        S3["S3 Temperatura celula<br/>3 modelos"]
+    end
+    subgraph DOMINIO
+        S4["S4 Serie electrica anual<br/>7 funciones PE y 2 CSV"]
+        S5["S5 Extremos y casos<br/>1979 lineas"]
+        S6["S6 Curva I-V<br/>7 funciones"]
+        S7["S7 Correccion y bootstrap<br/>18 funciones"]
+    end
+    subgraph SALIDA
+        S8["S8 Pantalla<br/>24 callbacks, 12 stores"]
+    end
+    S0 --> S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8
+    S4 -.->|CSV en disco| S8
+    S4 -.->|CSV en disco| S7
+    M["Libro de mediciones<br/>30 curvas y hoja Info"] --> S7
