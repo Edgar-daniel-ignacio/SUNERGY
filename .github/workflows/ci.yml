@@ -23,27 +23,6 @@ jobs:
           version: "0.9.10"
           python-version: "3.12"
       - run: uv sync --locked
-      - name: Diagnose Linux original-source numerical behavior
-        if: runner.os == 'Linux'
-        run: |
-          uv venv .local/legacy-iv-env --python 3.12
-          uv pip sync --python .local/legacy-iv-env/bin/python config/legacy-capture/requirements.txt --require-hashes
-          .local/legacy-iv-env/bin/python scripts/capture_legacy_iv.py --inputs tests/fixtures/legacy/iv_r/inputs.json --output tests/fixtures/legacy/iv_r/captured_linux
-          .local/legacy-iv-env/bin/python scripts/capture_legacy_iv.py --inputs tests/fixtures/legacy/iv_r/inputs_alternate.json --output tests/fixtures/legacy/iv_r/captured_alternate_linux
-          .local/legacy-iv-env/bin/python scripts/capture_legacy_iv.py --inputs tests/fixtures/legacy/iv_r/inputs.json --output .local/runs/repeat-linux
-          .local/legacy-iv-env/bin/python scripts/capture_legacy_iv.py --inputs tests/fixtures/legacy/iv_r/inputs_alternate.json --output .local/runs/repeat-alternate-linux
-          cmp tests/fixtures/legacy/iv_r/captured_linux/outputs.json .local/runs/repeat-linux/outputs.json
-          cmp tests/fixtures/legacy/iv_r/captured_alternate_linux/outputs.json .local/runs/repeat-alternate-linux/outputs.json
-          uv run --locked --offline python scripts/replay_backend.py --manifest tests/fixtures/legacy/iv_r/captured_linux/manifest.json --manifest tests/fixtures/legacy/iv_r/captured_alternate_linux/manifest.json
-      - name: Preserve independent Linux diagnostic captures
-        if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v7.0.2
-        with:
-          name: independent-linux-iv-r
-          path: |
-            tests/fixtures/legacy/iv_r/captured_linux
-            tests/fixtures/legacy/iv_r/captured_alternate_linux
-          if-no-files-found: error
       - run: uv run --locked --offline pytest
       - run: uv run --locked --offline ruff check .
       - run: uv run --locked --offline ruff format --check .

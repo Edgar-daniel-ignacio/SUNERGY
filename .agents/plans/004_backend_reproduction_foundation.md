@@ -200,3 +200,21 @@ Record actual results here; no skip or unavailable check counts as reproduction.
   tolerance/reference relaxation. Diagnosing with independently repeated unchanged
   original-source captures on Ubuntu before deciding platform acceptance. Temporary
   CI capture/upload step preserves outputs and same-platform comparisons.
+- Diagnostic run `42965809075`, Ubuntu job `130342643771`: original captures
+  executed twice with byte-identical outputs; modern Ubuntu comparisons to those
+  originals passed existing thresholds. This isolates the observed failure as
+  Windows/Linux oracle differences, not observed same-platform refactor drift.
+- Imported six unchanged JSON artifacts directly at their captured paths from
+  published ZIP `13830512913`, SHA-256
+  `cebb90afba356b7e5bed888ba0ba18d2f637b50e2122425ab116a5d220e0b15a`.
+  Whitelist-only extraction and every source/wrapper/lock/input/output hash passed;
+  no original Windows source/output/tolerance replaced. Removed the temporary
+  capture/upload CI steps so routine tests cannot generate their own oracle.
+- Replay now selects Windows/Linux x86-64 references by OS/architecture only;
+  unsupported environments fail explicitly. Added platform selection checks and
+  all-reference integrity tests. `scripts/compare_iv_platforms.py` generates the
+  retained original-source platform difference report; scientific mechanisms and
+  exact remaining compiler/native-build uncertainty are recorded as IV-04.
+- Current local full suite: **88 passed**. All five capture manifests validate on
+  Windows; selected numerical comparisons still use the unchanged thresholds.
+  Final Windows/Ubuntu CI rerun follows this integration commit.

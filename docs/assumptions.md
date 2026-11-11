@@ -120,6 +120,41 @@ maximum absolute MPP `dP/dV` was below 5.8e-7 A. These finite-case observations
 support numerical consistency of these stored curves only. They do not resolve
 IV-01/IV-02, establish global solver behavior or constitute empirical evidence.
 
+## IV-04 — Numerical platform identity
+
+**Observed evidence.** Windows and Ubuntu original-source captures use identical
+effective fit inputs but differ first in fitted parameters for the preset module.
+MPP coordinates also differ for the alternate module. Each platform's original
+execution matches the modern implementation under the existing thresholds, and
+repeated original executions are byte-identical on that host. Raw references,
+workflow/artifact provenance and the [difference report](evidence/iv_r_platform_comparison.json)
+are linked from [reproduction](reproduction.md). No Windows output or acceptance
+threshold was replaced or relaxed.
+
+**Source audit and interpretation.** PySAM 7.1.0 uses SSC 303; the pinned
+[6parsolve source](https://raw.githubusercontent.com/NatLabRockies/ssc/2025.4.16.r1.ssc.303/ssc/cmod_6parsolve.cpp)
+invokes a nonlinear solve with maximum 300 iterations and tolerance 1e-7. That
+residual criterion is not a per-parameter portability guarantee. pvlib 0.13.1's
+[golden-section source](https://raw.githubusercontent.com/pvlib/pvlib-python/v0.13.1/pvlib/tools.py)
+compares candidate powers and stops at interior-point separation below 1e-8 V.
+This does not prove MPP coordinate accuracy to 1e-8 V. In the alternate STC case,
+the logged current shift implies a voltage shift about 1.05e-7 V and a quadratic
+power change about 2.85e-14 W, roughly half one ULP at 400 W. Thus power rounding
+can leave the optimizer's coordinate branch sensitive while Pmp agrees.
+These mechanisms explain plausible sensitivity; exact compiler/libm causality
+has not been established. Local SSC reports version 303, build
+`Windows 64 bit Visual C++ Aug 8 2025 12:37:54`, native DLL SHA-256
+`defd47245c271abdc20a18bc827ea0ad0a833794a6000f3d07d28a700d45ac4d`.
+Linux environment/package identities are captured; its separate native build/hash
+has not yet been recorded.
+
+**Decision and owner.** `replay.iv_capture_names` selects the fixed reference pair
+by OS and architecture, without checking which values pass. Unsupported environments
+fail the reproduction gate explicitly; general calculation availability is separate.
+Same-platform software compatibility, cross-platform numerical invariance and
+scientific/empirical accuracy remain different claims. Future solver/library/native
+build changes require a fresh independent capture and discrepancy review.
+
 ## IN-01 — Preset and manual module paths
 
 `Placa_Prueba:982–1015` replaces every supplied argument with fixed 250 W,

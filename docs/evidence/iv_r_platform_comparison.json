@@ -1,0 +1,841 @@
+{
+  "purpose": "Original-source platform differences, not modern regression or scientific accuracy",
+  "relative_error_note": "Ratios near zero can be large; absolute floors remain essential. No tolerances changed.",
+  "producer": "scripts/compare_iv_platforms.py",
+  "pairs": [
+    {
+      "outputs": [
+        {
+          "path": "tests/fixtures/legacy/iv_r/captured/outputs.json",
+          "sha256": "c7c9df9d1f5234fdce76af26e1d351851c654b6fad79cc1a317e7c7a297bb70a"
+        },
+        {
+          "path": "tests/fixtures/legacy/iv_r/captured_linux/outputs.json",
+          "sha256": "9d5cce634e21b34b24f5cd911119368093c7108cf4642ab51019a8d502da6fdd"
+        }
+      ],
+      "effective_fit_inputs_equal": true,
+      "rounded_table_and_failures_equal": true,
+      "fit_parameters": {
+        "I_L_ref": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 1.5715428958174016e-11,
+          "max_relative_nonzero_reference": 1.780105209619661e-12,
+          "zero_reference_nonzero_candidate": 0
+        },
+        "I_o_ref": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 2.310995806914431e-18,
+          "max_relative_nonzero_reference": 6.854257904125013e-09,
+          "zero_reference_nonzero_candidate": 0
+        },
+        "R_s": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 1.0954664952933513e-10,
+          "max_relative_nonzero_reference": 2.881471070478792e-10,
+          "zero_reference_nonzero_candidate": 0
+        },
+        "R_sh_ref": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 2.4199888457587804e-06,
+          "max_relative_nonzero_reference": 3.250476375786926e-09,
+          "zero_reference_nonzero_candidate": 0
+        },
+        "a_ref": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 4.499944861180438e-10,
+          "max_relative_nonzero_reference": 2.8512711838014536e-10,
+          "zero_reference_nonzero_candidate": 0
+        },
+        "Adjust": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 6.413130293481117e-08,
+          "max_relative_nonzero_reference": 3.6076223502769445e-09,
+          "zero_reference_nonzero_candidate": 0
+        }
+      },
+      "cases": [
+        {
+          "condition_id": "STC",
+          "desoto_parameters": {
+            "photocurrent": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.5715428958174016e-11,
+              "max_relative_nonzero_reference": 1.780105209619661e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "saturation_current": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 2.310995806914431e-18,
+              "max_relative_nonzero_reference": 6.854257904125013e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_series": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.0954664952933513e-10,
+              "max_relative_nonzero_reference": 2.881471070478792e-10,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_shunt": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 2.4199888457587804e-06,
+              "max_relative_nonzero_reference": 3.250476375786926e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "nNsVth": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 4.499944861180438e-10,
+              "max_relative_nonzero_reference": 2.8512711838014536e-10,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "singlediode": {
+            "i_sc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 2.291500322826323e-13,
+              "max_relative_nonzero_reference": 2.5969349291223575e-14,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_oc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 9.094947017729282e-13,
+              "max_relative_nonzero_reference": 2.4028922107655934e-14,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 3.679840254733335e-08,
+              "max_relative_nonzero_reference": 4.433542493176481e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.3354443950674977e-07,
+              "max_relative_nonzero_reference": 4.433746314152097e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "p_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 5.0960125008714385e-11,
+              "max_relative_nonzero_reference": 2.038437615433939e-13,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_x": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 8.175149446287833e-11,
+              "max_relative_nonzero_reference": 9.292048428428911e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_xx": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 7.390728917755496e-08,
+              "max_relative_nonzero_reference": 1.2852882227100751e-08,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "voltage": {
+            "records": 100,
+            "unequal_records": 99,
+            "max_absolute": 9.094947017729282e-13,
+            "max_relative_nonzero_reference": 2.426965303685947e-14,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "current": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 2.637321472320764e-10,
+            "max_relative_nonzero_reference": 15.612903225806452,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_voltage": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 1.7240426132048015e-05,
+            "max_relative_nonzero_reference": 3.2486381173255534e-09,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_current": {
+            "records": 100,
+            "unequal_records": 0,
+            "max_absolute": 0.0,
+            "max_relative_nonzero_reference": 0.0,
+            "zero_reference_nonzero_candidate": 0
+          }
+        },
+        {
+          "condition_id": "warm",
+          "desoto_parameters": {
+            "photocurrent": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.2572165530855273e-11,
+              "max_relative_nonzero_reference": 1.7406470291681683e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "saturation_current": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 5.428162169695288e-17,
+              "max_relative_nonzero_reference": 6.854257851569619e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_series": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.0954664952933513e-10,
+              "max_relative_nonzero_reference": 2.881471070478792e-10,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_shunt": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 3.024985971933347e-06,
+              "max_relative_nonzero_reference": 3.2504762841659137e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "nNsVth": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 4.801803399345772e-10,
+              "max_relative_nonzero_reference": 2.8512716337615994e-10,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "singlediode": {
+            "i_sc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 2.133404564119701e-12,
+              "max_relative_nonzero_reference": 2.9549574001255027e-13,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_oc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.6125341062434018e-09,
+              "max_relative_nonzero_reference": 4.6422462048396495e-11,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 2.6039276512790366e-08,
+              "max_relative_nonzero_reference": 3.864798853205156e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.0823035978546613e-07,
+              "max_relative_nonzero_reference": 3.932891663617273e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "p_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.2625264389498625e-08,
+              "max_relative_nonzero_reference": 6.809282384980093e-11,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_x": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 5.629274824059394e-11,
+              "max_relative_nonzero_reference": 7.818566597404131e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_xx": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 5.0060973144638865e-08,
+              "max_relative_nonzero_reference": 1.0577066359477738e-08,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "voltage": {
+            "records": 100,
+            "unequal_records": 99,
+            "max_absolute": 1.6125341062434018e-09,
+            "max_relative_nonzero_reference": 4.6422656519414994e-11,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "current": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 1.8968648873851635e-10,
+            "max_relative_nonzero_reference": 1.2073310423825887,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_voltage": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 2.6405185963085387e-05,
+            "max_relative_nonzero_reference": 3.321289123752772e-09,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_current": {
+            "records": 100,
+            "unequal_records": 0,
+            "max_absolute": 0.0,
+            "max_relative_nonzero_reference": 0.0,
+            "zero_reference_nonzero_candidate": 0
+          }
+        },
+        {
+          "condition_id": "low",
+          "desoto_parameters": {
+            "photocurrent": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 3.143041382713818e-12,
+              "max_relative_nonzero_reference": 1.800474242882969e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "saturation_current": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 4.0668810445021824e-19,
+              "max_relative_nonzero_reference": 6.854257834312836e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_series": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.0954664952933513e-10,
+              "max_relative_nonzero_reference": 2.881471070478792e-10,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_shunt": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.2099943887733389e-05,
+              "max_relative_nonzero_reference": 3.2504762841659137e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "nNsVth": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 4.349016702320796e-10,
+              "max_relative_nonzero_reference": 2.851271663274747e-10,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "singlediode": {
+            "i_sc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 2.5122126601218042e-12,
+              "max_relative_nonzero_reference": 1.4392543982324696e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_oc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 4.9112713895738125e-11,
+              "max_relative_nonzero_reference": 1.3360933369252265e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 5.123049762190135e-09,
+              "max_relative_nonzero_reference": 3.0944406097673488e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 9.670908340808637e-08,
+              "max_relative_nonzero_reference": 3.0736897672479825e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "p_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.0809131367750524e-09,
+              "max_relative_nonzero_reference": 2.0750909517484315e-11,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_x": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.3476553206714925e-11,
+              "max_relative_nonzero_reference": 7.742727311387375e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_xx": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.2269327998026824e-08,
+              "max_relative_nonzero_reference": 9.3513570655475e-09,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "voltage": {
+            "records": 100,
+            "unequal_records": 99,
+            "max_absolute": 4.9112713895738125e-11,
+            "max_relative_nonzero_reference": 1.336273306394101e-12,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "current": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 9.960920976936904e-11,
+            "max_relative_nonzero_reference": 3.6867264191207854,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_voltage": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 0.00017186255718115717,
+            "max_relative_nonzero_reference": 3.3447195320807486e-09,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_current": {
+            "records": 100,
+            "unequal_records": 0,
+            "max_absolute": 0.0,
+            "max_relative_nonzero_reference": 0.0,
+            "zero_reference_nonzero_candidate": 0
+          }
+        },
+        {
+          "condition_id": "fractional",
+          "desoto_parameters": {
+            "photocurrent": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.1212364370294381e-11,
+              "max_relative_nonzero_reference": 1.7645525510954154e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "saturation_current": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 8.285677324017332e-18,
+              "max_relative_nonzero_reference": 6.854257993091464e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_series": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.0954664952933513e-10,
+              "max_relative_nonzero_reference": 2.881471070478792e-10,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_shunt": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 3.3919243378477404e-06,
+              "max_relative_nonzero_reference": 3.250476274544486e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "nNsVth": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 4.6175019363658976e-10,
+              "max_relative_nonzero_reference": 2.851270296226016e-10,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "singlediode": {
+            "i_sc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 3.022471162239526e-12,
+              "max_relative_nonzero_reference": 4.758365024873119e-13,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_oc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 7.421476766467094e-10,
+              "max_relative_nonzero_reference": 2.0479293782663674e-11,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 7.32271310255328e-09,
+              "max_relative_nonzero_reference": 1.2269744008462797e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 3.700195350120339e-08,
+              "max_relative_nonzero_reference": 1.2623895696261518e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "p_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 6.1952221130923135e-09,
+              "max_relative_nonzero_reference": 3.5415151879583775e-11,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_x": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 5.2727600063917635e-11,
+              "max_relative_nonzero_reference": 8.324314704592947e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_xx": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.5426319777134267e-08,
+              "max_relative_nonzero_reference": 3.5994935754867795e-09,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "voltage": {
+            "records": 100,
+            "unequal_records": 99,
+            "max_absolute": 7.421476766467094e-10,
+            "max_relative_nonzero_reference": 2.0479514363292365e-11,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "current": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 1.241708957877563e-10,
+            "max_relative_nonzero_reference": 2.2231292517006804,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_voltage": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 3.2552781703998335e-05,
+            "max_relative_nonzero_reference": 3.2820752012923775e-09,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_current": {
+            "records": 100,
+            "unequal_records": 0,
+            "max_absolute": 0.0,
+            "max_relative_nonzero_reference": 0.0,
+            "zero_reference_nonzero_candidate": 0
+          }
+        }
+      ]
+    },
+    {
+      "outputs": [
+        {
+          "path": "tests/fixtures/legacy/iv_r/captured_alternate/outputs.json",
+          "sha256": "0d30c029e7f741766f39dfd2a6526764ea25709c7a381670440bccc47744f0f6"
+        },
+        {
+          "path": "tests/fixtures/legacy/iv_r/captured_alternate_linux/outputs.json",
+          "sha256": "605c97430e8d6ed32460e46892a5fdf99f9a07144f0f2d2f75a0cacac6b09e5a"
+        }
+      ],
+      "effective_fit_inputs_equal": true,
+      "rounded_table_and_failures_equal": true,
+      "fit_parameters": {
+        "I_L_ref": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 5.329070518200751e-13,
+          "max_relative_nonzero_reference": 5.024296792484843e-14,
+          "zero_reference_nonzero_candidate": 0
+        },
+        "I_o_ref": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 7.90089316898267e-21,
+          "max_relative_nonzero_reference": 1.0446695602174146e-10,
+          "zero_reference_nonzero_candidate": 0
+        },
+        "R_s": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 1.4950540805358514e-12,
+          "max_relative_nonzero_reference": 6.576447149998128e-12,
+          "zero_reference_nonzero_candidate": 0
+        },
+        "R_sh_ref": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 3.943910087400582e-09,
+          "max_relative_nonzero_reference": 1.0801500180722755e-11,
+          "zero_reference_nonzero_candidate": 0
+        },
+        "a_ref": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 7.641443033890027e-12,
+          "max_relative_nonzero_reference": 4.08405925660951e-12,
+          "zero_reference_nonzero_candidate": 0
+        },
+        "Adjust": {
+          "records": 1,
+          "unequal_records": 1,
+          "max_absolute": 1.055392218063389e-09,
+          "max_relative_nonzero_reference": 1.0969159895236058e-10,
+          "zero_reference_nonzero_candidate": 0
+        }
+      },
+      "cases": [
+        {
+          "condition_id": "STC-alt",
+          "desoto_parameters": {
+            "photocurrent": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 5.329070518200751e-13,
+              "max_relative_nonzero_reference": 5.024296792484843e-14,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "saturation_current": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 7.90089316898267e-21,
+              "max_relative_nonzero_reference": 1.0446695602174146e-10,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_series": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.4950540805358514e-12,
+              "max_relative_nonzero_reference": 6.576447149998128e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_shunt": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 3.943910087400582e-09,
+              "max_relative_nonzero_reference": 1.0801500180722755e-11,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "nNsVth": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 7.641443033890027e-12,
+              "max_relative_nonzero_reference": 4.08405925660951e-12,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "singlediode": {
+            "i_sc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 6.448175327022909e-13,
+              "max_relative_nonzero_reference": 6.083184270778496e-14,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_oc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 9.094947017729282e-13,
+              "max_relative_nonzero_reference": 1.8947806286898666e-14,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 2.6166421918105698e-08,
+              "max_relative_nonzero_reference": 2.61664218463651e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.0466659006169721e-07,
+              "max_relative_nonzero_reference": 2.616664758740911e-09,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "p_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 9.038103598868474e-12,
+              "max_relative_nonzero_reference": 2.2595258997381526e-14,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_x": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.3500311979441904e-12,
+              "max_relative_nonzero_reference": 1.281568643931354e-13,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_xx": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 6.228804938501753e-08,
+              "max_relative_nonzero_reference": 8.379034295588404e-09,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "voltage": {
+            "records": 100,
+            "unequal_records": 99,
+            "max_absolute": 9.094947017729282e-13,
+            "max_relative_nonzero_reference": 1.9149126728696966e-14,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "current": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 5.068834241228615e-12,
+            "max_relative_nonzero_reference": 0.21739130434782608,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_voltage": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 2.0849256543442607e-08,
+            "max_relative_nonzero_reference": 1.0669662646337134e-11,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_current": {
+            "records": 100,
+            "unequal_records": 0,
+            "max_absolute": 0.0,
+            "max_relative_nonzero_reference": 0.0,
+            "zero_reference_nonzero_candidate": 0
+          }
+        },
+        {
+          "condition_id": "hot-alt",
+          "desoto_parameters": {
+            "photocurrent": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 3.4638958368304884e-13,
+              "max_relative_nonzero_reference": 4.4017896199858e-14,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "saturation_current": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 7.81963611548429e-19,
+              "max_relative_nonzero_reference": 1.0446699826730343e-10,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_series": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.4950540805358514e-12,
+              "max_relative_nonzero_reference": 6.576447149998128e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "resistance_shunt": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 6.067580216040369e-09,
+              "max_relative_nonzero_reference": 1.0801546885200201e-11,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "nNsVth": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 8.410161456140486e-12,
+              "max_relative_nonzero_reference": 4.083977994602524e-12,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "singlediode": {
+            "i_sc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 4.0234482412415673e-13,
+              "max_relative_nonzero_reference": 5.1149171328099064e-14,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_oc": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 4.001776687800884e-11,
+              "max_relative_nonzero_reference": 9.359006402951748e-13,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 6.4904366325890805e-09,
+              "max_relative_nonzero_reference": 8.823819834465393e-10,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "v_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 3.1112307397052064e-08,
+              "max_relative_nonzero_reference": 8.837511938813393e-10,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "p_mp": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 3.545892468537204e-10,
+              "max_relative_nonzero_reference": 1.3693235316096524e-12,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_x": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 8.233413950620161e-13,
+              "max_relative_nonzero_reference": 1.0518588438081745e-13,
+              "zero_reference_nonzero_candidate": 0
+            },
+            "i_xx": {
+              "records": 1,
+              "unequal_records": 1,
+              "max_absolute": 1.3794888786833326e-08,
+              "max_relative_nonzero_reference": 2.503557486641497e-09,
+              "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "voltage": {
+            "records": 100,
+            "unequal_records": 99,
+            "max_absolute": 4.001776687800884e-11,
+            "max_relative_nonzero_reference": 9.360834333889824e-13,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "current": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 4.885869486770389e-12,
+            "max_relative_nonzero_reference": 0.18549580661075482,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_voltage": {
+            "records": 100,
+            "unequal_records": 100,
+            "max_absolute": 4.8802576202433556e-08,
+            "max_relative_nonzero_reference": 1.0744865997972911e-11,
+            "zero_reference_nonzero_candidate": 0
+          },
+          "reverse_current": {
+            "records": 100,
+            "unequal_records": 0,
+            "max_absolute": 0.0,
+            "max_relative_nonzero_reference": 0.0,
+            "zero_reference_nonzero_candidate": 0
+          }
+        }
+      ]
+    }
+  ]
+}

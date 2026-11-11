@@ -4,6 +4,8 @@
   "manifests": [
     "tests/fixtures/legacy/iv_r/captured/manifest.json",
     "tests/fixtures/legacy/iv_r/captured_alternate/manifest.json",
+    "tests/fixtures/legacy/iv_r/captured_linux/manifest.json",
+    "tests/fixtures/legacy/iv_r/captured_alternate_linux/manifest.json",
     "tests/fixtures/legacy/thermal/captured/manifest.json"
   ],
   "implemented_profiles": ["legacy-iv-r-v1", "legacy-faiman-v1", "legacy-noct-v1"],
@@ -17,6 +19,6 @@
     "Other curve branches, module-two/VE and measurement-length grids",
     "Catalog workbook edition, hash, source and redistribution rights",
     "Original thesis and measurement workbook, correction and bootstrap baselines",
-    "Historical dependency environment and cross-platform numerical evidence"
+    "Historical dependency environment and unrepresented platform/compiler environments"
   ]
 }

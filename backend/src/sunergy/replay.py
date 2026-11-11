@@ -1,6 +1,7 @@
 """Offline IV_R reproduction gate over independently captured intermediate/final results."""
 
 import json
+import platform
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any
@@ -45,6 +46,19 @@ PARAMETER_KINDS = {
     "i_x": "current",
     "i_xx": "current",
 }
+
+
+def iv_capture_names(*, system: str | None = None, machine: str | None = None) -> tuple[str, str]:
+    """Select by observed OS/architecture, never by numerical closeness or fallback."""
+    system = platform.system() if system is None else system
+    machine = platform.machine() if machine is None else machine
+    if machine.lower() not in {"amd64", "x86_64"}:
+        raise ValueError("No independent IV_R reference for this processor architecture")
+    if system == "Windows":
+        return "captured", "captured_alternate"
+    if system == "Linux":
+        return "captured_linux", "captured_alternate_linux"
+    raise ValueError("No independent IV_R reference for this operating system")
 
 
 def compare_iv_reference(
@@ -144,6 +158,9 @@ def replay_iv_capture(root: Path, manifest_path: Path) -> tuple[LegacyIVResponse
         raise ValueError("Capture entrypoint is not the selected IV_R branch")
     if manifest.model_solver_grid["model"] != "legacy-IV_R-v1 CEC/SAM fit -> De Soto -> Lambert W":
         raise ValueError("Capture model/solver identity differs")
+    expected_family = "Windows" if iv_capture_names()[0] == "captured" else "Linux"
+    if not manifest.platform.startswith(expected_family):
+        raise ValueError("Capture platform differs from the replay platform")
     for package in ("pvlib", "nrel-pysam", "numpy", "pandas", "scipy"):
         if version(package) != manifest.dependencies[package]:
             raise ValueError(f"Replay dependency differs from capture: {package}")

@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "provenance": "Deliberately selected synthetic 400 W manual module test input, not a manufacturer record or measurement. Supplied cell type CdTe and temp_ref 20 degC demonstrate IV_R forced monoSi/25 degC compatibility behavior. Comparison values are constructed, not observations.",
+  "module": [
+    [
+      "Pmax",
+      400.0
+    ],
+    [
+      "Vmax60",
+      40.0
+    ],
+    [
+      "Imax",
+      10.0
+    ],
+    [
+      "Voc",
+      48.0
+    ],
+    [
+      "Isc",
+      10.6
+    ],
+    [
+      "alpha",
+      0.05
+    ],
+    [
+      "beta",
+      -0.29
+    ],
+    [
+      "deltha",
+      -0.38
+    ],
+    [
+      "cells_in_series",
+      72.0
+    ],
+    [
+      "temp_ref",
+      20.0
+    ],
+    [
+      "cell_type",
+      "CdTe"
+    ]
+  ],
+  "condition_columns": [
+    "Condiciones",
+    "Geff",
+    "Tcell",
+    "Isc",
+    "Voc",
+    "Im",
+    "Vm",
+    "Potencia"
+  ],
+  "conditions": [
+    [
+      "STC-alt",
+      1000.0,
+      25.0,
+      10.6,
+      48.0,
+      10.0,
+      40.0,
+      400.0
+    ],
+    [
+      "hot-alt",
+      650.0,
+      55.0,
+      7.0,
+      43.0,
+      6.0,
+      35.0,
+      210.0
+    ]
+  ],
+  "failure_cases": [
+    {
+      "id": "missing-irradiance",
+      "drop_column": "Geff"
+    },
+    {
+      "id": "missing-comparison-current",
+      "drop_column": "Isc"
+    }
+  ],
+  "capture_id": "legacy-iv-r-manual-alternate-v1"
+}

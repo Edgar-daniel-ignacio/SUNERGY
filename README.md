@@ -148,7 +148,9 @@ different questions. [Architecture](docs/architecture.md) records the adapted
 CANOE practices and the single owner for each configuration/data concern.
 
 The first reproduction milestone passed for two modules/six I–V conditions/600
-curve points and four thermal parameter cases/five points. The next bounded
+curve points per captured platform (Windows/Linux x86-64), and four thermal
+parameter cases/five points. Original platform differences remain recorded;
+replay selects by OS/architecture using unchanged thresholds. The next bounded
 milestone is Sandia selector/length/failure capture and annual-summary
 characterization, followed by source/weather/time-contract recovery for integrated
 annual replay. Full backend reproduction requires every intended coverage row

@@ -17,13 +17,13 @@ from sunergy.contracts import SourceRecord
 from sunergy.fetcher import normalize_legacy_iv_input
 from sunergy.model import LegacyCalculationError
 from sunergy.regression import CaptureManifest, verify_capture_artifacts
-from sunergy.replay import compare_iv_reference, replay_iv_capture
+from sunergy.replay import compare_iv_reference, iv_capture_names, replay_iv_capture
 
 ROOT = Path(__file__).resolve().parents[2]
 CAPTURES = ROOT / "tests/fixtures/legacy/iv_r"
 
 
-@pytest.fixture(scope="module", params=["captured", "captured_alternate"])
+@pytest.fixture(scope="module", params=iv_capture_names())
 def captured(request: pytest.FixtureRequest) -> tuple[CaptureManifest, dict[str, Any], Any]:
     path = CAPTURES / str(request.param)
     manifest = CaptureManifest.model_validate_json((path / "manifest.json").read_text("utf-8"))
@@ -187,6 +187,18 @@ def test_changed_output_artifact_and_wrong_branch_cannot_be_replayed(tmp_path: P
     path.write_text(changed.model_dump_json(), encoding="utf-8")
     with pytest.raises(ValueError, match="entrypoint"):
         replay_iv_capture(ROOT, path)
+
+
+def test_reference_selection_is_explicit_and_never_falls_back() -> None:
+    assert iv_capture_names(system="Windows", machine="AMD64") == ("captured", "captured_alternate")
+    assert iv_capture_names(system="Linux", machine="x86_64") == (
+        "captured_linux",
+        "captured_alternate_linux",
+    )
+    with pytest.raises(ValueError, match="operating system"):
+        iv_capture_names(system="Darwin", machine="x86_64")
+    with pytest.raises(ValueError, match="architecture"):
+        iv_capture_names(system="Linux", machine="arm64")
 
 
 @pytest.mark.parametrize(

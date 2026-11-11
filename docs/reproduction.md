@@ -122,6 +122,31 @@ are in each manifest. Independent repeat executions were byte-identical on the
 capture host. Historical dependencies remain unknown; the environment is explicitly
 reconstructed with Python 3.12, pvlib 0.13.1 and PySAM 7.1.0.
 
+I–V has separate immutable Windows x86-64 and Linux x86-64 references. The Linux
+pair lives at `iv_r/captured_linux` and `iv_r/captured_alternate_linux`. Both use the
+same supplied/effective inputs and existing tolerances. Default replay selects
+only by OS/architecture; an unsupported platform fails explicitly, with no numerical
+fallback. Integrity checks cover all four I–V manifests on both platforms. Counts
+are six conditions/600 points **per platform**, not additional scientific samples.
+
+Initial Ubuntu CI disagreed with the Windows oracles. An isolated original-source
+capture on [the diagnostic CI run](https://github.com/Edgar-daniel-ignacio/SUNERGY/actions/runs/42965809075)
+then matched the modern Ubuntu implementation under the unchanged thresholds;
+repeated original captures were byte-identical. The frozen Linux artifacts were
+downloaded from artifact `13830512913` (published ZIP SHA-256
+`cebb90afba356b7e5bed888ba0ba18d2f637b50e2122425ab116a5d220e0b15a`),
+whitelist-imported without path/content edits, and verified against source/wrapper/
+lock/input/output hashes. Temporary CI capture steps were removed: normal CI
+compares fixed independent references and never regenerates its oracle.
+
+The [platform difference report](evidence/iv_r_platform_comparison.json) preserves
+fit, translated parameter, solver/grid and discarded-diagnostic differences,
+including largest absolute/relative differences. Regenerate a report to a fresh
+ignored path with `uv run --locked --offline python scripts/compare_iv_platforms.py --output .local/runs/iv-platform-audit.json`.
+Original rounded tables and failure records agree exactly between platforms.
+This establishes same-platform compatibility, not platform-invariant numbers.
+See [IV-04](assumptions.md#iv-04--numerical-platform-identity) for the solver audit.
+
 Install the application with `uv sync --locked`. Replay modern comparisons offline:
 
 ```text
@@ -168,8 +193,9 @@ voltage 1e-8 V/1e-9, power 1e-7 W/1e-9, saturation current 1e-20 A/1e-9,
 resistance 1e-9 ohm/1e-9 and Adjust 1e-9 percent/1e-9. Each manifest explains the
 quantity precision and near-zero floor. Original rounded table values compare
 exactly. Thermal temperature uses 1e-12 °C/1e-12. These controlled-domain software
-thresholds are provisional across platforms; CI must supply actual evidence before
-claiming portability. They are not measurement/manufacturer tolerances.
+thresholds are applied unchanged within each captured platform. Windows-to-Linux
+oracle differences are retained separately; other platforms/builds remain
+unverified. They are not measurement/manufacturer tolerances.
 
 Tests deliberately perturb current, tiny saturation current, units, record order,
 grid length, required quantities and table structure; the gate must fail. Output

@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
-from sunergy.replay import replay_iv_capture
+from sunergy.replay import iv_capture_names, replay_iv_capture
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -14,8 +14,7 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path, action="append")
     args = parser.parse_args()
     manifests = args.manifest or [
-        ROOT / "tests/fixtures/legacy/iv_r/captured/manifest.json",
-        ROOT / "tests/fixtures/legacy/iv_r/captured_alternate/manifest.json",
+        ROOT / "tests/fixtures/legacy/iv_r" / name / "manifest.json" for name in iv_capture_names()
     ]
     results = []
     for path in manifests:

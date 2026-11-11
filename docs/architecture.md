@@ -119,6 +119,9 @@ they execute only inspected original function ASTs in fresh processes/CWDs with
 Python networking blocked. This reconstructed environment does not establish the
 unknown historical runtime. `uv.lock` owns application dependencies, the separate
 capture lock owns the reference environment, and manifests record actual versions.
+IV_R has independently executed Windows/Linux x86-64 references selected by observed
+platform, with unchanged quantity limits. Cross-platform numerical differences
+remain separate evidence; see [IV-04](assumptions.md#iv-04--numerical-platform-identity).
 
 ## Extension boundaries, not speculative schemas
 

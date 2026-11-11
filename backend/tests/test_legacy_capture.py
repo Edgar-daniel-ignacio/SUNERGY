@@ -15,7 +15,15 @@ ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "tests/fixtures/legacy/iv_r"
 
 
-@pytest.mark.parametrize("capture", ["captured", "captured_alternate"])
+@pytest.mark.parametrize(
+    "capture",
+    [
+        "captured",
+        "captured_alternate",
+        "captured_linux",
+        "captured_alternate_linux",
+    ],
+)
 def test_independent_capture_provenance_and_every_record_are_preserved(capture: str) -> None:
     directory = FIXTURES / capture
     manifest = CaptureManifest.model_validate_json((directory / "manifest.json").read_text("utf-8"))
