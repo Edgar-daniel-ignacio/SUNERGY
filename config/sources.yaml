@@ -1,6 +1,18 @@
 # Consumer: scripts/check_repository.py via sunergy.configuration.
 # Metadata only. Requests and model assumptions are not configured here.
 sources:
+  - id: curated_legacy_investigation
+    status: available_evidence
+    location: docs/legacy-refactorizacion/
+    description: Collaborator static investigation; primary retrieval map, reconciled per claim in docs/legacy_backend_coverage.md.
+    consumer: Agent workflow, capability coverage, assumptions and transformation lineage.
+    refresh: Preserve original investigation; reconcile against frozen source, execution and primary formulations.
+  - id: controlled_legacy_captures
+    status: available_evidence
+    location: tests/fixtures/legacy/capture_status.json
+    description: Original IV_R and Faiman/NOCT point outputs; manifests pin code, wrappers, inputs, outputs and reconstructed environment.
+    consumer: sunergy.replay, backend numerical tests and scripts/check_repository.py.
+    refresh: Recapture into a new isolated directory and review differences; never silently replace saved baselines.
   - id: supplied_thesis_summary
     status: available_evidence
     location: docs/evidence/pv_physics_engine_evidence_summary_for_agent_research_equations_fixed.md
@@ -11,7 +23,7 @@ sources:
     status: available_evidence
     location: legacy/
     description: Read-only source evidence at the inspected revision; byte inventory retained.
-    consumer: docs/reproduction.md and future isolated independent capture
+    consumer: docs/reproduction.md and isolated independent capture scripts
     refresh: Explicit baseline revision selection; never reset the local checkout.
   - id: legacy_module_workbook
     status: missing

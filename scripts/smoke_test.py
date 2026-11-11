@@ -16,6 +16,7 @@ from urllib.error import HTTPError, URLError
 from urllib.request import ProxyHandler, Request, build_opener
 
 from sunergy import __version__
+from sunergy.fetcher import normalize_legacy_iv_input
 
 ROOT = Path(__file__).resolve().parents[1]
 # Local smoke requests never use an ambient HTTP proxy or any external resource.
@@ -39,6 +40,18 @@ def request(url: str, *, data: bytes | None = None) -> tuple[int, bytes]:
 
 def stop(process: subprocess.Popen[bytes]) -> None:
     if process.poll() is None:
+        if os.name == "nt":
+            # uv-managed Python and Next can launch children. Terminating only
+            # the launcher leaves the service and its log handle alive.
+            subprocess.run(
+                ["taskkill", "/PID", str(process.pid), "/T", "/F"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False,
+                creationflags=subprocess.CREATE_NO_WINDOW,
+            )
+            process.wait(timeout=10)
+            return
         process.terminate()
         try:
             process.wait(timeout=10)
@@ -127,7 +140,19 @@ def smoke_test(*, frontend: bool) -> None:
                 request(f"{api_url}/api/v1/module-iv", data=b"{}")[0] == 422,
                 "Invalid requests must return a schema error",
             )
-            print("PASS: actual Uvicorn launch, health, capability and schema-error responses")
+            compatibility_input = normalize_legacy_iv_input(
+                json.loads(
+                    (ROOT / "tests/fixtures/legacy/iv_r/captured/inputs.json").read_text("utf-8")
+                )
+            )
+            status, content = request(
+                f"{api_url}/api/v1/compatibility/iv-r",
+                data=compatibility_input.model_dump_json().encode("utf-8"),
+            )
+            curves = json.loads(content)
+            expect(status == 200 and len(curves["cases"]) == 4, "Compatibility launch failed")
+            expect(len(curves["cases"][0]["voltage_v"]) == 100, "Compatibility grid differs")
+            print("PASS: Uvicorn launch, health, capabilities, validation and IV_R calculation")
             if not frontend:
                 return
 

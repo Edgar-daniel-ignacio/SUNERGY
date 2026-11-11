@@ -64,6 +64,8 @@ The scaffold is not a validated simulator or a completed migration.
 |---|---|
 | Ownership, integration, extension | `docs/architecture.md` |
 | Legacy migration, capture, numerical comparison | `docs/reproduction.md` |
+| Legacy capability or unresolved branch | `docs/legacy_backend_coverage.md`, then the relevant curated chapter/index entry in `docs/legacy-refactorizacion/` |
+| Parameter interpretation and transformation ownership | Relevant operation in `docs/assumptions.md`, then `docs/flowcharts.md` and the named contract/function |
 | Physics, measurements, scientific claims | `docs/evidence.md`, then relevant supplied-summary sections |
 | Source/path declarations | `config/paths.yaml`, `config/sources.yaml` and their named consumers |
 | Current scaffold decisions/results | `.agents/plans/001_initial_scaffold.md` |

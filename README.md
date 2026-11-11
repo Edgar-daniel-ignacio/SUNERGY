@@ -1,15 +1,17 @@
 # SUNERGY
 
 An evidence-first foundation for a PV technical, economic and financial application
-for small and large developers. **This is a runnable development scaffold, not a
-validated PV simulator or a completed legacy migration.** Agent-native describes
+for small and large developers. **This backend foundation reproduces selected
+legacy numerical boundaries; it is not a validated simulator or complete migration.** Agent-native describes
 the development workflow; no LLM runtime is required by the application.
 
-Implemented: importable Python package, FastAPI liveness/capabilities, explicit
-unavailable I–V endpoint, Next.js shell/service check, generated API types, source
-and path declarations, snapshot-integrity checks, capture/comparison contracts,
-offline tests and CI. Calculations, catalog/weather retrieval, measurement ingestion,
-calibration, systems, economics/finance and layout remain unimplemented.
+Implemented: versioned IV_R compatibility calculation through Python/FastAPI,
+Faiman/NOCT thermal point calculations through Python, immutable local source
+loading/normalization, independently captured legacy references and offline replay.
+The existing Next.js shell/service check and generated API contracts remain.
+The general module simulator, live catalog/weather retrieval, annual integrations,
+measurement/correction/calibration, systems, economics/finance and layout remain
+unimplemented. New frontend functionality stays behind full backend reproduction.
 
 ## Run locally
 
@@ -55,6 +57,7 @@ uv run --locked --offline ruff check .
 uv run --locked --offline ruff format --check .
 uv run --locked --offline mypy
 uv run --locked --offline python scripts/check_repository.py
+uv run --locked --offline python scripts/replay_backend.py
 uv run --locked --offline python scripts/export_openapi.py --check
 npm --prefix frontend run api:check
 npm --prefix frontend run lint
@@ -92,8 +95,8 @@ is excluded from formatting/lint/testing. No legacy UI is imported by the backen
 AGENTS.md                    stable policy and context routing
 .agents/PLANS.md             planning procedure
 .agents/plans/001_*.md       scaffold decisions and actual verification
-backend/src/sunergy/         contracts, use cases, physics placeholder, adapters
-backend/tests/              API/boundary, integrity and synthetic comparator tests
+backend/src/sunergy/         contracts, use cases, numerical kernels, fetcher/replay
+backend/tests/              independent reproduction, equations, boundaries/integrity
 frontend/                   Next.js / TypeScript presentation and health control
 contracts/openapi.json      generated FastAPI schema
 config/                     small typed path/source registries
@@ -101,8 +104,13 @@ scripts/                    offline export and repository-integrity checks
 docs/architecture.md        ownership, data flow and deferred extension boundaries
 docs/evidence.md             runtime trace, scientific limits and open questions
 docs/reproduction.md         independent capture requirements and separate gates
+docs/legacy_backend_coverage.md curated evidence → owners → reproduction backlog
+docs/assumptions.md          populated operation records and scientific audit
+docs/flowcharts.md           implemented and conditional transformation lineage
+docs/legacy-refactorizacion/ preserved collaborator investigation, primary locator
 docs/evidence/              unchanged supplied summary, attribution and hashes
-tests/fixtures/legacy/      explicit missing-reference status; no golden results
+tests/fixtures/legacy/      controlled original-source IV_R and thermal references
+config/legacy-capture/      separate hash-locked original-source capture environment
 legacy/                    preserved source evidence and original README/template
 ```
 
@@ -126,11 +134,30 @@ Suspected defects are recorded, not silently repaired.
 The supplied [thesis-derived summary](docs/evidence/pv_physics_engine_evidence_summary_for_agent_research_equations_fixed.md)
 is copied unchanged and attributed in adjacent provenance. It is secondary evidence;
 the original thesis, campaign data, catalog workbook, historical dependencies,
-weather snapshots and independent numerical outputs are unavailable. Its narrow
+and weather snapshots are unavailable. Controlled numerical reference outputs now
+exist for IV_R and Faiman/NOCT only. The summary's narrow
 module I–V/correction campaign does not validate annual yield or a full PV system.
 
-Next bounded milestone: capture the candidate active `IV_R` CEC/SAM → De Soto →
-Lambert W path independently, with reviewed module inputs, PySAM/scientific
-dependency versions, exact 100-point grid and raw output hashes, before porting it.
-See [architecture](docs/architecture.md) for the CANOE principles adapted and the
-transport-specific architecture rejected. Agents start with [AGENTS.md](AGENTS.md).
+Start at [AGENTS.md](AGENTS.md), then [coverage](docs/legacy_backend_coverage.md)
+for a capability, [assumptions](docs/assumptions.md) for a modeling decision,
+[flowcharts](docs/flowcharts.md) for ownership/lineage, and
+[reproduction](docs/reproduction.md) for exact replay and capture commands.
+The curated investigation remains supporting evidence; executable captures
+establish selected behavior, while primary formulations and observations answer
+different questions. [Architecture](docs/architecture.md) records the adapted
+CANOE practices and the single owner for each configuration/data concern.
+
+The first reproduction milestone passed for two modules/six I–V conditions/600
+curve points and four thermal parameter cases/five points. The next bounded
+milestone is Sandia selector/length/failure capture and annual-summary
+characterization, followed by source/weather/time-contract recovery for integrated
+annual replay. Full backend reproduction requires every intended coverage row
+to pass its reference comparisons or have a reviewed scope exclusion; no new
+frontend functionality begins before that gate.
+
+Local development requires the locked scientific packages (including PySAM's
+native wheel) and Python 3.12. Capture needs the separate environment, including
+Plotly. Tests/replay need no credentials or external services after installation.
+Loopback process smoke and frontend build commands are listed above; deployment
+packaging/startup verification is recorded in the task plan, with production
+hosting, TLS/secrets operation and cross-platform numerical evidence still pending.

@@ -1,7 +1,10 @@
 # Architecture and ownership
 
-SUNERGY is a small monorepo. The scaffold supports application development and
-explicit boundaries; it contains no migrated PV calculation or validated simulator.
+SUNERGY is a small monorepo with a versioned backend compatibility foundation.
+Selected IV_R, Faiman and NOCT numerical boundaries are implemented and compared
+against independent original-source captures. Full backend reproduction and
+scientific/empirical validation remain open. Start with [coverage](legacy_backend_coverage.md),
+then the relevant [assumption](assumptions.md) and [transformation](flowcharts.md).
 
 ```text
 Next.js forms/presentation
@@ -13,8 +16,8 @@ Next.js forms/presentation
                            catalog/weather snapshots and explicit assumptions
 
 FastAPI/Pydantic -> contracts/openapi.json -> generated TypeScript
-Legacy source + independent captures -> regression gate (currently missing)
-Primary formulations/physical tests -> scientific gate (not performed)
+Legacy source + independent captures -> selected numerical reproduction gates
+Primary formulations/equation tests -> partial scientific checks, open review
 Original measurements -> comparison -> optional calibration (not implemented)
 ```
 
@@ -23,12 +26,14 @@ Original measurements -> comparison -> optional calibration (not implemented)
 | Location | Responsibility and current scope |
 |---|---|
 | `backend/src/sunergy/contracts.py` | Pydantic external point-request, source record, status contracts. Explicit units; provisional request, no accepted scientific model. |
-| `application.py` | Directly callable health/capability and reserved module I–V use cases. |
+| `application.py` | Directly callable compatibility I–V and thermal point use cases, health/capability and reserved general module I–V. |
 | `physics.py` | Ordinary typed numerical boundary; raises `SimulationUnavailable`. No legacy, HTTP or plotting dependency. |
-| `api.py` | Thin FastAPI transport; health 200, capability states, reserved I–V 501, schema errors 422. |
-| `catalog.py` | Exact local snapshot-byte/hash read only; no catalog retrieval/normalization. |
+| `model.py`, `thermal.py` | Typed deterministic kernels: legacy fitting/coefficient interpretation, De Soto/Lambert W and Faiman/NOCT. No acquisition, Pydantic, HTTP or plotting. |
+| `compatibility.py`, `thermal_contracts.py` | Validated supported compatibility boundaries and outputs; separate from the provisional general simulator. |
+| `api.py` | Thin FastAPI transport; compatibility I–V 200 or explicit calculation failure, reserved general I–V 501, schema errors 422. |
+| `fetcher.py`, `catalog.py` | Expected-hash local source loading and explicit legacy field mapping. Catalog retains its existing public reader; no live catalog/weather retrieval. |
 | `configuration.py` | Explicit typed path/source registry loading and unique run-directory allocation. No implicit import-time configuration/network I/O. |
-| `regression.py` | Capture metadata and exact-structure/per-quantity comparison plumbing; no real reference captures. |
+| `regression.py`, `replay.py` | Capture provenance/integrity and exact-structure/per-quantity reproduction, including intermediates; branch/dependency/units checks. |
 | `frontend/` | Next.js App Router presentation, visible pending scope, optional health proxy; no numerical engine. |
 | `contracts/`, `scripts/` | Generated authoritative OpenAPI export and drift/integrity checks. |
 | `docs/evidence/` | Preserved supplied summary, attribution/hash and legacy byte inventory. |
@@ -49,7 +54,7 @@ unavailable/malformed upstream responses; frontend builds never contact the API.
 The reserved request supports manual specs or an explicit catalog snapshot/record
 identity. It takes coordinates and IANA timezone, cell temperature and effective
 in-plane irradiance, explicit reference conditions and versioned model selection.
-No model is supported yet; all valid requests return 501. Coefficients are named
+This general simulator remains unsupported; its valid requests return 501. Coefficients are named
 in A/°C, V/°C, or percent/°C. Original source coefficients remain in original records;
 future normalization must record conversions. Never infer Pmp from a Vmp coefficient.
 Ambient temperature is not cell temperature. A future weather-driven use case must
@@ -57,6 +62,26 @@ add explicit orientation, weather/thermal selection and timestamp/interval
 conventions; these are unnecessary for an explicitly supplied point condition.
 Measurements are optional and belong to a separate evaluation use case, not a
 prerequisite to forward simulation. No upload/calibration endpoint exists yet.
+
+The implemented `/api/v1/compatibility/iv-r` uses `LegacyIVRequest` with explicit
+source-percent coefficients, ordered conditions and comparison inputs. It returns
+exact supplied/effective inputs, fit/translation parameters, 100-point curves,
+MPP metrics and the original rounded error table. It preserves forced monoSi/25°C,
+raw-alpha translation and discarded CEC Adjust under `legacy-iv-r-v1`; it is not a
+scientifically accepted default. Its restricted finite positive-irradiance boundary
+and schema failures deliberately replace implicit dataframe failures. Plot styles
+and the unused reverse-voltage diagnostic are outside the modern returned boundary.
+See [reproduction](reproduction.md) for the exact preservation contract.
+
+`request_thermal` exposes `legacy-faiman-v1` and `legacy-noct-v1` directly in Python.
+Coefficients/NOCT are required inputs; points retain identifiers/order. It returns
+immutable values instead of mutating a legacy weather frame. No annual weather
+integration or thermal HTTP endpoint is inferred from these point kernels.
+
+Normalization ends at source field names, layout, identity and unchanged values.
+The model alone owns coefficient conversions, overrides, fitting, equations and
+grid selection. No imputation, aggregation, calibration or defaults hide in the
+fetcher. [Assumptions](assumptions.md#ownership-and-authorities) records every owner.
 
 The frontend's server-only `SUNERGY_API_URL` selects the API origin (default
 `http://127.0.0.1:8000`). No credentials are required today. Future weather secrets
@@ -69,7 +94,7 @@ framework is needed until there are actual settings to consume.
 | Class | Location / policy |
 |---|---|
 | Reviewed/source evidence | `docs/evidence/`; preserve supplied bytes with attribution/hash. New editions get new identities. |
-| Small redistributable fixtures | `tests/fixtures/legacy/`; explicit review, capture manifest and hashes required. No golden results today. |
+| Small redistributable fixtures | `tests/fixtures/legacy/`; controlled original-source outputs with capture manifests, hash-locked environment and explicitly synthetic manual inputs. |
 | Original private uploads | Planned `.local/private/`, ignored; preserve bytes/hash, permissions and ownership. |
 | Cache | Planned `.local/cache/`, ignored; disposable and never authoritative. Tool caches also ignored. |
 | Generated results | `.local/runs/run-*`, ignored; `create_run_directory` allocates isolated names. |
@@ -87,11 +112,13 @@ never change saved runs/baselines. The observed legacy catalog is a missing Exce
 workbook, not proven to be a pvlib snapshot. Manual specifications remain an
 alternative. No live acquisition occurs in current runtime or default tests.
 
-pvlib and PySAM are not installed in the HTTP scaffold because it performs no
-physics. The traced CEC fitting calls **already require NREL-PySAM**. The next
-independent capture must select/lock compatible pvlib, PySAM/SSC and scientific
-dependencies; do not postpone PySAM until full-system modeling or claim this
-new lockfile reproduces the unknown historical legacy environment.
+The application lock pins pvlib/PySAM/NumPy/pandas/SciPy to the captured core
+versions. A separate hash-locked `config/legacy-capture/requirements.txt` adds
+Plotly for original-source capture. Capture scripts import no modern SUNERGY code;
+they execute only inspected original function ASTs in fresh processes/CWDs with
+Python networking blocked. This reconstructed environment does not establish the
+unknown historical runtime. `uv.lock` owns application dependencies, the separate
+capture lock owns the reference environment, and manifests record actual versions.
 
 ## Extension boundaries, not speculative schemas
 
@@ -118,6 +145,14 @@ and fitting data provenance. Record held-out evaluation separately when availabl
 goodness of fit alone is not independent validation. No calibration algorithm now.
 
 ## Reference decisions
+
+The current reconciliation reuses CANOE's source/parameter separation, explicit
+snapshot refresh, parameter-specific assumptions/diagrams and selective routing.
+Reviewed local `config/paths.yaml`, the assumption-register structure and
+`docs/etl_flowcharts.md` on 2026-11-10; the [public repository](https://github.com/CANOE-main/canoe-transportation/)
+also exposes fetching → parameterization → validation and separate source-update
+maintenance. No transport equations, schemas, database pipeline or scenario
+infrastructure are adopted. The earlier scaffold comparison below is historical.
 
 Adapted from CANOE: selective context retrieval, one owner per artifact, traceable
 source metadata, stable policy separate from bounded plans, Pydantic at boundaries,

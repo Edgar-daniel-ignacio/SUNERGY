@@ -1,6 +1,7 @@
 """Independent-capture contract and strict comparison plumbing, not a parity claim."""
 
-from pathlib import PurePosixPath
+from hashlib import sha256
+from pathlib import Path, PurePosixPath
 
 from pydantic import AwareDatetime, Field, JsonValue, field_validator, model_validator
 
@@ -54,6 +55,29 @@ class CaptureManifest(BoundaryModel):
     capture_method: NonEmpty
     tolerances: dict[str, QuantityTolerance] = Field(min_length=1)
     review_status: NonEmpty
+
+
+def verify_capture_artifacts(root: Path, manifest: CaptureManifest) -> None:
+    """Reject changed/missing evidence before replay, including the capture intervention."""
+    wrapper = Artifact.model_validate(manifest.model_solver_grid["wrapper"])
+    snapshots = [
+        manifest.catalog_snapshot,
+        manifest.weather_snapshot,
+        manifest.measurement_snapshot,
+    ]
+    for artifact in [
+        *manifest.source_files,
+        manifest.dependency_lock,
+        *manifest.inputs,
+        *manifest.outputs,
+        wrapper,
+        *(snapshot for snapshot in snapshots if snapshot is not None),
+    ]:
+        path = (root / artifact.path).resolve()
+        if not path.is_relative_to(root.resolve()):
+            raise ValueError(f"Capture artifact escapes repository: {artifact.path}")
+        if sha256(path.read_bytes()).hexdigest() != artifact.sha256:
+            raise ValueError(f"Capture artifact hash mismatch: {artifact.path}")
 
 
 class QuantitySeries(BoundaryModel):

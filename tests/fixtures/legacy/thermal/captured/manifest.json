@@ -1,0 +1,91 @@
+{
+  "capture_id": "legacy-thermal-synthetic-v1",
+  "captured_at": "2026-11-11T04:55:32.976018+00:00",
+  "source_revision": "cef03c2b9f73558c715d489f499d55ce26824a4c",
+  "source_files": [
+    {
+      "path": "legacy/Input_File_DIV_Mac_Informe.py",
+      "sha256": "4c4ed36d0f8d1cd4cecfd1794ce0b99803aa8470bb0a7f3c096b992967d6702c",
+      "provenance": "Unchanged source; checked against preservation inventory"
+    }
+  ],
+  "entrypoint": "Input_File_DIV_Mac_Informe.Temperature_feinman:805-814 and Temperature_NOCT:817-825; original selected AST bodies",
+  "python_version": "3.12.12",
+  "platform": "Windows-11-10.0.26300-SP0; AMD64",
+  "dependencies": {
+    "certifi": "2026.10.23",
+    "charset-normalizer": "3.5.2",
+    "h5py": "3.16.0",
+    "idna": "3.20",
+    "narwhals": "2.28.0",
+    "NREL-PySAM": "7.1.0",
+    "numpy": "2.3.4",
+    "packaging": "26.3",
+    "pandas": "2.3.3",
+    "plotly": "6.4.0",
+    "pvlib": "0.13.1",
+    "python-dateutil": "4.0.0",
+    "pytz": "2026.6",
+    "requests": "2.34.2",
+    "scipy": "1.16.3",
+    "tzdata": "2026.6",
+    "urllib3": "2.8.0"
+  },
+  "dependency_lock": {
+    "path": "config/legacy-capture/requirements.txt",
+    "sha256": "5267c793958aadcfc70cb8064dc30b12880c3f14c15e5768f925824b8bd9aeab",
+    "provenance": "Reconstructed isolated environment; historical versions unavailable"
+  },
+  "inputs": [
+    {
+      "path": "tests/fixtures/legacy/thermal/captured/inputs.json",
+      "sha256": "eb2eca423a5ee438bb99485610571bc63a5b4dba027d31fc1a548771a5730d77",
+      "provenance": "Deliberately selected redistributable synthetic point conditions, not weather observations or empirical validation. Baseline parameters transcribed from legacy Feinman_options (25,6.84) and NOCT_In (43); alternate parameters exercise explicit caller inputs."
+    }
+  ],
+  "outputs": [
+    {
+      "path": "tests/fixtures/legacy/thermal/captured/outputs.json",
+      "sha256": "8d401b1526f373169a3d49ae2282c8b35c0f25021cbf88e6fc446b5e24a350ff",
+      "provenance": "Original legacy thermal functions independently executed before modern port"
+    }
+  ],
+  "catalog_snapshot": null,
+  "weather_snapshot": null,
+  "measurement_snapshot": null,
+  "units_and_coefficients": {
+    "inputs": "Poa_global W/m2; temp_air degC; wind_speed m/s",
+    "faiman": "u0 W/(m2 degC); u1 W/(m2 degC (m/s)); real pvlib.faiman called with explicit U0/U1; UI values 25,6.84",
+    "noct": "TNMOT degC; TNOCT=Ta+((TNMOT-20)/800)*E; constants 20 degC,800 W/m2; UI value 43 degC",
+    "outputs": "TFeinman,NOCT degC; names preserve legacy labels, not measured cell temperature"
+  },
+  "time_convention": "Ordered synthetic steady-state points; no timestamps, weather integration, timezone or DST",
+  "model_solver_grid": {
+    "model": "legacy-faiman-v1 and legacy-noct-v1; explicit supplied coefficients",
+    "wrapper": {
+      "path": "scripts/capture_legacy_thermal.py",
+      "sha256": "7b4d3f47cd8db0ccff46624bf720860c554ef654cfe00d6bf50c904e44f7fbe6",
+      "provenance": "Inspectable AST selection; no numerical edits or modern imports"
+    },
+    "function_source_sha256": {
+      "Temperature_feinman": "80ca79dc025e24a7e3f1fa8685d1437dbf0b34b4e414d28cbe54117f4f14c20a",
+      "Temperature_NOCT": "5cff98b4945c4f8cd9978c05b27d00c49412980531c85ac52ee97cf3d7c0e403"
+    },
+    "isolation": "Fresh subprocess/temporary CWD; socket connect blocked; full legacy module not imported",
+    "mutation": "Legacy returns None and appends output to original frame; modern numerical boundary returns ordered values without mutation",
+    "repeated_calculation": "Each original function repeats calculation for all four sizes without checking length; preserved capture executes original loops",
+    "excluded": "Sandia not ported: len gate requires 8760/17520/35040/105120 and selectors 5/6 lack deltaT entries; capture each regime/failure before port. No annual wrapper, weather acquisition, thermal calibration or measured cell-temperature claim."
+  },
+  "random_seed": null,
+  "randomness_notes": "No stochastic operations in selected functions",
+  "capture_method": "scripts/capture_legacy_thermal.py --inputs tests/fixtures/legacy/thermal/inputs.json --output tests/fixtures/legacy/thermal/captured",
+  "tolerances": {
+    "temperature": {
+      "unit": "degC",
+      "absolute": 1e-12,
+      "relative": 1e-12,
+      "rationale": "Double precision scalar arithmetic; 1e-12 degC floor and relative scale allow last-bit evaluation differences at these synthetic point conditions; no measurement accuracy claim"
+    }
+  },
+  "review_status": "Independently captured original kernels; representative synthetic conditions only; historical environment, cross-platform and empirical validation unavailable"
+}

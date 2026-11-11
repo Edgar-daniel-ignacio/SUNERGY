@@ -6,6 +6,7 @@ from hashlib import sha256
 from pathlib import Path
 
 from sunergy.configuration import load_paths, load_sources
+from sunergy.regression import CaptureManifest, verify_capture_artifacts
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -44,8 +45,14 @@ def check_repository(root: Path) -> None:
     capture_status = json.loads(
         (root / paths.regression_fixtures / "capture_status.json").read_text(encoding="utf-8")
     )
-    if capture_status["status"] != "missing_reference_outputs":
-        raise ValueError("Review capture status/check when real reference outputs are added")
+    if capture_status["status"] != "partial_reference_outputs" or not capture_status["manifests"]:
+        raise ValueError("Expected explicit partial capture coverage and manifest list")
+    for relative_path in capture_status["manifests"]:
+        path = (root / relative_path).resolve()
+        if not path.is_relative_to((root / paths.regression_fixtures).resolve()):
+            raise ValueError("Capture manifest must be inside the fixture directory")
+        manifest = CaptureManifest.model_validate_json(path.read_text(encoding="utf-8"))
+        verify_capture_artifacts(root, manifest)
 
 
 if __name__ == "__main__":

@@ -5,12 +5,24 @@ questions separately. It does not select a scientifically authoritative legacy
 branch. See [reproduction](reproduction.md) before capture or migration and
 [architecture](architecture.md) for modern ownership.
 
+The curated [legacy investigation](legacy-refactorizacion/README.md) is the primary
+starting map for this consolidation. Its [reconciled capability map](legacy_backend_coverage.md)
+assesses every chapter and preserves conflicts against actual source. The populated
+[assumption register](assumptions.md) links primary scientific support and operation
+owners, while [flowcharts](flowcharts.md) distinguish implemented and deferred paths.
+Selected IV_R/Faiman/NOCT numerical boundaries now have independent captures and
+modern comparisons; this does not select a scientifically accepted default.
+
 ## Sources and preservation
 
 - Local implementation inspected at SUNERGY revision
   `ef92cd12fd2c40854c24c1fe7cded9ba351de7df`; the working tree is the implementation
   target. [Preservation inventory](evidence/legacy_inventory.json) records legacy
   file hashes. No legacy code was imported or executed during scaffolding.
+- Current capture source revision is `cef03c2b9f73558c715d489f499d55ce26824a4c`.
+  Exact unchanged helper AST bodies were independently executed in isolation.
+  Manifests and commands are linked from [reproduction](reproduction.md); original
+  curated/source evidence was retained without rewriting it.
 - [Supplied thesis-derived summary](evidence/pv_physics_engine_evidence_summary_for_agent_research_equations_fixed.md)
   is preserved unchanged, with [copy provenance](evidence/provenance.json).
   Its stated primary source is Edgar Daniel Ignacio Domínguez Zamora,
@@ -36,21 +48,24 @@ no calls through either alias. Numerical callbacks mainly call
 `Input_File_DIV_Mac_Informe as input`. Thus an import or a README description
 does not make `CurvaIV.IV` the active application's curve implementation.
 
-| Capability | Observed code, inputs and outputs | Summary support | Future modern owner / gate |
+| Capability | Observed code, inputs and outputs | Summary support | Modern owner / current gate |
 |---|---|---|---|
 | Weather | Dashboard `clima:853–936` → [Primer_Funcion_Clima.py](../legacy/Primer_Funcion_Clima.py) `Clima:64–183`; coordinates/year/interval → mutable weather frames and metadata. Chooses PSM4 or PSM3 by installed pvlib capabilities. | §§4.1, 4.6: NSRDB/TMY environmental chain. | Weather adapter with explicit snapshot/replay; no capture available. |
 | Solar geometry / POA | [Posicion_Solar.py](../legacy/Posicion_Solar.py) `Solar_pos:36–114`, `Solar_pos_e:116–194`; weather, location and optional orientation → POA columns. | §4.6; supporting method, not annual experimental validation. | Deterministic physics functions; formulation/time review and parity pending. |
-| Thermal models | [Input_File_DIV_Mac_Informe.py](../legacy/Input_File_DIV_Mac_Informe.py) `Temperature_sandia:785–800`, `Temperature_feinman:805–814`, `Temperature_NOCT:817–825`; POA/air temperature/wind/settings → temperature columns. | §4.7: Sandia/Faiman/NOCT. | Physics functions and explicit assumptions; parity/scientific checks pending. |
+| Thermal models | [Input_File_DIV_Mac_Informe.py](../legacy/Input_File_DIV_Mac_Informe.py) `Temperature_sandia:785–800`, `Temperature_feinman:805–814`, `Temperature_NOCT:817–825`; POA/air temperature/wind/settings → temperature columns. | §4.7: Sandia/Faiman/NOCT. | Faiman/NOCT point kernels captured and compared; Sandia/annual integration pending. Scientific scope in assumptions TH-01/TH-02. |
 | Module specifications / catalog | Helper `Placa_Prueba:982–1015`, `Placa_D1/D2:1017–1057`; dashboard catalog reads CWD `Libro1.xlsx:765`. | §§4.2, 7.2: datasheet/manual/CEC input workflow. | Boundary contracts plus catalog adapter; workbook and edition missing. |
 | Annual module estimates | Dashboard `electric_parameters:1148–1458` → helper `PE:1376–1519`, `PE_NOCT:1524–2011`, `PE_t:2013–2178`, `PE_t_S:2180–2318` and companions. Weather/module → named electrical time series. | §§4.8, 6.3: simplified annual branch; explicitly unvalidated experimentally. | Application/physics; branch-specific capture and scientific review pending. |
-| Active detailed I–V curves | Helper `IV_R:4268–4369`, `IV_CI:5607–5769`, `IV_sim:5771–5817`, `IV_CI_cor:5819…`; CEC/SAM fit → De Soto → Lambert W; 100, `len(df)`, or 250 points, depending on function. | §§4.3–4.5 report nonlinear reference extraction with Powell-Hybrid and Lambert W, rather than proving these exact CEC-fit calls. | Physics with a separately tested pvlib/PySAM adapter; no golden outputs or parity. |
+| Active detailed I–V curves | Helper `IV_R:4268–4369`, `IV_CI:5607–5769`, `IV_sim:5771–5817`, `IV_CI_cor:5819…`; CEC/SAM fit → De Soto → Lambert W; 100, `len(df)`, or 250 points, depending on function. | §§4.3–4.5 report nonlinear reference extraction with Powell-Hybrid and Lambert W, rather than proving these exact CEC-fit calls. | IV_R numerical boundary captured/compared in model.py; other branches pending. Reproduction and assumptions IV-01–03 define the limits. |
 | Alternate detailed I–V | [CurvaIV.py](../legacy/CurvaIV.py) `IV:14–98`; CEC/SAM fit, six hardcoded conditions, De Soto, Newton, 100-point grid → Plotly figure and printed values. Imported but not called by candidate app. | Differs from detailed pathway and point counts reported in summary. | Separate baseline only if explicitly selected; not authoritative by filename. |
 | Measurements / correction | Dashboard `IV_Corrct:3791–3943`; helper upload `955–980`, `IV_CI_cor:5819…`, `correction_IV:7304–7534`, `correction_IV_s:7609…`; workbook curves/Info sheet → corrected curves and comparisons. | §§4.9, 5–6: narrow I–V/correction campaign. | Measurement ingestion/evaluation boundary; originals separate from normalized/corrected data; fixtures missing. |
 | Representative curve | Dashboard calls helper `Bootstrap`/`Bootstrap2:4087–4105`; helper `8358…`, `8565…` uses random resampling → representative curve/statistics. | §4.10: statistical synthesis. | Evaluation use case; seed/state, ordering and point handling must be captured. |
 
 Line references refer to the preserved local source revision and inventory, not
-to a moving remote branch. None of these rows has passed modern reproduction or
-independent scientific verification.
+to a moving remote branch. Current reproduction is limited to the captured IV_R
+and Faiman/NOCT numerical boundaries, with partial equation checks, as recorded in
+[reproduction](reproduction.md). No complete scientific or empirical validation is
+claimed. The table above retains the source-level map; current owners/statuses
+are maintained in [coverage](legacy_backend_coverage.md).
 
 ## Reported experimental envelope
 
@@ -88,8 +103,10 @@ These are questions or observed defects, not approved corrections:
 
 Missing: original report/PDF, historical dependency environment, `Libro1.xlsx`
 and its license/edition, weather response snapshots/metadata, original uploaded
-measurement workbook, measurement permissions, independently captured raw outputs,
-and reviewed numerical tolerances. `Modules_Data_Base.py` is empty; no
+measurement workbook and measurement permissions. Controlled IV_R/Faiman/NOCT
+raw outputs and provisional domain-specific software tolerances now exist;
+cross-platform behavior and all other capability references remain open.
+`Modules_Data_Base.py` is empty; no
 `retrieve_sam` call occurs in the traced active path. A future catalog adapter
 must explicitly select bundled or file/URL data and version each snapshot; a
 refresh cannot replace a saved run's data.

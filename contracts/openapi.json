@@ -1,6 +1,24 @@
 {
   "components": {
     "schemas": {
+      "CalculationFailure": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "const": "legacy_iv_calculation_failed",
+            "default": "legacy_iv_calculation_failed",
+            "title": "Code",
+            "type": "string"
+          },
+          "message": {
+            "default": "The compatibility fit or calculation did not return finite supported outputs.",
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "title": "CalculationFailure",
+        "type": "object"
+      },
       "CapabilityResponse": {
         "additionalProperties": false,
         "properties": {
@@ -10,9 +28,16 @@
             "title": "Calibration",
             "type": "string"
           },
+          "compatibility_models": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Compatibility Models",
+            "type": "array"
+          },
           "legacy_reproduction": {
-            "const": "missing_reference_outputs",
-            "default": "missing_reference_outputs",
+            "const": "partial_iv_r_and_thermal",
+            "default": "partial_iv_r_and_thermal",
             "title": "Legacy Reproduction",
             "type": "string"
           },
@@ -29,8 +54,8 @@
             "type": "string"
           },
           "scientific_verification": {
-            "const": "not_performed",
-            "default": "not_performed",
+            "const": "partial_equation_checks",
+            "default": "partial_equation_checks",
             "title": "Scientific Verification",
             "type": "string"
           }
@@ -94,6 +119,364 @@
           "version"
         ],
         "title": "HealthResponse",
+        "type": "object"
+      },
+      "LegacyIVCase": {
+        "additionalProperties": false,
+        "properties": {
+          "cell_temperature_c": {
+            "exclusiveMinimum": -273.15,
+            "title": "Cell Temperature C",
+            "type": "number"
+          },
+          "comparison_i_mp_a": {
+            "minimum": 0.0,
+            "title": "Comparison I Mp A",
+            "type": "number"
+          },
+          "comparison_i_sc_a": {
+            "minimum": 0.0,
+            "title": "Comparison I Sc A",
+            "type": "number"
+          },
+          "comparison_p_mp_w": {
+            "description": "Comparison input, not necessarily measured",
+            "minimum": 0.0,
+            "title": "Comparison P Mp W",
+            "type": "number"
+          },
+          "comparison_v_mp_v": {
+            "minimum": 0.0,
+            "title": "Comparison V Mp V",
+            "type": "number"
+          },
+          "comparison_v_oc_v": {
+            "minimum": 0.0,
+            "title": "Comparison V Oc V",
+            "type": "number"
+          },
+          "condition_id": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Condition Id",
+            "type": "string"
+          },
+          "effective_irradiance_w_m2": {
+            "description": "Zero has undefined error table",
+            "exclusiveMinimum": 0.0,
+            "title": "Effective Irradiance W M2",
+            "type": "number"
+          }
+        },
+        "required": [
+          "condition_id",
+          "effective_irradiance_w_m2",
+          "cell_temperature_c",
+          "comparison_i_sc_a",
+          "comparison_v_oc_v",
+          "comparison_i_mp_a",
+          "comparison_v_mp_v",
+          "comparison_p_mp_w"
+        ],
+        "title": "LegacyIVCase",
+        "type": "object"
+      },
+      "LegacyIVCaseResult": {
+        "additionalProperties": false,
+        "properties": {
+          "condition_id": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Condition Id",
+            "type": "string"
+          },
+          "current_a": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 100,
+            "minItems": 100,
+            "title": "Current A",
+            "type": "array"
+          },
+          "desoto_inputs": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Desoto Inputs",
+            "type": "object"
+          },
+          "desoto_parameters": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Desoto Parameters",
+            "type": "object"
+          },
+          "singlediode": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Singlediode",
+            "type": "object"
+          },
+          "voltage_v": {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 100,
+            "minItems": 100,
+            "title": "Voltage V",
+            "type": "array"
+          }
+        },
+        "required": [
+          "condition_id",
+          "desoto_inputs",
+          "desoto_parameters",
+          "singlediode",
+          "voltage_v",
+          "current_a"
+        ],
+        "title": "LegacyIVCaseResult",
+        "type": "object"
+      },
+      "LegacyIVModule": {
+        "additionalProperties": false,
+        "description": "Source coefficients retain percent/°C; the model owns interpretation.",
+        "properties": {
+          "alpha_sc_percent_per_c": {
+            "title": "Alpha Sc Percent Per C",
+            "type": "number"
+          },
+          "beta_voc_percent_per_c": {
+            "title": "Beta Voc Percent Per C",
+            "type": "number"
+          },
+          "cells_in_series": {
+            "exclusiveMinimum": 0.0,
+            "title": "Cells In Series",
+            "type": "integer"
+          },
+          "gamma_pmp_percent_per_c": {
+            "title": "Gamma Pmp Percent Per C",
+            "type": "number"
+          },
+          "i_mp_a": {
+            "exclusiveMinimum": 0.0,
+            "title": "I Mp A",
+            "type": "number"
+          },
+          "i_sc_a": {
+            "exclusiveMinimum": 0.0,
+            "title": "I Sc A",
+            "type": "number"
+          },
+          "p_mp_w": {
+            "description": "Retained source rating; unused by IV_R fit",
+            "exclusiveMinimum": 0.0,
+            "title": "P Mp W",
+            "type": "number"
+          },
+          "source_cell_type": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Source Cell Type",
+            "type": "string"
+          },
+          "source_reference_temperature_c": {
+            "exclusiveMinimum": -273.15,
+            "title": "Source Reference Temperature C",
+            "type": "number"
+          },
+          "v_mp_v": {
+            "exclusiveMinimum": 0.0,
+            "title": "V Mp V",
+            "type": "number"
+          },
+          "v_oc_v": {
+            "exclusiveMinimum": 0.0,
+            "title": "V Oc V",
+            "type": "number"
+          }
+        },
+        "required": [
+          "p_mp_w",
+          "v_mp_v",
+          "i_mp_a",
+          "v_oc_v",
+          "i_sc_a",
+          "alpha_sc_percent_per_c",
+          "beta_voc_percent_per_c",
+          "gamma_pmp_percent_per_c",
+          "cells_in_series",
+          "source_reference_temperature_c",
+          "source_cell_type"
+        ],
+        "title": "LegacyIVModule",
+        "type": "object"
+      },
+      "LegacyIVRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "cases": {
+            "items": {
+              "$ref": "#/components/schemas/LegacyIVCase"
+            },
+            "minItems": 1,
+            "title": "Cases",
+            "type": "array"
+          },
+          "model_id": {
+            "const": "legacy-iv-r-v1",
+            "title": "Model Id",
+            "type": "string"
+          },
+          "module": {
+            "$ref": "#/components/schemas/LegacyIVModule"
+          },
+          "source_record": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SourceRecord"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "model_id",
+          "module",
+          "cases"
+        ],
+        "title": "LegacyIVRequest",
+        "type": "object"
+      },
+      "LegacyIVResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "cases": {
+            "items": {
+              "$ref": "#/components/schemas/LegacyIVCaseResult"
+            },
+            "minItems": 1,
+            "title": "Cases",
+            "type": "array"
+          },
+          "effective_assumptions": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Effective Assumptions",
+            "type": "object"
+          },
+          "fit_inputs": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            },
+            "title": "Fit Inputs",
+            "type": "object"
+          },
+          "fit_parameters": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "title": "Fit Parameters",
+            "type": "object"
+          },
+          "model_id": {
+            "const": "legacy-iv-r-v1",
+            "default": "legacy-iv-r-v1",
+            "title": "Model Id",
+            "type": "string"
+          },
+          "reproduction_scope": {
+            "default": "Selected IV_R numerical boundary; full backend reproduction pending",
+            "title": "Reproduction Scope",
+            "type": "string"
+          },
+          "scientific_status": {
+            "default": "Compatibility defects preserved; no empirical validation",
+            "title": "Scientific Status",
+            "type": "string"
+          },
+          "source_record": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SourceRecord"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "supplied_cases": {
+            "items": {
+              "$ref": "#/components/schemas/LegacyIVCase"
+            },
+            "minItems": 1,
+            "title": "Supplied Cases",
+            "type": "array"
+          },
+          "supplied_module": {
+            "$ref": "#/components/schemas/LegacyIVModule"
+          },
+          "table_columns": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Table Columns",
+            "type": "array"
+          },
+          "table_records": {
+            "items": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            "title": "Table Records",
+            "type": "array"
+          }
+        },
+        "required": [
+          "supplied_module",
+          "supplied_cases",
+          "source_record",
+          "effective_assumptions",
+          "fit_parameters",
+          "fit_inputs",
+          "cases",
+          "table_columns",
+          "table_records"
+        ],
+        "title": "LegacyIVResponse",
         "type": "object"
       },
       "ManualModule": {
@@ -391,7 +774,7 @@
     }
   },
   "info": {
-    "title": "SUNERGY scaffold",
+    "title": "SUNERGY backend",
     "version": "0.1.0"
   },
   "openapi": "3.1.0",
@@ -412,6 +795,54 @@
           }
         },
         "summary": "Get Capabilities"
+      }
+    },
+    "/api/v1/compatibility/iv-r": {
+      "post": {
+        "operationId": "reproduceLegacyIV",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LegacyIVRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LegacyIVResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalculationFailure"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Post Legacy Iv"
       }
     },
     "/api/v1/module-iv": {
