@@ -54,8 +54,8 @@
             "type": "string"
           },
           "scientific_verification": {
-            "const": "partial_equation_checks",
-            "default": "partial_equation_checks",
+            "const": "incomplete_mpp_target_unmet",
+            "default": "incomplete_mpp_target_unmet",
             "title": "Scientific Verification",
             "type": "string"
           }
@@ -415,7 +415,7 @@
             "type": "string"
           },
           "scientific_status": {
-            "default": "Compatibility defects preserved; no empirical validation",
+            "default": "Limited equation checks; an original Linux MPP audit target is unmet; no empirical validation",
             "title": "Scientific Status",
             "type": "string"
           },

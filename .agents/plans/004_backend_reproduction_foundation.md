@@ -218,3 +218,15 @@ Record actual results here; no skip or unavailable check counts as reproduction.
 - Current local full suite: **88 passed**. All five capture manifests validate on
   Windows; selected numerical comparisons still use the unchanged thresholds.
   Final Windows/Ubuntu CI rerun follows this integration commit.
+- Subsequent CI `42966647478`: all selected Linux reproduction comparisons passed;
+  the independent scientific stationarity check exposed original Linux STC-alt at
+  about 1.118e-6 A against the fixed strict 1e-6 A review target. Kept that target
+  and failed audit outcome, rather than loosening it or changing the legacy solver.
+  The source audit explains near-flat rounded-power optimization sensitivity but
+  does not establish a physical defect or an accepted alternative accuracy bound.
+- Split equation-residual/endpoints from MPP audit characterization. Tests require
+  modern derivative values and target outcomes to reproduce the independent
+  reference, while API/report/docs explicitly state the target is unmet and
+  scientific verification incomplete. No skipped/xfail comparisons and no numerical
+  reproduction threshold changed. Local final suite **90 passed**; Ruff/format,
+  mypy, regenerated OpenAPI/TypeScript drift and all artifact integrity checks pass.

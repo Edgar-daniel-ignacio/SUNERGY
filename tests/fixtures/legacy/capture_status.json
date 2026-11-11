@@ -10,7 +10,7 @@
   ],
   "implemented_profiles": ["legacy-iv-r-v1", "legacy-faiman-v1", "legacy-noct-v1"],
   "reproduction": "Selected numerical boundaries compared; full backend pending",
-  "scientific_verification": "Partial unit/formulation audit and equation checks; compatibility defects preserved",
+  "scientific_verification": "Incomplete: residual checks pass, original Linux STC-alt MPP stationarity target remains unmet; compatibility defects preserved",
   "measurement_comparison": "Not performed; original measurement workbook unavailable",
   "calibration": "Not implemented",
   "remaining": [

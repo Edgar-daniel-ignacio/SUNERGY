@@ -3,6 +3,7 @@
 import argparse
 import json
 from hashlib import sha256
+from math import exp
 from pathlib import Path
 from typing import Any
 
@@ -32,6 +33,21 @@ def scalar_differences(left: dict[str, float], right: dict[str, float]) -> dict[
     return {name: differences([value], [right[name]]) for name, value in left.items()}
 
 
+def stationarity_audit(case: dict[str, Any]) -> dict[str, float | bool]:
+    parameters, metrics = case["desoto_parameters"], case["singlediode"]
+    v, i = metrics["v_mp"], metrics["i_mp"]
+    rs, rsh = parameters["resistance_series"], parameters["resistance_shunt"]
+    a, i0 = parameters["nNsVth"], parameters["saturation_current"]
+    conductance = i0 * exp((v + i * rs) / a) / a + 1 / rsh
+    signed = i - v * conductance / (1 + rs * conductance)
+    return {
+        "signed_stationarity_a": signed,
+        "absolute_stationarity_a": abs(signed),
+        "target_strictly_below_a": 1e-6,
+        "target_met": abs(signed) < 1e-6,
+    }
+
+
 def audit() -> dict[str, Any]:
     pairs = []
     for windows, linux in (
@@ -57,6 +73,10 @@ def audit() -> dict[str, Any]:
                         a["desoto_parameters"], b["desoto_parameters"]
                     ),
                     "singlediode": scalar_differences(a["singlediode"], b["singlediode"]),
+                    "scientific_audit": {
+                        "windows": stationarity_audit(a),
+                        "linux": stationarity_audit(b),
+                    },
                     **{
                         name: differences(a[name], b[name])
                         for name in ("voltage", "current", "reverse_voltage", "reverse_current")

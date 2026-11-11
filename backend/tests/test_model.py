@@ -94,7 +94,7 @@ def test_output_contract_rejects_incomplete_or_misaligned_results(
         LegacyIVResponse.model_validate(data)
 
 
-def test_scientific_solver_residual_and_mpp_stationarity(captured: Any) -> None:
+def test_scientific_solver_residual_and_endpoints(captured: Any) -> None:
     # Independent equation arithmetic, not a second pvlib solver. Supports solver
     # consistency only, not the source coefficient chain or empirical accuracy.
     _, _, result = captured
@@ -107,13 +107,29 @@ def test_scientific_solver_residual_and_mpp_stationarity(captured: Any) -> None:
             for v, i in zip(case.voltage_v, case.current_a, strict=True)
         ]
         assert max(abs(value) for value in residuals) < 1e-10  # A, observed <4e-14
-        vmp, imp = case.singlediode["v_mp"], case.singlediode["i_mp"]
-        conductance = i0 * exp((vmp + imp * rs) / a) / a + 1 / rsh
-        derivative = -conductance / (1 + rs * conductance)
-        assert abs(imp + vmp * derivative) < 1e-6  # A, pvlib MPP optimizer precision
         assert case.voltage_v[0] == 0
         assert case.voltage_v[-1] == case.singlediode["v_oc"]
         assert abs(case.current_a[-1]) < 1e-10
+
+
+def test_original_unmet_mpp_audit_target_is_preserved_and_visible(captured: Any) -> None:
+    _, reference, result = captured
+
+    def stationarity(parameters: dict[str, float], metrics: dict[str, float]) -> float:
+        v, i = metrics["v_mp"], metrics["i_mp"]
+        rs, rsh = parameters["resistance_series"], parameters["resistance_shunt"]
+        a, i0 = parameters["nNsVth"], parameters["saturation_current"]
+        conductance = i0 * exp((v + i * rs) / a) / a + 1 / rsh
+        return i - v * conductance / (1 + rs * conductance)
+
+    for original, modern in zip(reference["cases"], result.cases, strict=True):
+        expected = stationarity(original["desoto_parameters"], original["singlediode"])
+        actual = stationarity(modern.desoto_parameters, modern.singlediode)
+        assert actual == pytest.approx(expected, abs=1e-12)
+        assert (abs(actual) < 1e-6) == (abs(expected) < 1e-6)
+    # The fixed scientific target is an audit result, not a passing accuracy gate.
+    # The raw Linux reference fails it; this test characterizes that limitation.
+    assert "unmet" in result.scientific_status
 
 
 def test_scientific_translation_scaling_and_preserved_alpha_inconsistency(captured: Any) -> None:

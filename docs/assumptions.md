@@ -116,7 +116,9 @@ An independent arithmetic audit of the six recorded cases in `iv_r/captured`
 and `iv_r/captured_alternate` evaluated the residual and analytic implicit
 derivative directly from stored parameters/points, without calling the modern
 model or pvlib. Maximum absolute equation residual was below 4.0e-14 A;
-maximum absolute MPP `dP/dV` was below 5.8e-7 A. These finite-case observations
+maximum absolute MPP `dP/dV` was below 5.8e-7 A for the Windows captures. The
+Linux alternate STC case later exceeded the unchanged 1e-6 A review target;
+IV-04 preserves that unmet result. These finite-case observations
 support numerical consistency of these stored curves only. They do not resolve
 IV-01/IV-02, establish global solver behavior or constitute empirical evidence.
 
@@ -154,6 +156,17 @@ fail the reproduction gate explicitly; general calculation availability is separ
 Same-platform software compatibility, cross-platform numerical invariance and
 scientific/empirical accuracy remain different claims. Future solver/library/native
 build changes require a fresh independent capture and discrepancy review.
+
+**Unmet scientific audit target.** The independent Linux `STC-alt` reference has
+`abs(Imp + Vmp*dI/dV)` about 1.118e-6 A, above the selected strict `<1e-6 A`
+target. The target was retained, with `target_met: false` in the original-source
+audit report. Modern numeric outputs and audit outcome reproduce this limitation.
+The single-diode residual check still passes separately at 1e-10 A. A green
+characterization/reproduction suite therefore does not mean this scientific
+target passed; API capability status explicitly reports it unmet. This is an
+unmet solver audit target, not proof of a physical defect or a justification for
+a new accepted accuracy threshold. A power-precision criterion would require
+separate derivation/review and must supplement this preserved result.
 
 ## IN-01 — Preset and manual module paths
 

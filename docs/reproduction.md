@@ -202,6 +202,13 @@ grid length, required quantities and table structure; the gate must fail. Output
 contracts independently reject missing/misaligned stages. Equation residual and
 MPP derivative tests use direct arithmetic, distinct from reproduction tests.
 
+The fixed MPP stationarity audit target `<1e-6 A` is unmet by original Linux
+`STC-alt` (about 1.118e-6 A) and by its faithful modern reproduction. It remains
+`target_met: false` in the platform audit; tests characterize that numeric result
+and outcome, rather than marking the scientific target passed or changing its
+threshold. Equation residual and endpoint checks pass separately. The API reports
+`scientific_verification: incomplete_mpp_target_unmet`.
+
 ## Next bounded milestones and full backend gate
 
 Next capture Sandia's accepted-length/selector/failure regimes and characterize

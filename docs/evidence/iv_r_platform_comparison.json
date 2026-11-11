@@ -151,6 +151,20 @@
               "zero_reference_nonzero_candidate": 0
             }
           },
+          "scientific_audit": {
+            "windows": {
+              "signed_stationarity_a": -5.616285605469784e-07,
+              "absolute_stationarity_a": 5.616285605469784e-07,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
+            },
+            "linux": {
+              "signed_stationarity_a": 7.239814614479201e-08,
+              "absolute_stationarity_a": 7.239814614479201e-08,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
+            }
+          },
           "voltage": {
             "records": 100,
             "unequal_records": 99,
@@ -268,6 +282,20 @@
               "max_absolute": 5.0060973144638865e-08,
               "max_relative_nonzero_reference": 1.0577066359477738e-08,
               "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "scientific_audit": {
+            "windows": {
+              "signed_stationarity_a": 4.947397460597358e-07,
+              "absolute_stationarity_a": 4.947397460597358e-07,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
+            },
+            "linux": {
+              "signed_stationarity_a": 9.326559702316217e-08,
+              "absolute_stationarity_a": 9.326559702316217e-08,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
             }
           },
           "voltage": {
@@ -389,6 +417,20 @@
               "zero_reference_nonzero_candidate": 0
             }
           },
+          "scientific_audit": {
+            "windows": {
+              "signed_stationarity_a": 2.1727585286512863e-08,
+              "absolute_stationarity_a": 2.1727585286512863e-08,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
+            },
+            "linux": {
+              "signed_stationarity_a": 1.3294371870031796e-07,
+              "absolute_stationarity_a": 1.3294371870031796e-07,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
+            }
+          },
           "voltage": {
             "records": 100,
             "unequal_records": 99,
@@ -506,6 +548,20 @@
               "max_absolute": 1.5426319777134267e-08,
               "max_relative_nonzero_reference": 3.5994935754867795e-09,
               "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "scientific_audit": {
+            "windows": {
+              "signed_stationarity_a": 3.7060223245788393e-07,
+              "absolute_stationarity_a": 3.7060223245788393e-07,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
+            },
+            "linux": {
+              "signed_stationarity_a": 2.4328379311100434e-07,
+              "absolute_stationarity_a": 2.4328379311100434e-07,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
             }
           },
           "voltage": {
@@ -687,6 +743,20 @@
               "zero_reference_nonzero_candidate": 0
             }
           },
+          "scientific_audit": {
+            "windows": {
+              "signed_stationarity_a": 5.73088694721946e-07,
+              "absolute_stationarity_a": 5.73088694721946e-07,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
+            },
+            "linux": {
+              "signed_stationarity_a": 1.1179004584249697e-06,
+              "absolute_stationarity_a": 1.1179004584249697e-06,
+              "target_strictly_below_a": 1e-06,
+              "target_met": false
+            }
+          },
           "voltage": {
             "records": 100,
             "unequal_records": 99,
@@ -804,6 +874,20 @@
               "max_absolute": 1.3794888786833326e-08,
               "max_relative_nonzero_reference": 2.503557486641497e-09,
               "zero_reference_nonzero_candidate": 0
+            }
+          },
+          "scientific_audit": {
+            "windows": {
+              "signed_stationarity_a": 4.772193866742214e-07,
+              "absolute_stationarity_a": 4.772193866742214e-07,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
+            },
+            "linux": {
+              "signed_stationarity_a": 5.900689288296235e-07,
+              "absolute_stationarity_a": 5.900689288296235e-07,
+              "target_strictly_below_a": 1e-06,
+              "target_met": true
             }
           },
           "voltage": {

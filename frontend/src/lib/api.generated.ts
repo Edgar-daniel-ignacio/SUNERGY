@@ -116,10 +116,10 @@ export interface components {
             module_iv: "not_implemented";
             /**
              * Scientific Verification
-             * @default partial_equation_checks
+             * @default incomplete_mpp_target_unmet
              * @constant
              */
-            scientific_verification: "partial_equation_checks";
+            scientific_verification: "incomplete_mpp_target_unmet";
         };
         /** CatalogModule */
         CatalogModule: {
@@ -270,7 +270,7 @@ export interface components {
             reproduction_scope: string;
             /**
              * Scientific Status
-             * @default Compatibility defects preserved; no empirical validation
+             * @default Limited equation checks; an original Linux MPP audit target is unmet; no empirical validation
              */
             scientific_status: string;
             source_record: components["schemas"]["SourceRecord"] | null;

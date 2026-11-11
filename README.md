@@ -162,4 +162,6 @@ native wheel) and Python 3.12. Capture needs the separate environment, including
 Plotly. Tests/replay need no credentials or external services after installation.
 Loopback process smoke and frontend build commands are listed above; deployment
 packaging/startup verification is recorded in the task plan, with production
-hosting, TLS/secrets operation and cross-platform numerical evidence still pending.
+hosting, TLS/secrets operation and other platform/build environments still pending.
+Scientific verification remains incomplete: the original Linux alternate-STC
+MPP stationarity audit target is unmet and preserved explicitly in the report.

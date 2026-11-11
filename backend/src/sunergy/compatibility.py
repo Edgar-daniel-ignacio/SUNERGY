@@ -80,7 +80,10 @@ class LegacyIVCaseResult(BoundaryModel):
 class LegacyIVResponse(BoundaryModel):
     model_id: Literal["legacy-iv-r-v1"] = "legacy-iv-r-v1"
     reproduction_scope: str = "Selected IV_R numerical boundary; full backend reproduction pending"
-    scientific_status: str = "Compatibility defects preserved; no empirical validation"
+    scientific_status: str = (
+        "Limited equation checks; an original Linux MPP audit target is unmet; "
+        "no empirical validation"
+    )
     supplied_module: LegacyIVModule
     supplied_cases: list[LegacyIVCase] = Field(min_length=1)
     source_record: SourceRecord | None
