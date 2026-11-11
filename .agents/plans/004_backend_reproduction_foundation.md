@@ -230,3 +230,9 @@ Record actual results here; no skip or unavailable check counts as reproduction.
   scientific verification incomplete. No skipped/xfail comparisons and no numerical
   reproduction threshold changed. Local final suite **90 passed**; Ruff/format,
   mypy, regenerated OpenAPI/TypeScript drift and all artifact integrity checks pass.
+- CI `42967459613`: Ubuntu runtime suite now **90 passed** with fixed references,
+  unchanged comparison thresholds and explicit unmet scientific target. Linux
+  mypy then exposed the Windows-only subprocess flag behind `os.name`; switched
+  both process branches to the type-checker's supported `sys.platform` guard.
+  Windows backend and Ubuntu frontend checks had passed; final portability rerun
+  verifies this last typing-only guard adjustment.

@@ -40,7 +40,7 @@ def request(url: str, *, data: bytes | None = None) -> tuple[int, bytes]:
 
 def stop(process: subprocess.Popen[bytes]) -> None:
     if process.poll() is None:
-        if os.name == "nt":
+        if sys.platform == "win32":
             # uv-managed Python and Next can launch children. Terminating only
             # the launcher leaves the service and its log handle alive.
             subprocess.run(
@@ -73,7 +73,7 @@ def service(
             stdin=subprocess.DEVNULL,
             stdout=output,
             stderr=subprocess.STDOUT,
-            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
         )
         try:
             yield process
