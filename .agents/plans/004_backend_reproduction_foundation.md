@@ -236,3 +236,7 @@ Record actual results here; no skip or unavailable check counts as reproduction.
   both process branches to the type-checker's supported `sys.platform` guard.
   Windows backend and Ubuntu frontend checks had passed; final portability rerun
   verifies this last typing-only guard adjustment.
+- Explicit local `mypy --platform linux --no-incremental` revealed that its inline
+  conditional still evaluated the Windows-only attribute. Resolved the flag once
+  behind a platform `if` statement instead. Both explicit Linux and Windows mypy
+  runs now pass for all 27 Python files, with formatting/lint unchanged.

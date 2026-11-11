@@ -21,6 +21,10 @@ from sunergy.fetcher import normalize_legacy_iv_input
 ROOT = Path(__file__).resolve().parents[1]
 # Local smoke requests never use an ambient HTTP proxy or any external resource.
 HTTP = build_opener(ProxyHandler({}))
+if sys.platform == "win32":
+    PROCESS_FLAGS = subprocess.CREATE_NO_WINDOW
+else:
+    PROCESS_FLAGS = 0
 
 
 def unused_port() -> int:
@@ -48,7 +52,7 @@ def stop(process: subprocess.Popen[bytes]) -> None:
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
                 check=False,
-                creationflags=subprocess.CREATE_NO_WINDOW,
+                creationflags=PROCESS_FLAGS,
             )
             process.wait(timeout=10)
             return
@@ -73,7 +77,7 @@ def service(
             stdin=subprocess.DEVNULL,
             stdout=output,
             stderr=subprocess.STDOUT,
-            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
+            creationflags=PROCESS_FLAGS,
         )
         try:
             yield process
