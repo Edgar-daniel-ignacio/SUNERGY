@@ -191,3 +191,12 @@ Record actual results here; no skip or unavailable check counts as reproduction.
   no legacy/curated/supplied-summary bytes changed, no private/generated run files
   staged. The user-provided skill and plan 003 are included; only skill routing
   references changed to connect the new canonical context.
+- Opened PR #2: https://github.com/Edgar-daniel-ignacio/SUNERGY/pull/2. Connector
+  creation lacked integration permission; used existing authenticated Git access
+  without logging credentials. PR attached to the chat, repository clean after
+  implementation commit `082371e`.
+- First CI run `42965383301`: Windows backend and Ubuntu frontend passed; Ubuntu
+  reproduction against Windows numerical captures failed strict thresholds. No
+  tolerance/reference relaxation. Diagnosing with independently repeated unchanged
+  original-source captures on Ubuntu before deciding platform acceptance. Temporary
+  CI capture/upload step preserves outputs and same-platform comparisons.

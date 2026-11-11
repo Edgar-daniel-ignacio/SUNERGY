@@ -19,6 +19,7 @@ def main() -> None:
     ]
     results = []
     for path in manifests:
+        path = path.resolve()
         result, problems = replay_iv_capture(ROOT, path)
         results.append(
             {
