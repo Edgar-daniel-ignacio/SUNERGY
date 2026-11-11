@@ -5,14 +5,13 @@ retrieve_when: Se interpreta una afirmación de la tesis, una medición o una ru
 read_scope: La modalidad o etapa pertinente; seguir el símbolo y la evidencia original citada.
 authority: Atribución del autor y revisión estática; los resultados del libro e informe no son una reproducción local.
 verify: Recuperar originales y versión; distinguir dato observado, cálculo implementado y validez científica.
-review_status: '#to-review'
 ---
 
 # 08 — Del informe de licenciatura al código
 
 > Qué función produce cada cosa que el informe afirma. Sirve para dos cosas: defender el software
 > (cada número debe tener su origen) y proponer el alcance de reproducción. Conservar
-> el código actual no demuestra por sí solo conservar los resultados históricos validados. #to-review
+> el código actual no demuestra por sí solo conservar los resultados históricos validados.
 >
 > **Nota:** el informe de licenciatura es
 > *«Simulación, Corrección y Validación de Curvas I-V de Módulos Fotovoltaicos»* (UNAM, 2025). El mapeo
@@ -38,7 +37,7 @@ El informe describe tres formas de obtener una curva I-V. En el código son `Met
 |---|---|---|
 | Descarga de clima (TMY o año específico, 1998–2020) | `Primer_Funcion_Clima.Clima` | `64-183` |
 | Cálculo de irradiancia en el plano (POA) | `Posicion_Solar.Solar_pos(_e)` | `36-192` |
-| Modelos térmicos Faiman / Sandia SAPM / NOCT | `Temperature_feinman`, `Temperature_sandia`, `Temperature_NOCT` | `785-825`; Sandia empieza en 785. #to-review |
+| Modelos térmicos Faiman / Sandia SAPM / NOCT | `Temperature_feinman`, `Temperature_sandia`, `Temperature_NOCT` | `785-825`; Sandia empieza en 785. |
 | Ecuaciones de traslación (`Isc`, `Voc`, `Imax`, `Vmax`, `Pmax`) | familia `PE*` | `1376-2761` |
 | Parámetros De Soto y CEC/SAM | `fit_cec_sam` + `calcparams_desoto` (pvlib) dentro de las `PE*` | — |
 
@@ -55,27 +54,30 @@ propio informe lo limita a la campaña de curvas I-V.
 
 ## 3. Corrección y comparación (el núcleo del trabajo)
 
+#to-review — Esta cadena corrige la temperatura efectiva, el despacho M2/M2N por
+origen y los denominadores; el significado estadístico del IC95% sigue abierto.
+
 | Paso | Función | Líneas |
 |---|---|---|
 | Lectura del libro de mediciones (hojas + `Info`) | `IV_CI_cor` | `5893-5960` |
-| Temperaturas observada y efectiva | `IV_CI_cor`: usa la media de sensores, luego deriva otro `Tmod` desde Voc | `5957`, `5985-5989`; las correcciones reciben el Tmod derivado. #to-review |
-| Corrección de curvas medidas, M2 o M2N | `correction_IV` | `7304-7534`; ambas ramas viven en esta función. #to-review |
-| Corrección de curvas simuladas, M2 o M2N | `correction_IV_s` | `7609-7800`; el sufijo identifica el origen simulado, no el método normalizado. #to-review |
+| Temperaturas observada y efectiva | `IV_CI_cor`: usa la media de sensores, luego deriva otro `Tmod` desde Voc | `5957`, `5985-5989`; las correcciones reciben el Tmod derivado. |
+| Corrección de curvas medidas, M2 o M2N | `correction_IV` | `7304-7534`; ambas ramas viven en esta función. |
+| Corrección de curvas simuladas, M2 o M2N | `correction_IV_s` | `7609-7800`; el sufijo identifica el origen simulado, no el método normalizado. |
 | Ajuste de `Rs` y coeficientes | `Rs_e`, `find_k_sweep`, `Temperature_coeffs`, `linear_fit` | `7080-7301` |
 | Extrapolación a los ejes | `minimos`, `minimos_s` | `7803-8052` |
-| Errores contra ficha STC o contra curva medida corregida | `IV_CI_cor`, según `Tipo_Analisis` | `6006-6008`, `6125-6127`, `6288-6290`; denominadores distintos. #to-review |
+| Errores contra ficha STC o contra curva medida corregida | `IV_CI_cor`, según `Tipo_Analisis` | `6006-6008`, `6125-6127`, `6288-6290`; denominadores distintos. |
 | Curva representativa | `Bootstrap`, `Bootstrap2` | `8358-8761` |
-| Tabla rotulada IC95% y banda de ficha ±3% | `Comprobacion` | `8764-8850`; fija n=30 y usa el spread del bootstrap; validez estadística pendiente. #to-review |
+| Tabla rotulada IC95% y banda de ficha ±3% | `Comprobacion` | `8764-8850`; fija n=30 y usa el spread del bootstrap; validez estadística pendiente. |
 
 M2 y M2N son etiquetas del código. La conformidad con una edición concreta de
 IEC 60891 necesita revisión de las ecuaciones. Además, las ramas M2N medidas y
 simuladas usan ajustes diferentes: `correction_IV` recalcula coeficientes,
 simula G=400…1100 y optimiza k; `correction_IV_s` conserva los coeficientes,
-simula G=200…1100 y usa `ri_2/100`. No deben unificarse por nombre. #to-review
+simula G=200…1100 y usa `ri_2/100`. No deben unificarse por nombre.
 
 La media de sensores queda en las tablas de temperatura, aunque corrección y
 `IV_sim` usan el `Tmod` derivado. `T_Medicion == 'Promedio'` (`6427…`) resume
-las tablas finales; no selecciona la temperatura de célula. #to-review
+las tablas finales; no selecciona la temperatura de célula.
 
 ---
 
@@ -89,14 +91,14 @@ local de la campaña. #to-review
 | Lo que afirma el informe | Lo que hay en el `.xlsx` | Estado |
 |---|---|---|
 | 30 curvas medidas | **30 hojas** `IV1…IV30` | coincide |
-| Tomadas en una misma campaña | 11/08/2024, de 11:04 a 11:17 (13 minutos), según la revisión del autor | la duración no establece por sí sola homogeneidad. #to-review |
-| Módulo policristalino de 60 celdas, según el informe | `Power` máx. 227,1 W; `Isc` 8,84 A; `Voc` 36,14 V, reportados del libro | esos máximos no identifican por sí solos tecnología, celdas o espécimen. #to-review |
+| Tomadas en una misma campaña | 11/08/2024, de 11:04 a 11:17 (13 minutos), según la revisión del autor | la duración no establece por sí sola homogeneidad. |
+| Módulo policristalino de 60 celdas, según el informe | `Power` máx. 227,1 W; `Isc` 8,84 A; `Voc` 36,14 V, reportados del libro | esos máximos no identifican por sí solos tecnología, celdas o espécimen. |
 | Corrección a STC y comparación | `correction_IV`, tablas, bootstrap | implementado |
 
 Datos reportados del libro: irradiancia **860–1024 W/m²**, `Temp1`
 **33,9–62,7 °C**, `Temp2` **34,6–63,8 °C**, `CurveID` de 1 a 37 con 30 filas.
 Hay siete identificadores ausentes; no consta aquí si fueron curvas descartadas
-ni con qué criterio. #to-review
+ni con qué criterio.
 
 **Campos reportados que `IV_CI_cor` no consume:** `Power`, `Isc`, `Ipeak`,
 `Vpeak`, `Fill Factor`, `CurveID`, `Normalized`, `Date/Time`. Son ocho nombres.
@@ -108,13 +110,13 @@ no equivale a validar la identidad del módulo, sensores o curva. #to-review
 ## 5. Alcance de reproducción propuesto
 
 Estos cinco puntos organizan el trabajo; no son prueba suficiente de conservar
-lo que la tesis validó. Falta enlazar informe, datos y revisión de código. #to-review
+lo que la tesis validó. Falta enlazar informe, datos y revisión de código.
 
 1. La curva de un módulo en condiciones dadas, con las tres modalidades.
-2. Las ecuaciones de traslación anuales y sus combinaciones térmicas, separadas de la validación experimental del informe. #to-review
+2. Las ecuaciones de traslación anuales y sus combinaciones térmicas, separadas de la validación experimental del informe.
 3. La corrección M2 y M2N a STC con las mismas tolerancias.
 4. El error porcentual contra la medición.
-5. La curva representativa y su intervalo, con el mismo estado/algoritmo RNG, orden de datos y reglas de alineación. #to-review
+5. La curva representativa y su intervalo, con el mismo estado/algoritmo RNG, orden de datos y reglas de alineación.
 
 El bootstrap no fija semilla (`8366-8388`), pero una captura puede registrar y
 reponer el estado RNG original sin cambiar la función. La síntesis suministrada

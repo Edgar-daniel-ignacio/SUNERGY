@@ -5,13 +5,12 @@ retrieve_when: Seguir una transformación legacy y sus dependencias.
 read_scope: Solo el estado afectado y los estados que producen o consumen sus datos.
 authority: Investigación estática del autor; no demuestra ejecución, paridad ni validez científica.
 verify: Contrastar símbolos y condiciones con legacy; consultar la cobertura canónica para capturas e implementación actuales.
-review_status: '#to-review'
 ---
 
 # 02 — La historia del dato: de la coordenada a la curva
 
 > El espinazo de la investigación: nueve estados, S0–S8, descritos por entradas, salidas,
-> funciones, llamadores y condiciones de fallo. No acredita una ejecución completa. #to-review
+> funciones, llamadores y condiciones de fallo. No acredita una ejecución completa.
 
 **Convención de este documento:** todo lo que dice «línea» está en `legacy/`, y `el panel` es
 `GIU_Final_Presetacion.py` (6.043 líneas) mientras `el módulo` es `Input_File_DIV_Mac_Informe.py`
@@ -66,15 +65,17 @@ módulo de prueba (`Pot=250`, `Vm=30.12`, `Voc=37.85`, …) y seis casos de irra
 
 ## S1 — Clima: de una coordenada a un diccionario de series
 
+#to-review — En S1 cambian el intervalo TMY, el contrato SmartNDH y el alcance del filtrado de longitudes.
+
 **Qué entra.** Latitud, longitud, `SY` con años concretos, un año directo o `TMY`; intervalos y
 credenciales explícitos o del entorno. TMY fija `time_step=60` e ignora el intervalo solicitado
-(`Primer_Funcion_Clima.py:64-173`). #to-review
+(`Primer_Funcion_Clima.py:64-173`).
 
 **Qué sale.** `SmartNDH`, subclase de dict con claves `float` de longitud y listas de DataFrames.
 Inicializa cuatro claves conocidas y agrega otras longitudes si las recibe. `.items()` mantiene
 la ruta del panel; la iteración devuelve `(df, metadata)` de la **última respuesta**, no un archivo
 de metadatos por año (`Primer_Funcion_Clima.py:43-56, 118-121, 173-183`). Las columnas consumidas
-incluyen `temp_air`, `wind_speed`, `ghi`, `dni`, `dhi`, `albedo` y componentes de fecha. #to-review
+incluyen `temp_air`, `wind_speed`, `ghi`, `dni`, `dhi`, `albedo` y componentes de fecha.
 
 | Función | Líneas | Qué hace |
 |---|---|---|
@@ -89,15 +90,15 @@ térmicos seleccionados. Dentro, el panel llama a `pf.Clima` y después a `cl.cl
 (S2).
 
 **Qué garantiza.** Agrupa cada respuesta descargada bajo su longitud; no garantiza datos en cada
-resolución. El escritor posterior nombra los CSV aceptados `g_{año}_{n}.csv`. #to-review
+resolución. El escritor posterior nombra los CSV aceptados `g_{año}_{n}.csv`.
 
 **Qué no garantiza.** No valida integridad temporal ni columnas. `Clima` conserva longitudes
 no estándar; consumidores como `Solar_pos`, `Temperature_sandia` y `creador_csv_clima` solo procesan
-las cuatro reconocidas. El nombre del índice se hereda del proveedor (ver `00` §3). #to-review
+las cuatro reconocidas. El nombre del índice se hereda del proveedor (ver `00` §3).
 
 **Qué se rompe.** Si faltan credenciales tanto en argumentos como en el entorno, `Clima` lanza
 `ValueError` antes de descargar (`70-78`). El autor reporta pvlib 0.11.0/PSM3 en su entorno; el
-código selecciona PSM4/PSM3 por disponibilidad y cada captura debe registrar la rama efectiva. #to-review
+código selecciona PSM4/PSM3 por disponibilidad y cada captura debe registrar la rama efectiva.
 
 ---
 
@@ -170,7 +171,7 @@ usada, donde `*` es `F`, `S` o `NOCT`.
 | `electric_parameters` (callback 1) | panel `1148-1441` | orquesta: 35 llamadas a `df_creator`, elige motor, escribe CSV |
 | `df_creator` | módulo `1059-1129` | relee `g_*.csv`, pone índice `Time` |
 | `PE`, `PE_t`, `PE_t_S` | módulo `1376-2318` | módulo 1: un modelo, dos modelos, o Feinman+Sandia |
-| `PE_1`, `PE_t1`, `PE_t_S1` | módulo `2320-2761` | variantes del módulo 2; rangos individuales en 04. #to-review |
+| `PE_1`, `PE_t1`, `PE_t_S1` | módulo `2320-2761` | variantes del módulo 2; rangos individuales en 04. |
 | `PE_NOCT` | módulo `1524-2011` | cualquier combinación que incluya NOCT (488 líneas) |
 | `Placa_Prueba`, `Placa_D1`, `Placa_D2` | módulo `982-1057` | construyen el diccionario de placa |
 | `creador_csv_PE`, `creador_csv_PE2` | módulo `859-911` | escriben los CSV tras borrar los anteriores |
@@ -181,7 +182,7 @@ la selección de modelos. Dentro, llama al motor que corresponda **según la com
 **La estructura que hay que ver.** Siete funciones `PE*` repiten operaciones por combinación
 térmica y módulo; sus rangos suman 1.377 líneas. Esa semejanza orienta la consolidación, pero no
 acredita equivalencia de todas las ramas, errores y conversiones. Los contratos C-06 y las
-suposiciones canónicas mantienen las diferencias que requieren caracterización. #to-review
+suposiciones canónicas mantienen las diferencias que requieren caracterización.
 
 **Qué se rompe.**
 - En `PE_NOCT`, solo el operando `'NOCT'` es siempre verdadero (`1663`). El acceso inválido
@@ -213,14 +214,14 @@ suposiciones canónicas mantienen las diferencias que requieren caracterización
 
 **Qué se rompe.**
 - Si se alcanza `round(d, 2)` con el dict construido por las ramas `[2]`/`[3]` (`3267`, `3524`),
-  se produce `TypeError`. Las precondiciones anteriores todavía pueden fallar antes. #to-review
+  se produce `TypeError`. Las precondiciones anteriores todavía pueden fallar antes.
 - `resume_IV` etiqueta condiciones elegidas por voltaje máximo como temperatura mínima: diez
-  `"Temperatura minima"` y un `"Temperatura Minima"` (`4759`). Esas etiquetas llegan a la gráfica. #to-review
+  `"Temperatura minima"` y un `"Temperatura Minima"` (`4759`). Esas etiquetas llegan a la gráfica.
 - La rama `[1]` lee `Vmax_F` donde debería leer `Voc_F` (`3128-3129`); Sandia sí lee `Voc_S` (`3215`).
   La tabla de extremos de Feinman está mal y no da error.
 - El autor reporta **132 asignaciones no consumidas**: 6/28/42/28/28 en las ramas indicadas. La
   suma es consistente; el análisis de liveness original no está disponible y no se ha reproducido
-  aquí. No eliminar cálculos solo por esa cifra. #to-review
+  aquí. No eliminar cálculos solo por esa cifra.
 
 ---
 
@@ -246,10 +247,10 @@ suposiciones canónicas mantienen las diferencias que requieren caracterización
   Sin el libro/dtypes y una captura, B-09 no acredita fallo general. #to-review
 - Hay 32 lecturas de `Uploaded_.csv` sin escritor activo en el panel (`4344-5937`). Son rutas
   alcanzables que requieren un archivo externo; si falta, fallan al leer. La rama `4289` lee el
-  primer sheet del `.xlsx`, pero su éxito completo tampoco queda demostrado. #to-review
+  primer sheet del `.xlsx`, pero su éxito completo tampoco queda demostrado.
 - Siete asignaciones `tableC2` llaman `IV_R2(Placa, resume)` en lugar de los datos del segundo
   módulo (`5456, 5535, 5611, 5684, 5757, 5830, 5903`); la figura usa `Placa2/resume2`. La tabla 2
-  se construye con la entrada del módulo 1 y puede discrepar de su figura. #to-review
+  se construye con la entrada del módulo 1 y puede discrepar de su figura.
 
 ---
 
@@ -268,7 +269,7 @@ empírica ni independencia de las observaciones; véase EV-01 en
 |---|---|---|
 | `IV_Corrct` (callback) | panel `3791-3963` | orquesta la corrección |
 | `IV_CI_cor` | módulo `5819-6648` | 830 líneas: lee `Info`, recorre curvas, corrige |
-| `correction_IV`, `correction_IV_s` | módulo `7304-7800` | etiquetas M2/M2N del código; conformidad con IEC 60891 pendiente de contraste. #to-review |
+| `correction_IV`, `correction_IV_s` | módulo `7304-7800` | etiquetas M2/M2N del código; conformidad con IEC 60891 pendiente de contraste. |
 | `Rs_e`, `find_k_sweep`, `Temperature_coeffs`, `linear_fit` | módulo `7080-7301` | ajuste de la resistencia serie y coeficientes |
 | `minimos`, `minimos_s` | módulo `7803-8052` | extrapolan los extremos de la curva |
 | `Bootstrap`, `Bootstrap2` | módulo `8358-8761` | 3.000 muestras de tamaño 12, media recortada al 5 % |
@@ -282,7 +283,7 @@ disponible para esta revisión. No se confirmó aquí el contenido de ese artefa
 
 - El lector usa curvas por posición (`sheet_name=i`) y `Info` por nombre; espera que `Info`
   quede al final. Si va antes, puede leer su estructura de 12 columnas como curva y fallar antes
-  de producir resultados. Las 30 curvas son el caso reportado, no un requisito fijo del lector. #to-review
+  de producir resultados. Las 30 curvas son el caso reportado, no un requisito fijo del lector.
 - La extracción inicial usa `Voc`, `Irrad1`, `Temp1` y `Temp2`. La media de sensores alimenta
   primero De Soto (`5957`) y queda en tablas, pero `Tmod` se sobrescribe mediante una expresión
   basada en Voc (`5985-5989`); ese valor derivado alimenta correcciones e `IV_sim`. Véanse
@@ -295,7 +296,7 @@ disponible para esta revisión. No se confirmó aquí el contenido de ese artefa
   cero (`3794-3797`) y puede publicarlos en retornos de guarda. Su posterior uso como tabla o
   entrada de bootstrap puede fallar; no se observó la secuencia en navegador. #to-review
 - Cinco retornos de `Tabla_R_Boots` usan claves `style` en objetos ya destinados a la propiedad
-  `style` (`4092, 4100, 4110, 4119, 4127`), en vez de `display`. El efecto visual requiere captura. #to-review
+  `style` (`4092, 4100, 4110, 4119, 4127`), en vez de `display`. El efecto visual requiere captura.
 - La semilla del bootstrap no está fijada: dos corridas dan curvas representativas distintas.
 
 ---
@@ -315,16 +316,16 @@ disponible para esta revisión. No se confirmó aquí el contenido de ese artefa
 | Corrección | `IV_Corrct`, `Tabla_select`, `Tabla_R_Boots` | corrección, tabla, bootstrap |
 
 **Quién manda a hablar.** El navegador dispara callbacks por sus entradas. Los que consumen
-series releen el disco; otros solo gestionan controles o datos del store. No todo callback hace I/O. #to-review
+series releen el disco; otros solo gestionan controles o datos del store. No todo callback hace I/O.
 
 **Qué se rompe.**
 - El filtro de dos módulos compara caracteres (`5428-5431`); las etiquetas habituales comparten
   dígitos y espacios, por lo que puede aceptar años no seleccionados (B-03). #to-review
 - Cuatro ramas están fuera de la guarda de año (`5662, 5735, 5808, 5881`), aunque dentro del
   recorrido de datos. Con entradas no vacías pueden retornar el primer par antes del año deseado;
-  el caso exacto requiere captura (B-01). #to-review
+  el caso exacto requiere captura (B-01).
 - Las etiquetas `"Año …"`/`"Year …"` no coinciden; su efecto depende del filtro defectuoso y
-  la rama elegida. No se observó una pantalla vacía universal. #to-review
+  la rama elegida. No se observó una pantalla vacía universal.
 - `use_ndh` lee todos los CSV para devolver `None`.
 
 ---
@@ -337,4 +338,4 @@ series releen el disco; otros solo gestionan controles o datos del store. No tod
 2. **Cada estado tiene su propio contrato implícito**, y ninguno está escrito en el código. Ese es el
    trabajo de [03](03-contratos.md).
 3. **El orden importa y no está declarado.** S3 sin POA o un `Info` leído como curva pueden
-   fallar, además de producir resultados mal asociados. Hay que capturar tanto fallos como valores. #to-review
+   fallar, además de producir resultados mal asociados. Hay que capturar tanto fallos como valores.

@@ -5,21 +5,22 @@ sequenceDiagram
     participant X as IV_CI_cor
     participant B as Bootstrap
     U->>P: sube libro de mediciones
-    %% #to-review: reescritura de hojas, no preservación del archivo original.
+    %% reescritura de hojas, no preservación del archivo original.
     P->>P: guardar_archivo reescribe Uploaded_.xlsx
     U->>P: elige metodo CI y correction
     P->>C: dispara callback
     C->>X: corrige curvas a STC
-    %% #to-review: alcance de la extracción inicial del lector, no todo consumidor del libro.
+    %% alcance de la extracción inicial del lector, no todo consumidor del libro.
     X->>X: extrae Voc, Irrad1, Temp1, Temp2 de Info
-    %% #to-review: media de sensores para De Soto y tablas; Tmod efectivo se sobrescribe desde Voc (5957, 5985-5989).
+    %% #to-review: la cadena hasta correction_IV_s distingue media de sensores, Tmod derivado y métodos por origen (capítulo08/EV-01).
+    %% media de sensores para De Soto y tablas; Tmod efectivo se sobrescribe desde Voc (5957, 5985-5989).
     X->>X: media Temp1/Temp2 para traslacion inicial y tablas
     X->>X: deriva y sobrescribe Tmod desde Voc
-    %% #to-review: nombres de métodos en código; conformidad científica pendiente, no acreditada por el diagrama.
+    %% nombres de métodos en código; conformidad científica pendiente, no acreditada por el diagrama.
     X->>X: correction_IV con Tmod derivado (M2 / M2N)
-    %% #to-review: IV_sim recibe el mismo Tmod derivado; ver capítulo08 y EV-01.
+    %% IV_sim recibe el mismo Tmod derivado; ver capítulo08 y EV-01.
     X->>X: IV_sim con Tmod derivado
-    %% #to-review: correction_IV_s recibe la curva simulada; conserva despacho M2/M2N propio.
+    %% correction_IV_s recibe la curva simulada; conserva despacho M2/M2N propio.
     X->>X: correction_IV_s con Tmod derivado (M2 / M2N)
     X-->>C: tablas corregidas
     C-->>P: escribe Tablarm, Tablars, Tabla_Info

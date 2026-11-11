@@ -5,14 +5,13 @@ retrieve_when: Interpretar nombres, unidades, estados o índices de los archivos
 read_scope: La convención y sus productores o consumidores citados.
 authority: Investigación estática del autor; no demuestra ejecución, paridad ni validez científica.
 verify: Contrastar símbolos y condiciones con legacy; consultar la cobertura canónica para capturas e implementación actuales.
-review_status: '#to-review'
 ---
 
 # 00 — Convenciones, unidades y nombres
 
 > Sin esta página, la mitad de los defectos del sistema parecen errores distintos y son el mismo
 > problema de vocabulario. Convenciones contrastadas estáticamente; sus condiciones de aplicación
-> no sustituyen una captura ni una validación científica. #to-review
+> no sustituyen una captura ni una validación científica.
 
 ---
 
@@ -27,9 +26,9 @@ de «input» para referirse a ese módulo. Son el mismo objeto.
 | **el módulo** | `Input_File_DIV_Mac_Informe.py` | 8.853 |
 | clima | `Primer_Funcion_Clima.py` | 183 |
 | radiación | `Posicion_Solar.py` | 204 |
-| caracterización meteorológica | `Clima_Car.py` | 40 #to-review |
-| **sin llamadas desde el panel trazado** | `Parametros_Electricos.py` | 240 #to-review |
-| **sin llamadas desde el panel trazado** | `CurvaIV.py` | 99 #to-review |
+| caracterización meteorológica | `Clima_Car.py` | 40 |
+| **sin llamadas desde el panel trazado** | `Parametros_Electricos.py` | 240 |
+| **sin llamadas desde el panel trazado** | `CurvaIV.py` | 99 |
 
 `Parametros_Electricos` y `CurvaIV` se importan en el panel (`L4` y `L7`), sin llamadas a sus
 alias `pe` e `iv` en ese fichero. Sus ecuaciones no prueban el comportamiento de los motores
@@ -40,7 +39,7 @@ activos en `Input_File_DIV_Mac_Informe.py`. No se ha descartado todo consumidor 
 ## 2. Las cinco dimensiones del problema
 
 Estas cinco decisiones explican la repetición de ramas. Los 84 `if Metodo ==` pertenecen al
-callback `electric_parameters@4182`; el conteo no acredita todas las combinaciones posibles. #to-review
+callback `electric_parameters@4182`; el conteo no acredita todas las combinaciones posibles.
 
 | Dimensión | Valores | Dónde vive |
 |---|---|---|
@@ -91,7 +90,7 @@ los datos que relee, aunque sí realiza I/O y puede fallar al leerlos. #to-revie
 
 | Rótulo en pantalla | Lo que realmente contiene | Dónde |
 |---|---|---|
-| `"Temperatura minima"` / `"Temperatura Minima"` en `resume_IV` | condiciones elegidas por **voltaje máximo**, no temperatura mínima | 10 rótulos con `minima` y uno con `Minima` (`4759`); llega a la leyenda de `IV_R`. #to-review |
+| `"Temperatura minima"` / `"Temperatura Minima"` en `resume_IV` | condiciones elegidas por **voltaje máximo**, no temperatura mínima | 10 rótulos con `minima` y uno con `Minima` (`4759`); llega a la leyenda de `IV_R`. |
 | `"Año … [Horas: …]"` | formato de 1 módulo | `4245`, `1789` |
 | `"Year … [Hours: …]"` | formato de 2 módulos; **no coincide** con las opciones del desplegable | `5428`, `2477` |
 | `"Voc"` en la tabla de Feinman | es **`Vmax_F`**, no `Voc_F` (`3128-3129`) | `resume_df` |
@@ -114,10 +113,12 @@ valores por defecto del módulo de prueba, y por eso la línea `678` de `toggle_
 
 ## 7. Estados de una función
 
+#to-review — Las etiquetas viva, muerta y rota ahora delimitan análisis estático, no ejecución observada.
+
 | Estado | Significado | Cómo se reconoce |
 |---|---|---|
-| **viva** | alcanzable en el grafo estático del panel | 23 callbacks o 22 factorías del layout; no demuestra que la rama se ejecute con datos válidos. #to-review |
-| **muerta** | sin camino desde las raíces analizadas | alcanzabilidad estática = 0 en estos dos ficheros; comprobar consumidores externos antes de borrar. #to-review |
+| **viva** | alcanzable en el grafo estático del panel | 23 callbacks o 22 factorías del layout; no demuestra que la rama se ejecute con datos válidos. |
+| **muerta** | sin camino desde las raíces analizadas | alcanzabilidad estática = 0 en estos dos ficheros; comprobar consumidores externos antes de borrar. |
 | **muerta-hoy** | existe y es coherente, pero ningún llamador puede alcanzarla con los argumentos actuales | p. ej. las 5 ramas de `df_creator_1` |
-| **rota** | anotación original de defecto o riesgo de fallo | ver condiciones y límites en `06-lo-que-esta-roto.md`; no equivale a fallo observado. #to-review |
+| **rota** | anotación original de defecto o riesgo de fallo | ver condiciones y límites en `06-lo-que-esta-roto.md`; no equivale a fallo observado. |
 | **nunca conectada** | escrita y nunca invocada | `df_creator_PE`, `Year_tabla`, `minimos2`, `minimos_s2`, `IV_CI_Corr`, `get_corrected_IV_P2` |

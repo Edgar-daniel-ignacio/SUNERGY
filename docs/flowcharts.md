@@ -5,7 +5,6 @@ retrieve_when: Following a producer-consumer chain or changing a transformation 
 read_scope: Relevant diagram and linked operation records; not the whole legacy inventory
 authority: Diagrams explain named code paths, not execution coverage or scientific approval
 verify: Check actual callers, branch conditions and the corresponding assumption and coverage entries
-review_status: "#to-review"
 ---
 
 # Backend transformation lineage
@@ -13,7 +12,7 @@ review_status: "#to-review"
 Each diagram states whether it describes modern implementation or frozen legacy
 source. A solid arrow records a transformation in that boundary, not proof that
 every input/branch has executed. Modern coverage is owned by the [coverage map](legacy_backend_coverage.md);
-meanings and equations are owned by [assumptions](assumptions.md). #to-review
+meanings and equations are owned by [assumptions](assumptions.md).
 
 ## Implemented modern point calculations
 
@@ -36,7 +35,7 @@ flowchart LR
     thermal --> thermaloutput["Validated profile, unit, IDs and temperatures"]
 ```
 
-#to-review — Source mapping ends before coefficient interpretation. The model owns
+Source mapping ends before coefficient interpretation. The model owns
 fit conversions, overrides, solver/grid and error meaning. Thermal is a direct
 Python point use case; this diagram does not implement weather acquisition or an
 annual workflow. The reserved general simulator remains unavailable.
@@ -45,6 +44,7 @@ annual workflow. The reserved general simulator remains unavailable.
 
 ```mermaid
 flowchart LR
+    %% #to-review: corrected weather/POA lineage and catalogue NOCT-to-fit-reference mapping; see WX-01 and IN-02.
     response["Clima / SmartNDH — S1, C-01<br/>weather frames by fetched length<br/>last response metadata"] --> poa["Solar_pos / Solar_pos_e — S2<br/>downstream length gate<br/>pvlib position and explicit/default orientation"]
     poa --> irradiance["Mutated NDH with POA columns"]
     irradiance --> temperature["S3 — TH-01 / TH-02<br/>selected thermal columns<br/>Sandia length/selector rules differ"]
@@ -59,7 +59,7 @@ flowchart LR
     curves --> output
 ```
 
-#to-review — This is source lineage, not modern annual reproduction. Acquisition
+This is source lineage, not modern annual reproduction. Acquisition
 can retain lengths that downstream consumers ignore. Unused manual seasonal
 calculations can still require fields/fail, but the returned POA chain consumes
 pvlib position. The catalogue temperature mapping and upstream preset/manual
@@ -69,6 +69,7 @@ behavior must remain visible before sharing a numerical kernel.
 
 ```mermaid
 flowchart TD
+    %% #to-review: corrected upload preservation, effective/reported temperature, method/origin and statistical lineage; see EV-01.
     upload["Original workbook supplied by user"] --> rewrite["guardar_archivo<br/>rewrites Uploaded_.xlsx via pandas<br/>not byte preservation"]
     rewrite --> workbook["Info rows and positional curve sheets<br/>module/sensor linkage must be established"]
     workbook --> sensors["Voc, Irrad1, Temp1, Temp2"]
@@ -89,7 +90,7 @@ flowchart TD
     bootstrap --> intervals["Comprobacion<br/>fixed n=30 / df=29 and t-based interval label<br/>statistical applicability unresolved"]
 ```
 
-#to-review — This representative source chain preserves three different temperature
+This representative source chain preserves three different temperature
 roles and separates correction method from curve origin/fit strategy. It does not
 replace the branch-specific code or prove statistical validity. The supplied
 summary's reported bootstrap method differs from current source. Original
@@ -102,4 +103,4 @@ Independent original-source captures feed the compatibility comparisons describe
 in [reproduction](reproduction.md). Schema checks, numerical reproduction,
 scientific formulation checks, observations and calibration have separate evidence
 requirements. Neither these diagrams nor current tests approve a disputed modeling
-choice or the full backend. #to-review
+choice or the full backend.

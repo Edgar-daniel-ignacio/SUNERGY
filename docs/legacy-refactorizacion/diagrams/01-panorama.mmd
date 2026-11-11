@@ -1,8 +1,8 @@
 flowchart LR
-    %% #to-review: esquema de dependencias, no cobertura de ejecución; cuentas principales excluyen módulos externos.
+    %% esquema de dependencias, no cobertura de ejecución; cuentas principales excluyen módulos externos.
     subgraph ENTRADA
         S0["S0 Arranque y UI<br/>29 funciones"]
-        %% #to-review: las 3 funciones del inventario son helpers; Clima vive fuera de los dos ficheros.
+        %% las 3 funciones del inventario son helpers; Clima vive fuera de los dos ficheros.
         S1["S1 Clima NREL<br/>3 helpers + Clima externo"]
     end
     subgraph FISICA
@@ -12,12 +12,12 @@ flowchart LR
     subgraph DOMINIO
         S4["S4 Serie electrica anual<br/>7 funciones PE y 2 CSV"]
         S5["S5 Extremos y casos<br/>1979 lineas"]
-        %% #to-review: 7 motores numéricos; S6 del inventario incluye además 7 constructores de tablas.
+        %% 7 motores numéricos; S6 del inventario incluye además 7 constructores de tablas.
         S6["S6 Curva I-V<br/>7 motores + tablas"]
         S7["S7 Correccion y bootstrap<br/>18 funciones"]
     end
     subgraph SALIDA
-        %% #to-review: 24 funciones, 23 decoradas; parse_contents es auxiliar.
+        %% 24 funciones, 23 decoradas; parse_contents es auxiliar.
         S8["S8 Pantalla<br/>23 callbacks, 12 stores"]
     end
     S0 --> S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7 --> S8

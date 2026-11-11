@@ -5,14 +5,13 @@ retrieve_when: Reproducir una frontera de datos legacy o diagnosticar sus supues
 read_scope: El contrato C- correspondiente y sus funciones citadas.
 authority: Investigación estática del autor; no demuestra ejecución, paridad ni validez científica.
 verify: Contrastar símbolos y condiciones con legacy; consultar la cobertura canónica para capturas e implementación actuales.
-review_status: '#to-review'
 ---
 
 # 03 — Contratos: qué entra y qué sale en cada frontera
 
 > Las fronteras donde el sistema cambia de manos. Cada contrato lleva un identificador `C-###`
 > para que se pueda citar sin ambigüedad. Son contratos implícitos recuperados del código, no
-> contratos validados ni promesas del backend moderno. #to-review
+> contratos validados ni promesas del backend moderno.
 
 Un contrato aquí no es una promesa del código: es **lo que el código asume**. Donde la asunción no
 está declarada en ningún sitio, se dice.
@@ -25,8 +24,8 @@ está declarada en ningún sitio, se dice.
 |---|---|
 | Productor | `Primer_Funcion_Clima.Clima` (`L64-183`), vía callback `clima` |
 | Consumidores | `Clima_Car.clc`, `Posicion_Solar.Solar_pos(_e)`, `Temperature_*`, `table_e`, `TMY`, `creador_csv_clima` |
-| Claves | longitud de serie como `float`; inicializa `8760.0`, `17520.0`, `35040.0`, `105120.0` y admite claves adicionales si la descarga tiene otra longitud (`118-121`, `173-175`). #to-review |
-| Valores | lista de DataFrames; `SmartNDH` también guarda `.df/.metadata` de la última respuesta y su iteración devuelve esos dos valores, no las claves (`43-56`, `183`). El panel usa `.items()`. #to-review |
+| Claves | longitud de serie como `float`; inicializa `8760.0`, `17520.0`, `35040.0`, `105120.0` y admite claves adicionales si la descarga tiene otra longitud (`118-121`, `173-175`). |
+| Valores | lista de DataFrames; `SmartNDH` también guarda `.df/.metadata` de la última respuesta y su iteración devuelve esos dos valores, no las claves (`43-56`, `183`). El panel usa `.items()`. |
 | Columnas mínimas | `temp_air`, `wind_speed`, `ghi`, `dni`, `dhi`, `albedo`, `Year`, `Month`, `Day`, `Hour`, `Minute` |
 | Columnas añadidas | `Poa_global`, `Poa_direct`, `Poa_diffuse`, `Poa_sky_diffuse`, `Poa_ground_diffuse` (S2) y `TFeinman`, `Tsandia`, `NOCT` (S3) |
 
@@ -103,21 +102,23 @@ stores no declaran `data` inicial; algunos retornos de `IV_Corrct` publican cero
 | Escritura | decodifica la subida, lee todas las hojas y reescribe `Uploaded_.xlsx` con `index=False`, nombres/orden de hoja y borrado previo; no preserva bytes originales, formatos ni evidencia de fórmulas (`962-980`). #to-review |
 | Hojas | `IV1…IVn` con columnas `Volts`, `Amps`, `Watts`, **y `Info` al final** |
 | Hoja `Info` | `CurveID, Normalized, Date/Time, Power, Isc, Voc, Ipeak, Vpeak, Fill Factor, Irrad1, Temp1, Temp2` |
-| Columnas usadas | en la extracción inicial de `IV_CI_cor`, **4 de 12**: `Voc`, `Irrad1`, `Temp1`, `Temp2`; no significa que `Voc` se descarte ni describe todos los lectores posibles. #to-review |
+| Columnas usadas | en la extracción inicial de `IV_CI_cor`, **4 de 12**: `Voc`, `Irrad1`, `Temp1`, `Temp2`; no significa que `Voc` se descarte ni describe todos los lectores posibles. |
 
 **Riesgo `R-03`:** el código lee curvas **por posición** (`sheet_name=i`) e `Info` por nombre.
 Si `Info` queda dentro del recorrido, se interpreta como curva y puede fallar por forma/columnas
 antes de calcular. El libro de 30 curvas es evidencia reportada por el autor, ausente aquí;
-no se capturó el fallo ni se verificó ese artefacto en esta revisión. #to-review
+no se capturó el fallo ni se verificó ese artefacto en esta revisión.
 
 **Riesgo `R-04`:** no hay validación de identidad que asocie el libro con la placa simulada.
 `Voc` sí se usa en el cálculo; su presencia y la de otros campos no impiden comparar módulos
-distintos. Los valores 227 W/570 W son el ejemplo reportado, no un caso reproducido aquí. #to-review
+distintos. Los valores 227 W/570 W son el ejemplo reportado, no un caso reproducido aquí.
+
+#to-review — R-03/R-04 distinguen fallo posicional, uso de Voc y ausencia de validación de identidad.
 
 **Nota sobre `Uploaded_.csv`:** 32 lecturas esperan un archivo sin productor activo
 (`creador_uplouded`, módulo `913-930`, comentado). Es una dependencia ausente de rutas alcanzables:
 si no existe un CSV externo, fallan al leer. La rama del panel `4289` usa `.xlsx` y solo lee la
-primera hoja; no se ha demostrado su éxito completo. #to-review
+primera hoja; no se ha demostrado su éxito completo.
 
 ---
 
@@ -125,7 +126,7 @@ primera hoja; no se ha demostrado su éxito completo. #to-review
 
 | Campo | Valor |
 |---|---|
-| Productores | `Placa_Prueba` (`982-1015`), `Placa_D1` (`1017-1036`), `Placa_D2` (`1038-1057`); `Parametros_Electricos.Placa` no es llamado desde el panel trazado. #to-review |
+| Productores | `Placa_Prueba` (`982-1015`), `Placa_D1` (`1017-1036`), `Placa_D2` (`1038-1057`); `Parametros_Electricos.Placa` no es llamado desde el panel trazado. |
 | Consumidores | todo el cálculo eléctrico (`PE*`, `IV_R*`, `IV_CI*`, `correction_*`) |
 | Claves | `Pmax`, `Vmax60`, `Imax`, `Voc`, `Isc`, `alpha`, `beta`, `deltha`, `cells_in_series`, `temp_ref`, `cell_type`, `A`, `Boltzmann`, `Elementary_charge` |
 
@@ -137,7 +138,7 @@ entradas manuales, como `INSERT`; el preset `SELEC` ya muestra 250 W. De las 14 
 **Nota de unidades:** `PE` divide `alpha/beta` por 100 al ajustar CEC, pero pasa `alpha` sin
 dividir a De Soto (`1386`, `1400`). Las semánticas y conversiones dependen de la fuente y no
 pueden imponerse uniformemente desde los nombres. Véanse [10](10-decisiones-pendientes.md) y
-[las suposiciones canónicas](../assumptions.md). #to-review
+[las suposiciones canónicas](../assumptions.md).
 
 **Discrepancia de significado:** el catálogo coloca `Average NOCT` en el campo 10 de
 `Database1/2` (índice 9; panel `1014`, `1047`, `1075`). `Placa_D1/D2` lo guarda como `temp_ref`,
@@ -151,7 +152,7 @@ y revisar una corrección por separado. #to-review
 
 Esta lista conserva necesidades propuestas por el autor, no un contrato aprobado. La frontera
 moderna y su cobertura se mantienen en [arquitectura](../architecture.md) y
-[cobertura](../legacy_backend_coverage.md). #to-review
+[cobertura](../legacy_backend_coverage.md).
 
 1. Un **objeto de datos tipado** en lugar de rutas de fichero: serie anual con índice `Time`
    garantizado y columnas declaradas.

@@ -5,14 +5,13 @@ retrieve_when: Evaluar una posible simplificación sin confundir duplicación co
 read_scope: El patrón afectado y sus llamadores; no usar ahorros estimados como requisito.
 authority: Investigación estática del autor; no demuestra ejecución, paridad ni validez científica.
 verify: Contrastar símbolos y condiciones con legacy; consultar la cobertura canónica para capturas e implementación actuales.
-review_status: '#to-review'
 ---
 
 # 05 — Lo que no sirve
 
 > Separar duplicación, ausencia de un camino estático, ramas no seleccionadas y resultados
 > descartados. Repetir código no demuestra que funcione ni que sus variantes sean equivalentes.
-> Las métricas de similitud son reportadas por el autor; sus scripts no están disponibles. #to-review
+> Las métricas de similitud son reportadas por el autor; sus scripts no están disponibles.
 
 ---
 
@@ -20,12 +19,12 @@ review_status: '#to-review'
 
 | Función | Líneas | Qué se repite | Ahorro estimado |
 |---|---:|---|---|
-| `electric_parameters@4182` | 1.774 | el autor reporta 44 grupos, 166 bloques y **1.619 líneas = 91 %**; método no reproducido | ~1.650, estimación del autor #to-review |
-| `Voltaje_Corriente_Selector@1742` | 1.942 | ramas de 1/2 módulos; 692/1.206 líneas y 73 % de similitud reportados, sin método disponible | ~1.865, estimación del autor #to-review |
-| `resume_df` | 1.050 | siete ramas; 73 % de similitud y 12 bloques normalizados reportados, sin método disponible | ~1.010, estimación del autor #to-review |
-| `resume_IV` | 929 | siete ramas con retorno; semejanza estructural, no prueba de equivalencia numérica | ~884, estimación del autor #to-review |
-| `IV_CI_cor` | 830 | reapertura de Excel por hoja; 158 líneas no consumidas reportadas, sin análisis original disponible | ~690, estimación del autor #to-review |
-| `PE_NOCT` | 488 | repite operaciones por combinación térmica; las siete funciones `PE*` suman 1.377 líneas, no 1.521 | no estimado por separado #to-review |
+| `electric_parameters@4182` | 1.774 | el autor reporta 44 grupos, 166 bloques y **1.619 líneas = 91 %**; método no reproducido | ~1.650, estimación del autor |
+| `Voltaje_Corriente_Selector@1742` | 1.942 | ramas de 1/2 módulos; 692/1.206 líneas y 73 % de similitud reportados, sin método disponible | ~1.865, estimación del autor |
+| `resume_df` | 1.050 | siete ramas; 73 % de similitud y 12 bloques normalizados reportados, sin método disponible | ~1.010, estimación del autor |
+| `resume_IV` | 929 | siete ramas con retorno; semejanza estructural, no prueba de equivalencia numérica | ~884, estimación del autor |
+| `IV_CI_cor` | 830 | reapertura de Excel por hoja; 158 líneas no consumidas reportadas, sin análisis original disponible | ~690, estimación del autor |
+| `PE_NOCT` | 488 | repite operaciones por combinación térmica; las siete funciones `PE*` suman 1.377 líneas, no 1.521 | no estimado por separado |
 
 **Total de las seis funciones: 7.013 líneas**, el 51,9 % de las 13.516 líneas de funciones o
 47,1 % de las 14.896 líneas brutas. Las longitudes se contrastaron por AST; los porcentajes de
@@ -58,7 +57,7 @@ una diferencia de operación señalada en B-09. No son equivalencias demostradas
 El grafo estático reconstruido desde 45 raíces (23 callbacks + 22 factorías del `layout`)
 alcanza **103 de 109** funciones. Se siguieron llamadas directas locales y `input.*`, conservando
 las dos definiciones de cada nombre duplicado. No cubre consumidores externos ni despacho
-dinámico; la métrica no prueba ejecución exitosa. Las seis desconectadas coinciden con el índice. #to-review
+dinámico; la métrica no prueba ejecución exitosa. Las seis desconectadas coinciden con el índice.
 
 | Función | Líneas | Similitud con una viva | Comentario |
 |---|---:|---|---|
@@ -71,7 +70,7 @@ dinámico; la métrica no prueba ejecución exitosa. Las seis desconectadas coin
 
 `Parametros_Electricos.py` (240 líneas) y `CurvaIV.py` (99) se importan en el panel (`L4`, `L7`),
 sin llamadas a sus alias en ese fichero. Quedan fuera de la ruta del panel trazada; no se
-investigaron todos los consumidores externos posibles. #to-review
+investigaron todos los consumidores externos posibles.
 
 Las seis funciones suman 564 líneas (4,2 % de las líneas de funciones; 3,8 % del total bruto de
 los dos ficheros). Los 339 renglones de los otros módulos están **fuera** de ese denominador.
@@ -88,10 +87,10 @@ dependencias de archivo ausentes y operaciones ejecutadas cuyo resultado se desc
 | Qué | Dónde | Condición o efecto |
 |---|---|---|
 | 5 ramas de `df_creator_1` (`[2]`, `[3]`, `[1,3]`, `[2,3]`, `[1,2,3]`) | módulo `1230-1286` | las 19 llamadas pasan `[1]` cableado |
-| 32 lecturas de `Uploaded_.csv` | panel `4344-5937` | alcanzables, pero sin productor activo (`módulo 913-930` comentado); requieren archivo externo y fallan si falta. #to-review |
-| `use_ndh` completo | panel `1105-1115` | callback alcanzable: relee/filtra y retorna `None`; realiza I/O, aunque descarta datos. #to-review |
-| `clc` completo | `Clima_Car.py:3-40` | se llama; su resultado se descarta en las dos ramas (panel `906`, `910`), sin mutar el NDH de entrada. #to-review |
-| `Effective_irradiance` | panel `907`, `911` | asignación alcanzable que recibe `None`; el efecto útil es la mutación de NDH por `Solar_pos`. #to-review |
+| 32 lecturas de `Uploaded_.csv` | panel `4344-5937` | alcanzables, pero sin productor activo (`módulo 913-930` comentado); requieren archivo externo y fallan si falta. |
+| `use_ndh` completo | panel `1105-1115` | callback alcanzable: relee/filtra y retorna `None`; realiza I/O, aunque descarta datos. |
+| `clc` completo | `Clima_Car.py:3-40` | se llama; su resultado se descarta en las dos ramas (panel `906`, `910`), sin mutar el NDH de entrada. |
+| `Effective_irradiance` | panel `907`, `911` | asignación alcanzable que recibe `None`; el efecto útil es la mutación de NDH por `Solar_pos`. |
 
 ---
 
@@ -99,10 +98,10 @@ dependencias de archivo ausentes y operaciones ejecutadas cuyo resultado se desc
 
 | Qué | Cuánto | Dónde |
 |---|---|---|
-| Asignaciones no consumidas en `resume_IV` | **132 reportadas** | 6/28/42/28/28 según el autor; suma comprobada, análisis de liveness original no disponible. #to-review |
-| Invocaciones `IV_R/IV_R1/IV_R2` en el callback de curvas | 70 llamadas en 35 pares | 42/14/14 llamadas por AST; los pares obtienen figura y tabla por separado, sin medición de coste. #to-review |
-| Reaperturas del `.xlsx` de mediciones | dependen del número de curvas y la rama | 31 es el caso de 30 curvas reportado por el autor; no un número universal ni una medición aquí. #to-review |
-| Reaperturas de `Libro1.xlsx` | hasta 3 al crear filtros, más la lectura de `data_handler` | `creador_de_filtros` llama `Data_filter` una vez por dimensión seleccionada (`568-661`); no son siempre 4 por selección. #to-review |
+| Asignaciones no consumidas en `resume_IV` | **132 reportadas** | 6/28/42/28/28 según el autor; suma comprobada, análisis de liveness original no disponible. |
+| Invocaciones `IV_R/IV_R1/IV_R2` en el callback de curvas | 70 llamadas en 35 pares | 42/14/14 llamadas por AST; los pares obtienen figura y tabla por separado, sin medición de coste. |
+| Reaperturas del `.xlsx` de mediciones | dependen del número de curvas y la rama | 31 es el caso de 30 curvas reportado por el autor; no un número universal ni una medición aquí. |
+| Reaperturas de `Libro1.xlsx` | hasta 3 al crear filtros, más la lectura de `data_handler` | `creador_de_filtros` llama `Data_filter` una vez por dimensión seleccionada (`568-661`); no son siempre 4 por selección. |
 | Relecturas del CSV eléctrico por cambio de filtro | 19 puntos de llamada | ver `C-03` |
 
 Los pares repiten ajuste y cálculo para recuperar figura y tabla. Son un candidato de
@@ -114,9 +113,9 @@ sistema. La equivalencia debe cubrir también errores y efectos laterales. #to-r
 ## 5. Lo que esto significa para el refactor
 
 - La ausencia de un camino estático no autoriza borrar fuentes congeladas ni garantiza ausencia
-  de uso externo. Cualquier retirada de implementación futura requiere comprobar sus consumidores. #to-review
+  de uso externo. Cualquier retirada de implementación futura requiere comprobar sus consumidores.
 - El ahorro de ~6.300 líneas es una estimación de diseño del autor, no una meta ni un resultado
   medido. Consolidar requiere reproducir estructura, valores, orden, unidades y fallos de cada ruta
-  seleccionada, manteniendo aparte las correcciones intencionales. #to-review
+  seleccionada, manteniendo aparte las correcciones intencionales.
 - Una rama no seleccionada y una ruta con dependencia ausente tienen bloqueos distintos.
-  Registrarlos en cobertura permite caracterizar cada una antes de decidir una corrección. #to-review
+  Registrarlos en cobertura permite caracterizar cada una antes de decidir una corrección.

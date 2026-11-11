@@ -5,7 +5,6 @@ retrieve_when: Se pretende corregir o seleccionar una ecuación, unidad, rejilla
 read_scope: La decisión D pertinente, su función citada y el registro de supuestos vigente.
 authority: Propuestas abiertas; ninguna recomendación equivale a un valor científico o contrato aprobado.
 verify: Conservar la referencia observada y revisar formulación, unidades, fuentes y consecuencias del cambio.
-review_status: '#to-review'
 ---
 
 # 10 — Decisiones pendientes
@@ -23,12 +22,12 @@ review_status: '#to-review'
 **Qué pasa hoy.** `PE` (`1508`) calcula `Pmax=Vmp*Imp`. La función alternativa
 de `Parametros_Electricos` (`185-186`, `219-220`) divide otra fórmula por
 `1000/POA`. La síntesis suministrada reporta un factor impreso `1000/G`; el
-informe original y la cadena completa requieren contraste. #to-review
+informe original y la cadena completa requieren contraste.
 
 | Opción | Consecuencia |
 |---|---|
-| **A** — multiplicar por `G/1000` | es igual a dividir por `1000/G`, para G distinto de cero. No identifica por sí solo la fórmula completa. #to-review |
-| **B** — dividir por `1000/G` | no invierte el factor respecto a A; el término que se multiplica también debe compararse. #to-review |
+| **A** — multiplicar por `G/1000` | es igual a dividir por `1000/G`, para G distinto de cero. No identifica por sí solo la fórmula completa. |
+| **B** — dividir por `1000/G` | no invierte el factor respecto a A; el término que se multiplica también debe compararse. |
 
 **Por qué importa:** `PE` ya incluye `G/1000` en `Imax` y calcula `Vmax*Imax`;
 la función alternativa traslada directamente la potencia de ficha. No se ha
@@ -47,8 +46,8 @@ abiertas.
 
 | Opción | Consecuencia |
 |---|---|
-| **A** — definir unidades explícitas en el contrato del modelo corregido | no basta dividir entre 100: el ajuste CEC requiere alpha en A/°C y beta en V/°C; De Soto consume alpha absoluto. #to-review |
-| **B** — preservar valores y conversiones actuales en compatibilidad | permite medir el comportamiento observado; mantiene la inconsistencia documentada. #to-review |
+| **A** — definir unidades explícitas en el contrato del modelo corregido | no basta dividir entre 100: el ajuste CEC requiere alpha en A/°C y beta en V/°C; De Soto consume alpha absoluto. |
+| **B** — preservar valores y conversiones actuales en compatibilidad | permite medir el comportamiento observado; mantiene la inconsistencia documentada. |
 
 **Propuesta del autor:** normalizar la interpretación para un modelo corregido.
 Debe conservarse el registro fuente y asignarse un único propietario de cada
@@ -63,12 +62,12 @@ conversión. No se aplica silenciosamente a una referencia de compatibilidad. #t
 usan el término cuadrático, pero ajustan parámetros de forma distinta para
 curvas medidas y simuladas. Existe `get_corrected_IV_P2` (`7537-7607`) sin
 llamadas directas en el panel/módulo inspeccionados. El informe reconoce
-ambigüedad logarítmica; ver el [mapa de métodos y orígenes](08-tesis-a-codigo.md). #to-review
+ambigüedad logarítmica; ver el [mapa de métodos y orígenes](08-tesis-a-codigo.md).
 
 | Opción | Consecuencia |
 |---|---|
-| **A** — implementar una formulación contrastada de IEC 60891 | requiere identificar edición, ecuaciones y condiciones, y evaluar sus diferencias con cada variante actual. #to-review |
-| **B** — conservar cada forma implementada como variante | puede establecer paridad con el código seleccionado; no demuestra por sí sola paridad con la tesis ni distancia de una norma no contrastada. #to-review |
+| **A** — implementar una formulación contrastada de IEC 60891 | requiere identificar edición, ecuaciones y condiciones, y evaluar sus diferencias con cada variante actual. |
+| **B** — conservar cada forma implementada como variante | puede establecer paridad con el código seleccionado; no demuestra por sí sola paridad con la tesis ni distancia de una norma no contrastada. |
 
 **Propuesta del autor:** conservar primero las variantes. Identificar edición y
 ecuaciones de la norma antes de afirmar conformidad o desviación; preservar
@@ -103,7 +102,7 @@ No se resamplean referencias para obtener un pase. #to-review
 
 **Propuesta del autor:** A, asociada al riesgo `R-03`. La lectura por nombre es
 un cambio respecto a la selección posicional actual y requiere preservar primero
-el libro original y capturar fallos/desalineación por rama. #to-review
+el libro original y capturar fallos/desalineación por rama.
 
 ---
 
@@ -113,8 +112,8 @@ el libro original y capturar fallos/desalineación por rama. #to-review
 
 | Opción | Consecuencia |
 |---|---|
-| **A** — fijar semilla y declararla en el resultado | propone un control explícito; debe identificar también generador, versión y orden de llamadas. #to-review |
-| **B** — preservar el RNG global actual | puede capturarse su estado y reponerse para reproducir una corrida controlada; sin estado no se recupera una corrida histórica desconocida. #to-review |
+| **A** — fijar semilla y declararla en el resultado | propone un control explícito; debe identificar también generador, versión y orden de llamadas. |
+| **B** — preservar el RNG global actual | puede capturarse su estado y reponerse para reproducir una corrida controlada; sin estado no se recupera una corrida histórica desconocida. |
 
 **Propuesta del autor:** A para nuevas corridas controladas. La compatibilidad
 también puede registrar estado RNG sin editar la función; cambiar semilla por

@@ -57,15 +57,23 @@ core document frontmatter stating its role, retrieval scope, authority and what
 to verify. Keep one owner per fact/contract; link supporting evidence rather than
 copying inventories, equations or status tables across documents.
 
-For agent-authored substantive additions or changes to core `docs/` evidence,
-place a literal `#to-review` beside each changed paragraph, list item, table row
-or diagram entry/caption. A file-wide marker alone is insufficient. Keep tags out
-of headings, equations, code and rendered diagram labels; use an adjacent note or
-Mermaid comment. For routing-metadata edits, use `review_status: "#to-review"` in
-frontmatter. Mechanical formatting/link repairs need no substantive tag.
+Use `#to-review` only for a significant change or deviation from the existing
+evidence: a changed scientific or empirical claim, equation/unit, behavior or data
+contract, consequential provenance/validity assessment, or new modeling assumption.
+Compare with the prior text and identify the changed meaning. Being agent-authored,
+newly documented or edited is not enough. Do not tag unchanged facts, confirmations,
+restatements, ordinary wording/reorganization, links, formatting or routing metadata.
 
-Do not tag unchanged source history or remove existing tags without explicit
-human authorization. A request to edit is not approval of the resulting wording;
+Place one short review note beside the smallest coherent change, stating its scope
+and reason. Group adjacent changes with the same rationale; do not repeat tags in
+every paragraph/cell or in summaries that merely link to the owning correction.
+Keep tags out of headings, equations, code and rendered diagram labels; use an
+adjacent note or Mermaid comment. Do not use blanket frontmatter review tags.
+
+Do not tag unchanged source history or remove a substantive review marker without
+explicit human authorization. A requested tagging cleanup may remove or consolidate
+redundant markers under these criteria; preserve the underlying uncertainty and
+pending decisions. A request to edit is not approval of the resulting wording;
 passing checks is not human review or scientific acceptance. Review tags do not
 block the rest of an authorized task. Preserve immutable supplied documents and
 capture bytes; describe their role through catalogue/provenance metadata instead.

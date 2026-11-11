@@ -5,7 +5,6 @@ retrieve_when: Se elige el siguiente flujo legacy que caracterizar o se recupera
 read_scope: El paso pertinente; contrastar sus prerrequisitos con cobertura y comandos actuales.
 authority: Propuesta de secuencia, no estado vigente ni receta de ejecución aprobada.
 verify: Confirmar artefactos, importaciones, efectos de llamada y capturas existentes antes de ejecutar.
-review_status: '#to-review'
 ---
 
 # 11 — Por dónde empezar
@@ -16,7 +15,7 @@ review_status: '#to-review'
 El congelado sigue siendo la prioridad. Esta propuesta antecede a las capturas
 parciales actuales; [cobertura](../legacy_backend_coverage.md) mantiene sus límites,
 el [README del proyecto](../../README.md) los comandos soportados y el plan activo
-el progreso de una tarea. No se ejecuta un pseudoflujo solo por aparecer aquí. #to-review
+el progreso de una tarea. No se ejecuta un pseudoflujo solo por aparecer aquí.
 
 ---
 
@@ -28,13 +27,16 @@ es el juez de todos los pasos siguientes: un módulo refactorizado entra solo si
 **Por qué va primero.** Sin él, cualquier refactor es una opinión. Con él, cada paso es comprobable en
 segundos y los defectos de [06](06-lo-que-esta-roto.md) pasan de deducciones a hechos.
 
-**Dependencias de cada ruta**, no bloqueos de todo arnés: #to-review
+**Dependencias de cada ruta**, no bloqueos de todo arnés:
+
+#to-review — La tabla limita los bloqueos a la ruta que los consume; no impide
+caracterizaciones con módulos manuales o entradas guardadas/sintéticas.
 
 | Bloqueo | Qué falta | Cómo se resuelve |
 |---|---|---|
-| `NREL_API_KEY` + `NREL_API_EMAIL` | credenciales para adquisición en vivo | bloquean esa adquisición; un snapshot o entradas sintéticas permiten otras caracterizaciones. #to-review |
-| `Libro1.xlsx` | catálogo del selector `CEC`, sin edición/origen confirmados | afecta ese modo; el módulo manual evita esa dependencia. #to-review |
-| Entorno histórico | versiones originales no establecidas | seleccionar y registrar un entorno reconstruido no prueba identidad histórica; las capturas actuales ya tienen locks propios. #to-review |
+| `NREL_API_KEY` + `NREL_API_EMAIL` | credenciales para adquisición en vivo | bloquean esa adquisición; un snapshot o entradas sintéticas permiten otras caracterizaciones. |
+| `Libro1.xlsx` | catálogo del selector `CEC`, sin edición/origen confirmados | afecta ese modo; el módulo manual evita esa dependencia. |
+| Entorno histórico | versiones originales no establecidas | seleccionar y registrar un entorno reconstruido no prueba identidad histórica; las capturas actuales ya tienen locks propios. |
 
 **El arnés propuesto.** Importar el helper completo sí requiere Dash y otras
 dependencias UI/científicas. Su nivel superior contiene importaciones y funciones,
@@ -47,7 +49,7 @@ implementada: #to-review
 2. llame a `df_creator`, `PE*`, `resume_df`, `resume_IV`, `IV_R`, `IV_CI_cor`;
 3. conserve salidas crudas y un manifiesto con fuente/wrapper, entorno incluido
    PySAM/SSC para ajuste CEC, entradas efectivas, unidades, rejillas, RNG y hashes;
-   no basta registrar solo pvlib/pandas. #to-review
+   no basta registrar solo pvlib/pandas.
 
 **Los tres casos mínimos:**
 
@@ -82,7 +84,7 @@ Escribir `C-01`…`C-06` como **tipos y validaciones**, no como documentación: 
 
 Los tipos deben formalizar las fronteras que se implementen, distinguiendo los
 contratos observados de propuestas como lectura por nombre o coeficientes corregidos.
-No se necesitan esquemas especulativos de rutas aún no implementadas. #to-review
+No se necesitan esquemas especulativos de rutas aún no implementadas.
 
 ---
 
@@ -121,8 +123,8 @@ Aquí desaparecen las clases enteras de defectos de presentación: `B-03`, `B-12
 
 | Tentación | Por qué no |
 |---|---|
-| Reescribir sin preservar fuente y referencias | se pierde la posibilidad de medir compatibilidad; la validez física necesita evidencia separada. #to-review |
-| Anteponer nueva UI a la reproducción | la arquitectura actual usa Python/FastAPI/Next, pero la funcionalidad nueva del frontend espera al backend; no se exige reconstruir Dash. #to-review |
+| Reescribir sin preservar fuente y referencias | se pierde la posibilidad de medir compatibilidad; la validez física necesita evidencia separada. |
+| Anteponer nueva UI a la reproducción | la arquitectura actual usa Python/FastAPI/Next, pero la funcionalidad nueva del frontend espera al backend; no se exige reconstruir Dash. |
 | Arreglar los 13 defectos antes del congelado | sin juez, no se puede demostrar que el arreglo no rompió otra cosa |
 | Borrar el código muerto como primer paso | ahorra 6 % y no cambia nada estructural |
 | Parametrizar sin casos de prueba | es la forma más rápida de cambiar resultados sin darse cuenta |
@@ -132,13 +134,13 @@ Aquí desaparecen las clases enteras de defectos de presentación: `B-03`, `B-12
 
 ## Orden orientativo, sin promesa de plazo
 
-1. Revisar los entornos/capturas existentes y registrar el entorno de la ruta siguiente. #to-review
-2. Recuperar credenciales o fuentes solo para las rutas que las necesiten. #to-review
-3. Caracterizar el caso completo seleccionado, partiendo de límites ya capturados. #to-review
-4. Preservar manifiesto, referencias y diferencias antes de reemplazar ese comportamiento. #to-review
-5. Repetir para módulos, fuentes y correcciones que tengan sus entradas disponibles. #to-review
-6. Resolver decisiones corregidas cuando una implementación dependa de ellas. #to-review
-7. Formalizar contratos de las fronteras que se implementen y comprobar consumidores. #to-review
+1. Revisar los entornos/capturas existentes y registrar el entorno de la ruta siguiente.
+2. Recuperar credenciales o fuentes solo para las rutas que las necesiten.
+3. Caracterizar el caso completo seleccionado, partiendo de límites ya capturados.
+4. Preservar manifiesto, referencias y diferencias antes de reemplazar ese comportamiento.
+5. Repetir para módulos, fuentes y correcciones que tengan sus entradas disponibles.
+6. Resolver decisiones corregidas cuando una implementación dependa de ellas.
+7. Formalizar contratos de las fronteras que se implementen y comprobar consumidores.
 
 El alcance y los siguientes pasos se ajustan con resultados ejecutados y huecos
-concretos, no con los plazos de esta propuesta histórica. #to-review
+concretos, no con los plazos de esta propuesta histórica.

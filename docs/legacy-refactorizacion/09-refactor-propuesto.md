@@ -5,7 +5,6 @@ retrieve_when: Se evalúa la intención de una separación o consolidación de f
 read_scope: El estado pertinente y sus requisitos de preservación; los pseudocontratos no son APIs existentes.
 authority: Propuesta del autor, no arquitectura aprobada ni cobertura ejecutada del backend moderno.
 verify: Contrastar cada equivalencia con productores, consumidores, contratos y capturas; arquitectura actual en docs/architecture.md.
-review_status: '#to-review'
 ---
 
 # 09 — El refactor propuesto
@@ -19,7 +18,7 @@ Este alcance histórico conserva la intención del autor. La arquitectura actual
 se rige por [arquitectura](../architecture.md): Python/FastAPI y presentación
 Next.js, con nueva funcionalidad frontend después de la reproducción del backend.
 Las firmas siguientes son propuestas de diseño, no comandos ni interfaces
-soportadas por su mera presencia aquí. #to-review
+soportadas por su mera presencia aquí.
 
 ---
 
@@ -48,13 +47,13 @@ y pasar los casos de cada contrato. #to-review
 | **S6** Curvas | 7 | **4** | `IV_R`/`R1`/`R2` → un motor; `IV_CI`/`CI2` → uno |
 | **S7** Corrección + estadística | 18 | **8** | `minimos` ×4 → 1, `Bootstrap`/`Bootstrap2` → 1, dos muertas |
 | **S8** Presentación | 31 | **12** | 24 callbacks → una función por pantalla; 7 constructores → 3 |
-| **Suma de las filas** | **116** | **40** | No es un nuevo conteo del código; el total 120 anterior no coincidía con las filas. #to-review |
+| **Suma de las filas** | **116** | **40** | No es un nuevo conteo del código; el total 120 anterior no coincidía con las filas. |
 
 **Líneas: 14.896 → ~4.400** (estimación por diseño, no medida; sin tests ni contratos, que añaden ~800).
 
 Reducir funciones no debería reducir producto. El objetivo de 40 y los umbrales
 de tamaño/duplicación son preferencias de esta propuesta, no prueba de cobertura
-ni criterios suficientes de reproducción. #to-review
+ni criterios suficientes de reproducción.
 
 ---
 
@@ -166,8 +165,8 @@ Si alguna de estas se rompe, el código vuelve a la forma actual en tres meses:
 | Criterio | Umbral |
 |---|---|
 | Paridad numérica en los casos congelados | diferencia dentro de la tolerancia acordada por magnitud |
-| Cobertura de combinaciones | ejecutar los contratos de cada combinación soportada, incluidos módulos, años, origen/método de corrección y fallos; el producto 7×3×3 no los enumera todos. #to-review |
-| Funciones | ~40 y límite 200 líneas son objetivos de diseño propuestos, no evidencia numérica. #to-review |
-| Duplicación | límite 30 líneas propuesto; compartir código no sustituye las comparaciones. #to-review |
+| Cobertura de combinaciones | ejecutar los contratos de cada combinación soportada, incluidos módulos, años, origen/método de corrección y fallos; el producto 7×3×3 no los enumera todos. |
+| Funciones | ~40 y límite 200 líneas son objetivos de diseño propuestos, no evidencia numérica. |
+| Duplicación | límite 30 líneas propuesto; compartir código no sustituye las comparaciones. |
 | Acoplamiento | S1–S7 sin importar `dash` |
 | Arranque | un comando ejecuta un caso completo sin abrir la interfaz |

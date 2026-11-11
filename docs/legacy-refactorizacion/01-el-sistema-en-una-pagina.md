@@ -5,13 +5,12 @@ retrieve_when: Entender el alcance funcional y el acoplamiento del panel legacy.
 read_scope: Resumen; seguir después el contrato o estado afectado.
 authority: Investigación estática del autor; no demuestra ejecución, paridad ni validez científica.
 verify: Contrastar símbolos y condiciones con legacy; consultar la cobertura canónica para capturas e implementación actuales.
-review_status: '#to-review'
 ---
 
 # 01 — El sistema en una página
 
 > Resumen de la investigación del autor sobre `legacy/`. Las cifras y sus límites están en el
-> [README](README.md) §1; el backend actual se consulta en [cobertura](../legacy_backend_coverage.md). #to-review
+> [README](README.md) §1; el backend actual se consulta en [cobertura](../legacy_backend_coverage.md).
 
 ---
 
@@ -21,11 +20,11 @@ Una aplicación de escritorio-monolito en **Python + Plotly Dash** para analizar
 fotovoltaicos: descarga el clima de un sitio (NREL NSRDB), calcula irradiancia en el plano,
 estima temperatura con tres modelos y produce series eléctricas e I-V. El panel también conecta
 corrección y comparación de mediciones. Este alcance describe rutas implementadas; sus defectos
-y la cobertura de ejecución se evalúan por separado. #to-review
+y la cobertura de ejecución se evalúan por separado.
 
 El autor lo vincula con su informe de licenciatura (UNAM, 2025) sobre simulación, corrección y
 validación de curvas I-V. Su conocimiento del sistema orienta la investigación; los juicios
-sobre comportamiento y ciencia se contrastan con código, capturas y fuentes. #to-review
+sobre comportamiento y ciencia se contrastan con código, capturas y fuentes.
 
 ---
 
@@ -53,7 +52,7 @@ sobre comportamiento y ciencia se contrastan con código, capturas y fuentes. #t
 
 ```mermaid
 flowchart TD
-    %% #to-review: 24 funciones, solo 23 decoradas; parse_contents es auxiliar.
+    %% 24 funciones, solo 23 decoradas; parse_contents es auxiliar.
     A["el panel: 6.043 lineas<br/>23 callbacks + auxiliar + layout"] -->|importa| B["el modulo: 8.853 lineas<br/>85 funciones"]
     A -->|importa| C["Primer_Funcion_Clima"]
     A -->|importa| D["Posicion_Solar"]
@@ -74,7 +73,7 @@ Tres cosas que hay que saber de esta estructura:
 2. **Dos funciones tienen el mismo nombre y ambas están vivas**: `electric_parameters`
    (`1148` y `4182`) y `Voltaje_Corriente_Selector` (`1723` y `1742`). El decorador de Dash registra
    la primera referencia antes de que la segunda reasigne el símbolo, así que hablan dos funciones
-   distintas con el mismo nombre. Estos dos nombres requieren distinguir también su línea. #to-review
+   distintas con el mismo nombre. Estos dos nombres requieren distinguir también su línea.
 3. **Las series se comunican mediante ficheros en el directorio de trabajo**, y los stores
    transportan sus rutas. Los stores de corrección también llevan tablas y curvas reales (C-04).
    Los nombres compartidos y el borrado previo permiten interferencias entre sesiones. #to-review
@@ -88,7 +87,7 @@ Tres cosas que hay que saber de esta estructura:
 | `dash`, `dash-bootstrap-components`, `dash-leaflet`, `plotly`, `cufflinks` | instalables |
 | `pvlib` | **0.11.0** reportado en la máquina original de análisis; `Clima` elige PSM4/PSM3 mediante `hasattr`, por lo que la ruta efectiva depende del entorno de captura. #to-review |
 | `openpyxl`, `pandas`, `numpy`, `scipy`, `timezonefinder`, `pytz` | instalables |
-| Credenciales NREL | necesarias para ejecutar S1; `Clima` admite argumentos explícitos o variables de entorno. No prueban un requisito universal de arranque de Dash. #to-review |
+| Credenciales NREL | necesarias para ejecutar S1; `Clima` admite argumentos explícitos o variables de entorno. No prueban un requisito universal de arranque de Dash. |
 | `Libro1.xlsx` (catálogo CEC) | **no suministrado**: solo afecta al modo `CEC` |
 
 El bloque principal del panel llama a `app.run(debug=True)` (`6041-6042`). No hay un ejecutor
@@ -105,10 +104,10 @@ La captura aislada debe revisar efectos laterales e importaciones de cada fronte
    siguen en [evidencia](../evidence.md) y [suposiciones](../assumptions.md). #to-review
 2. **La repetición concentra mantenimiento**: seis funciones suman 7.013 líneas, el 51,9 % de
    las líneas de funciones. El 91 % de duplicación es una métrica reportada sin script disponible;
-   los 84 `if Metodo ==` sí se contrastaron en el callback de curvas. #to-review
+   los 84 `if Metodo ==` sí se contrastaron en el callback de curvas.
 3. **Falta el juez de todas las rutas**: ya existen capturas parciales, sin reproducción completa
    del panel. [Cobertura](../legacy_backend_coverage.md) identifica las comparaciones y los
-   bloqueos restantes; este resumen no sustituye ese registro. #to-review
+   bloqueos restantes; este resumen no sustituye ese registro.
 
 ---
 
