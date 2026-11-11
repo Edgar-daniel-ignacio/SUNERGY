@@ -1,7 +1,18 @@
+---
+title: Convenciones del sistema legacy
+role: Vocabulario y convenciones recuperados por el autor, con correcciones auditadas pendientes de revisión.
+retrieve_when: Interpretar nombres, unidades, estados o índices de los archivos legacy.
+read_scope: La convención y sus productores o consumidores citados.
+authority: Investigación estática del autor; no demuestra ejecución, paridad ni validez científica.
+verify: Contrastar símbolos y condiciones con legacy; consultar la cobertura canónica para capturas e implementación actuales.
+review_status: '#to-review'
+---
+
 # 00 — Convenciones, unidades y nombres
 
 > Sin esta página, la mitad de los defectos del sistema parecen errores distintos y son el mismo
-> problema de vocabulario. Borradores: **verificado** salvo donde se marque.
+> problema de vocabulario. Convenciones contrastadas estáticamente; sus condiciones de aplicación
+> no sustituyen una captura ni una validación científica. #to-review
 
 ---
 
@@ -16,20 +27,20 @@ de «input» para referirse a ese módulo. Son el mismo objeto.
 | **el módulo** | `Input_File_DIV_Mac_Informe.py` | 8.853 |
 | clima | `Primer_Funcion_Clima.py` | 183 |
 | radiación | `Posicion_Solar.py` | 204 |
-| caracterización meteorológica | `Clima_Car.py` | 39 |
-| **muerto** | `Parametros_Electricos.py` | 240 |
-| **muerto** | `CurvaIV.py` | 99 |
+| caracterización meteorológica | `Clima_Car.py` | 40 #to-review |
+| **sin llamadas desde el panel trazado** | `Parametros_Electricos.py` | 240 #to-review |
+| **sin llamadas desde el panel trazado** | `CurvaIV.py` | 99 #to-review |
 
-`Parametros_Electricos` y `CurvaIV` se importan en el panel (`L4` y `L7`) y **no se llaman nunca**:
-son una generación anterior del mismo cálculo, copiada después dentro del módulo. Cualquier
-afirmación sobre «el modelo de un diodo» que se apoye en ellos está describiendo código muerto.
+`Parametros_Electricos` y `CurvaIV` se importan en el panel (`L4` y `L7`), sin llamadas a sus
+alias `pe` e `iv` en ese fichero. Sus ecuaciones no prueban el comportamiento de los motores
+activos en `Input_File_DIV_Mac_Informe.py`. No se ha descartado todo consumidor externo posible. #to-review
 
 ---
 
 ## 2. Las cinco dimensiones del problema
 
-Todo el sistema es el producto de estas cinco decisiones. Entenderlo es entender por qué hay 84
-bloques de cálculo.
+Estas cinco decisiones explican la repetición de ramas. Los 84 `if Metodo ==` pertenecen al
+callback `electric_parameters@4182`; el conteo no acredita todas las combinaciones posibles. #to-review
 
 | Dimensión | Valores | Dónde vive |
 |---|---|---|
@@ -59,7 +70,8 @@ Consecuencia práctica: **si cambias quién produce un CSV, cambias el nombre de
 `df_creator_1` tiene cinco ramas que esperan `Unnamed: 0` en un fichero que siempre trae `Time`;
 hoy no se alcanzan porque los 19 puntos de llamada pasan `[1]` cableado.
 
-`use_ndh` usa un tercer nombre, `Tiempo`, y no devuelve nada. Es código sin efecto.
+`use_ndh` usa un tercer nombre, `Tiempo`, y devuelve `None` (`panel 1105-1115`): no publica
+los datos que relee, aunque sí realiza I/O y puede fallar al leerlos. #to-review
 
 ---
 
@@ -68,8 +80,9 @@ hoy no se alcanzan porque los 19 puntos de llamada pasan `[1]` cableado.
 - Temperatura en **°C**; irradiancia en **W/m²**; corriente en **A**; tensión en **V**; potencia en **W**.
 - El año se trocea en cuatro resoluciones, y las longitudes son las claves del diccionario `NDH`:
   **8760** (1 h) · **17520** (30 min) · **35040** (15 min) · **105120** (5 min).
-- El código filtra por `len(df) == n`, no por la resolución pedida: si un año trae un número
-  distinto de filas (bisiesto, hueco de datos), **no entra en ninguna rejilla y desaparece sin aviso**.
+- `Clima` conserva longitudes distintas creando nuevas claves (`Primer_Funcion_Clima.py:118-121,
+  173-175`). Son consumidores posteriores —posición solar, Sandia y escritores/tablas— los que
+  filtran las cuatro longitudes reconocidas. La pérdida depende del consumidor, no de la descarga. #to-review
 - El índice temporal es `DatetimeIndex` con zona horaria (`Etc/GMT±N` en la ruta de pvlib).
 
 ---
@@ -78,13 +91,14 @@ hoy no se alcanzan porque los 19 puntos de llamada pasan `[1]` cableado.
 
 | Rótulo en pantalla | Lo que realmente contiene | Dónde |
 |---|---|---|
-| `"Temperatura minima"` (fila 2 de las tablas de extremos) | valores de **voltaje** | 10 sitios; llega a la leyenda de `IV_R` |
+| `"Temperatura minima"` / `"Temperatura Minima"` en `resume_IV` | condiciones elegidas por **voltaje máximo**, no temperatura mínima | 10 rótulos con `minima` y uno con `Minima` (`4759`); llega a la leyenda de `IV_R`. #to-review |
 | `"Año … [Horas: …]"` | formato de 1 módulo | `4245`, `1789` |
 | `"Year … [Hours: …]"` | formato de 2 módulos; **no coincide** con las opciones del desplegable | `5428`, `2477` |
 | `"Voc"` en la tabla de Feinman | es **`Vmax_F`**, no `Voc_F` (`3128-3129`) | `resume_df` |
 
-El tercero no es cosmético: el filtro compara etiquetas, y con el idioma cambiado la pantalla
-queda vacía sin lanzar error.
+La discrepancia `Año`/`Year` afecta las comparaciones de etiquetas. El resultado concreto
+depende del filtro y la rama: varios filtros de dos módulos comparan caracteres (B-03), por lo
+que tampoco se puede deducir una pantalla vacía universal sin ejecutar el caso. #to-review
 
 ---
 
@@ -102,8 +116,8 @@ valores por defecto del módulo de prueba, y por eso la línea `678` de `toggle_
 
 | Estado | Significado | Cómo se reconoce |
 |---|---|---|
-| **viva** | se ejecuta en algún flujo real | alcanzable desde los 23 callbacks o el layout |
-| **muerta** | nadie la llama | alcanzabilidad = 0 |
+| **viva** | alcanzable en el grafo estático del panel | 23 callbacks o 22 factorías del layout; no demuestra que la rama se ejecute con datos válidos. #to-review |
+| **muerta** | sin camino desde las raíces analizadas | alcanzabilidad estática = 0 en estos dos ficheros; comprobar consumidores externos antes de borrar. #to-review |
 | **muerta-hoy** | existe y es coherente, pero ningún llamador puede alcanzarla con los argumentos actuales | p. ej. las 5 ramas de `df_creator_1` |
-| **rota** | se ejecuta y falla o corrompe el dato | ver `06-lo-que-esta-roto.md` |
+| **rota** | anotación original de defecto o riesgo de fallo | ver condiciones y límites en `06-lo-que-esta-roto.md`; no equivale a fallo observado. #to-review |
 | **nunca conectada** | escrita y nunca invocada | `df_creator_PE`, `Year_tabla`, `minimos2`, `minimos_s2`, `IV_CI_Corr`, `get_corrected_IV_P2` |

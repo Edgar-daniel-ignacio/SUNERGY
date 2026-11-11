@@ -1,148 +1,117 @@
-# Legacy backend coverage and evidence reconciliation
+---
+title: Legacy audit and backend coverage
+role: Reconcile the original investigation and map capabilities to implementation and references
+retrieve_when: Recovering legacy behavior, checking a disputed claim or choosing the next backend slice
+read_scope: Relevant audit finding or capability; follow the original chapter, symbol and capture
+authority: Source-audited reconciliation; static findings and executed coverage remain distinct
+verify: Inspect named source and actual reference assertions before extending a claim
+review_status: "#to-review"
+---
 
-Start with the collaborator's [curated overview](legacy-refactorizacion/README.md)
-and use its [index](legacy-refactorizacion/index.json) to locate a capability,
-function (`F-`), implicit contract (`C-`) or issue (`B-`/`D-`). This document connects
-that investigation to current backend ownership and executable reproduction.
-It does not replace the original chapters or make their proposals authoritative.
-For capture requirements and acceptance rules, use [reproduction](reproduction.md);
-for scientific limits, use [evidence](evidence.md).
+# Legacy audit and backend coverage
 
-## Evidence assessment
+Start with the collaborator's [overview](legacy-refactorizacion/README.md), its
+[chapter catalogue](legacy-refactorizacion/README.md#8-índice-de-documentos) and
+[index](legacy-refactorizacion/index.json). They preserve the original author's
+understanding, terminology, implicit contracts and intended refactor. This document
+owns the independent audit and legacy-to-modern coverage, not a replacement
+function inventory. Modeling interpretation belongs in [assumptions](assumptions.md).
+#to-review
 
-The curated investigation is dated 2026-11-02. Its overview explicitly says the
-system was **not executed**. `medido` means static AST analysis; `verificado`
-means reviewed source, unless a specific raw execution artifact establishes more.
-The analysis repository's benchmark scripts and detailed bug report are not part
-of this checkout. The preserved source inventory, rather than moving line numbers
-or document dates, identifies the implementation under review.
+## Audit scope and confidence
 
-The following assessment covers each chapter. Existing source links and IDs remain
-useful; no translated copy or second function inventory is needed.
+The current audit reviewed chapters 00–11, the overview, index and four diagrams,
+then checked consequential claims at their named functions, callbacks and data
+consumers. Source identity is the frozen [inventory](evidence/legacy_inventory.json).
+Static source findings below do not claim that the full dashboard, original
+workbook or annual/correction branches executed. #to-review
 
-| Curated evidence | Enduring finding and application | Qualification / owner |
+| Evidence checked | Result and scope |
+|---|---|
+| All 109 indexed functions | Names, start/end lines and spans match the two main source files; no indexed locator drift or omitted top-level function was found. Reuse chapter 04/index rather than recreate them. #to-review |
+| Callback/layout reachability | 23 decorated callbacks plus 22 distinct layout factories give 45 static roots; the traced graph reaches 103/109 functions and corroborates the six listed disconnected helpers. This graph does not rule out external direct callers. #to-review |
+| Counts and source spans | State counts/spans agree with the index. The six largest functions total 7,013/13,516 function-span lines (51.89%), or 47.08% of 14,896 raw lines. Denominators matter. #to-review |
+| Repeated selector structure | The large curve callback has 84 `Metodo` branches, 28 `Seleccion` branches and 113 return statements of width 13. These are branches, not 113 distinct output ports. #to-review |
+| Reported duplication/liveness metrics | The 91% duplication, 44 groups/166 blocks and 132 unused assignments remain collaborator-reported measurements; the originating benchmark tools/method artifacts are absent. Their source pointers remain useful, but the exact metrics were not independently reproduced. #to-review |
+| External modules | Their indexed locations were checked separately; the cited top-level definitions include ten functions and one class. They are outside the main 109-function inventory. #to-review |
+| Numerical execution | Existing independent IV_R/Faiman/NOCT references establish only the domains below. This context audit adds no new numerical reproduction or empirical-validation claim. #to-review |
+
+## What the original chapters uniquely provide
+
+Use 00 for conventions, 01–02 for the system/data story, 03 for implicit boundaries,
+04/index for exact function locators, 05–07 for duplication/defects/missing work,
+08 for the author's report-to-code account, and 09–11 for proposed organization,
+unresolved decisions and historical implementation order. Proposals in the last
+three chapters are valuable design input, not accepted contracts or proof of
+scientific validity. Their own frontmatter narrows retrieval. #to-review
+
+## Consequential findings and corrections
+
+The original chapters retain local tagged corrections. This table is the compact
+cross-chapter disposition; follow the cited source/operation for details. #to-review
+
+| Claim or seam | Audited conclusion | Trace / consequence |
 |---|---|---|
-| [00: conventions](legacy-refactorizacion/00-convenciones.md) | Names, units, thermal selectors, file/index conventions and function states route targeted inspection. | Row-count filtering and mutation differ by function; verify each producer/consumer. An imported alternate path is not the active callback path. |
-| [01: overview](legacy-refactorizacion/01-el-sistema-en-una-pagina.md) | Three input families (weather, module, measurements), three output families (annual, curves, comparison), dependency leads. | `pvlib 0.11.0` describes the analysis machine, not an established historical runtime. Claims that physics is sound are interpretations, not scientific verification. |
-| [02: data history](legacy-refactorizacion/02-historia-del-dato.md) | S0–S8 transformation chain, mutation and file side effects identify boundaries and ordering. | Backend is concerned with source acquisition and S1–S7 calculations; Dash presentation is evidence, not a migration target. |
-| [03: contracts](legacy-refactorizacion/03-contratos.md) | C-01–C-06 document assumptions of existing producers/consumers; C-07 identifies missing boundaries. | These are descriptive implicit contracts. Proposed normalization, named-sheet lookup and module/measurement checks deliberately change behavior and need separately tested profiles. C-04 stores include result dictionaries, despite its generalization that they transport only paths/small parameters. |
-| [04: inventory](legacy-refactorizacion/04-inventario.md) | Stable function IDs and external-module section enable selective retrieval. | Main 109-function list excludes external weather/POA functions. Counts and reachability are static, not evidence of successful runs or full coverage. |
-| [05: duplication and disconnection](legacy-refactorizacion/05-lo-que-no-sirve.md) | Repeated PE, curve, summary and module-two paths identify candidate shared kernels. | Similarity does not establish equivalence: compare effective arguments, grids, labels, failure modes and consumers before unification. Do not delete frozen legacy code. |
-| [06: defects](legacy-refactorizacion/06-lo-que-esta-roto.md) | B-01–B-13 are concrete characterization leads; B-04/B-06/B-07/B-08/B-09 affect backend behavior. | Its execution row is explicitly empty. Its heading says four data-corrupting defects but lists five. Preserve each defect independently; do not treat the proposed patches as approved scientific changes. |
-| [07: missing work](legacy-refactorizacion/07-lo-que-falta.md) | Distinguishes never connected, presently unreachable, broken and absent functionality. | A modern API/test scaffold now exists. Legacy captures, isolated runs and particular numerical ports must be assessed from actual artifacts, not this historical absence list. |
-| [08: report-to-code](legacy-refactorizacion/08-tesis-a-codigo.md) | Conceptual map of annual, I–V, correction and bootstrap paths; identifies limitations of the annual evidence. | Workbook values and campaign details are collaborator-reported observations. Original workbook/report are unavailable here; no empirical replay or independent confirmation follows from this chapter. See discrepancies below. |
-| [09: proposed refactor](legacy-refactorizacion/09-refactor-propuesto.md) | Reuse pure calculations, explicit boundaries, dimensions as data, and separation of presentation. | Its intended target is a cleaned Dash application. Current policy selects Python/FastAPI/Next. Function-count/line-count targets and hypothetical coverage are not reproduction gates. |
-| [10: pending decisions](legacy-refactorizacion/10-decisiones-pendientes.md) | D-01–D-08 identify irradiance, coefficients, M2N, grids, workbook, RNG, tolerances and preset issues. | Recommendations remain proposals. Preserve selected legacy behavior in a named compatibility profile; review corrections independently. Refer to IDs in chapter 10 (README examples do not consistently use the same numbering). |
-| [11: starting plan](legacy-refactorizacion/11-por-donde-empezar.md) | Independently freeze outputs before replacement; manual module and saved weather can bypass missing live sources. | The suggested full helper import needs Dash/plotting dependencies and source inspection. Its minimal harness and proposed sample tolerances are not an executable baseline. Unknown historical dependencies constrain historical claims, not all fresh controlled captures. |
-| [Diagrams](legacy-refactorizacion/diagrams/) and index | Useful original data-flow, file-bus, combination and measurement locators. | Diagram statements such as “all paths covered” describe a proposed design outcome. Current implemented/proposed paths are maintained in the canonical transformation diagrams. |
+| Counts, IDs and overview language | The panel contains 24 functions but 23 callbacks. Some README ID examples are invalid; duplication percentages use differing denominators. Unsupported statements that the physics is sound are interpretations. #to-review | Original README/01/04/05 and the index; current audit preserves the valid locators and separates measured/reported/proposed claims. #to-review |
+| Weather acquisition and length filtering | `Clima` returns `SmartNDH`, supports direct supplied arguments and creates keys for fetched lengths. TMY forces 60-minute requests. Downstream POA/Sandia/writers impose length gates; acquisition does not universally discard nonstandard lengths. Metadata describe the last fetched response, not every year. #to-review | `Primer_Funcion_Clima.Clima:64–183`, `SmartNDH:43–56`; C-01 and WX-01. Separate source records, temporal interpretation and downstream filtering. #to-review |
+| Import versus execution side effects | Full helper import requires UI/plotting dependencies. CSV deletion and upload rewriting occur inside called helpers, not proven import-time deletion. #to-review | Helper top-level AST and writer/upload bodies; isolated capture must inspect both dependencies and selected call effects. #to-review |
+| Catalog reference temperature | The catalogue selector places `Average NOCT` in slot 9; `Placa_D1/D2` name it `temp_ref`; annual PE consumes it as fit reference temperature. Detailed IV_R instead forces 25 °C. #to-review | Dashboard `render_content:969–1080`, helper `Placa_D1/D2:1017–1057`, `PE:1390`; IN-02. This semantic mismatch is not repaired by field normalization. #to-review |
+| Preset versus discarded manual input | A displayed 250 W preset is legitimate behavior. The silent-input problem is the INSERT path's reuse of `Placa_Prueba`, which replaces the supplied fields. #to-review | B-06, preset defaults/callback branches and IN-01; keep preset identity separate from manual-input preservation. #to-review |
+| Thermal contracts and reachability | Sandia has six a/b entries but four deltaT entries; the UI exposes 1–4. Direct helper/externally supplied selectors 5–6 remain an out-of-domain failure risk. Unsupported lengths are ignored; missing POA can fail immediately. Faiman/NOCT lack Sandia's length predicate. #to-review | `Temperature_sandia:785–800`, `Sandia_options:762–783`, thermal callback; TH-01/02. Capture exposed selectors and helper failure regimes separately. #to-review |
+| Annual equations | `PE` already applies irradiance in current before multiplying Vmp×Imp. D-01's algebraic wording does not justify another factor. Stored `nNsVth` and temperature-coefficient meanings need scientific review. #to-review | `PE:1488–1508`, AN-01 and IV-01; no corrected default selected. #to-review |
+| Compound missing-column condition | Only the literal `NOCT` operand is always truthy; the complete condition still depends on Sandia/Faiman columns. The branch reading all three temperatures is normally supplied by thermal selection `[1,2,3]`; other PE_NOCT branches use different selections. #to-review | B-08; characterize missing-NOCT inputs and reachable callers instead of asserting unconditional application failure. #to-review |
+| Float/list arithmetic | IV_CI2 reads pandas scalars. NumPy scalar subtraction can dispatch successfully over a list, unlike plain Python float subtraction. The asserted TypeError is dtype-dependent. #to-review | B-09 and `IV_CI2`; no measurement/function execution is available to establish the actual failure for the original workbook. #to-review |
+| UI failure/default scope | The malformed fallback is a real arity defect for cleared/unknown selection; the default is `SELEC`. Bootstrap table style defects affect five returns. Missing-correction zeroes are callback outputs, not initial store data. #to-review | B-11/12/13 and the actual callbacks; do not turn conditional symptoms into startup facts. #to-review |
+| Correction method versus curve origin | Both `correction_IV` and `_s` support M2/M2N. `_s` identifies simulated-curve inputs, not the normalized method; their fitting grids/coefficient/k strategies differ. #to-review | Chapters 08–10, `correction_IV:7304–7534`, `correction_IV_s:7609…`; EV-01. Method, origin and fit strategy are separate axes. #to-review |
+| Effective versus reported temperature | IV_CI_cor first uses sensor average for translation, then overwrites Tmod with a Voc-derived value for corrections/simulation, while output metadata retain the sensor average. #to-review | `IV_CI_cor:5957–6015` and repeated branches; EV-01 and the correction lineage diagram. Sensor averaging alone is not the effective correction contract. #to-review |
+| Statistical/report linkage | Source bootstrap uses 3,000 × 12 and minimum-length truncation; the summary reports 4,000 × 15 and 255 positions. `Comprobacion` fixes n=30 / df=29. A displayed 95% label does not validate the statistic or historical method linkage. #to-review | Bootstrap/Bootstrap2/Comprobacion and summary §4.10; EV-01. Preserve RNG/sample/ordering rules before any controlled alternative. #to-review |
+| Design equivalence and estimates | `Solar_pos_e(tilt=None)` equivalence is proposed, not current behavior; `float(None)` fails. Refactor line/function totals and coverage predictions are estimates. #to-review | Chapter 09; preserve dimensions-as-data intent without adopting hypothetical contracts/counts. #to-review |
+| Workbook identity and preservation | Earlier workbook observations are collaborator-reported because originals are absent. Positional sheet consumption can misassociate or fail. `guardar_archivo` rewrites the workbook, so preserving original bytes is a deliberate modern safeguard. #to-review | C-05/R-03/R-04, upload helper and EV-01; retain author observations without inferring source availability or identity. #to-review |
 
-## Capability-to-implementation inventory
+## Capability-to-implementation coverage
 
-Scope is the observed legacy backend, including broken paths that require explicit
-compatibility or correction decisions. Browser controls, Plotly styles and Dash
-stores explain callers; they are not numerical backend requirements. A captured
-kernel with synthetic conditions establishes controlled software behavior, not
-the original campaign or a successful dashboard run.
+Repository module paths below are relative to `backend/src/sunergy/`; original
+function/contract IDs resolve through chapter 04/index. Scope is the intended
+legacy backend, including unresolved failure/correction decisions. Browser styling
+and Dash stores explain callers but are not migrated numerical features. #to-review
 
-| Stable capability | Curated / raw source boundary | Inputs, outputs and dependencies | Modern owner and current evidence / blocker |
+| Capability | Legacy boundary / inputs | Modern owner and present coverage | Next evidence or work |
 |---|---|---|---|
-| `module_record` | S0/S4, C-06; F-038–040 `Placa_Prueba`, `Placa_D1`, `Placa_D2` | Ordered 11 nameplate fields → mapping; numerical constants added. Workbook selector reads missing `Libro1.xlsx`. | Fetcher preserves raw record/order/units; model owns coefficient interpretation. Manual records allow capture without catalog. B-06 preset discards every supplied field. Catalog edition/hash/license remain missing. |
-| `weather` | S1, C-01; `Primer_Funcion_Clima.Clima:64–183`, dashboard `clima:853–936` | Site/year/interval → frames and metadata; pvlib PSM4/PSM3, credentials, current-date timezone lookup. | Fetcher owns explicit acquisition, original response, versioned immutable snapshot and source-only normalization. No captured response is present. Obtain reviewed raw response/time metadata or supplied historical snapshot before annual replay. |
-| `poa` | S2; `Posicion_Solar.Solar_pos:36–114`, `Solar_pos_e:116–194` | Weather/site/orientation → in-place `Poa_*` additions; pvlib, timezonefinder. | Model owns geometry/transposition, orientation assumptions and time interpretation. Separate pure replacement requires inspected timestamp alignment and snapshots. Default tilt/azimuth, `Day` semantics and air-mass behavior require review. |
-| `thermal` | S3; F-033–035 `Temperature_sandia:785–800`, `Temperature_feinman:805–814`, `Temperature_NOCT:817–825` | `Poa_global`, `temp_air`, wind plus selected parameters → `Tsandia`, `TFeinman`, `NOCT` mutation; pvlib/NumPy. | `thermal.calculate_thermal` and `thermal_contracts.py` implement captured Faiman/NOCT point profiles: four parameter cases × five synthetic points, 16 focused tests and byte-identical original replay. Original mutation/return/failure evidence is retained; modern immutable/validated boundaries are deliberate differences. Sandia selector/length captures and actual-weather/empirical validation remain pending. |
-| `annual_electrical` | S4; F-044–051 `Factor_Idealidad`, `PE*`; C-02/03 | Module + POA/thermal series → named electrical series and parameters. CEC fit/PySAM, De Soto, custom translation, filtering/cleaning. | Model owns parameter derivation/equations; application orchestrates; file I/O stays in adapters. Requires captured effective inputs, each supported thermal combination and module branch. No annual parity follows from detailed I–V parity. |
-| `annual_summary` | S5; F-052 `resume_df:3100–4149`, F-053 `resume_IV:4675–5603` | Annual frames/selection → extrema and curve-condition rows with original ordering/ties/labels. | Model/application summary owner, pending port. Synthetic annual frames can characterize B-04 wrong Voc and B-07 `round(dict, 2)` failures without original weather. Compatibility summaries and corrected summaries need separate identities. |
-| `iv_r` | S6, F-058 `IV_R:4268–4368`; dashboard `electric_parameters:4182…` PE branch | Ordered legacy module + condition table including comparison values → CEC fit, De Soto values, 100-point Lambert W curve, MPP and rounded error table. | `model.py`, `compatibility.py` and `application.reproduce_legacy_iv` implement `legacy-iv-r-v1`. Two independent module captures/six conditions/600 points pass stage and final comparisons; replay/limits in [reproduction](reproduction.md). Capturing the helper does not cover S5 condition generation, other curve variants or dashboard wiring. |
-| `iv_r_variants` | S6, F-059–061 `IV_R1`, `IV_R2`, `IV_R_VE` | Module/conditions → curves/tables. Module-two variants and user-specific conditions have distinct effective fit arguments/return schemas. | Model can reuse proven numerical kernels only after preserving each profile. VE forces gamma `-0.36`; IV_R uses supplied `deltha`. No automatic parity transfer across variants. |
-| `measurement_comparison` | S6, C-05; F-062–064 `IV_CI`, `IV_sim`, `IV_CI2`; dashboard CI branches | Measurement workbook (`Info` + positional curve sheets), module → measured/simulated curves, errors; pandas/openpyxl/fit/solver. | Fetcher preserves original workbook and sheet/record identities; model owns sensor averaging, fitting and comparison conventions. Workbook, permissions and module linkage missing. B-09 float−list and B-10 unwritten CSV need failure captures/explicit correction decisions. |
-| `correction` | S7, F-070–080 `IV_CI_cor`, `Rs_e`, `Temperature_coeffs`, `correction_IV`, `correction_IV_s`, `minimos*` | Measured curves/conditions/target/module → fitted coefficients, corrected curves and comparison tables. | Model owns correction/fitting/extrapolation, evaluation owns reported errors. M2/M2N formulation, fit/target provenance, grids and workbook need branch-specific capture. Alternative F-076 `get_corrected_IV_P2` is uncalled, not default authority. |
-| `representative_curve` | S7, F-083–085 `Bootstrap`, `Bootstrap2`, `Comprobacion` | Ordered corrected curves → stochastic representative curve/statistics/tolerance table; NumPy legacy RNG, SciPy trimming, 3,000×12 resampling. | Evaluation owner, unimplemented. Capture RNG implementation/state and all source lengths/order before any deterministic alternative. Legacy truncates to shortest curve; no implicit modern truncation/resampling is acceptable. ±3% is campaign comparison policy, not software-parity tolerance. |
-| `alternate_historical_kernels` | Imported `CurvaIV.IV` and `Parametros_Electricos.*`; ch04 external list | Separate Newton/100-point/hardcoded-conditions and alternate annual equations. | Historical evidence, no calls from the traced dashboard aliases. Do not use these as substitute oracles for active helpers. If selected for a distinct compatibility use case, capture and name separately. |
-| `legacy_io_and_presentation` | C-02–05; F-032/036/037/041/043/068/069 and S8 | CWD glob deletion, CSV index inheritance, fixed upload overwrite, result dictionaries, duplicated callbacks. | Isolated capture wrapper records necessary side effects; modern application uses explicit run directories and returns data. No new frontend work until the full backend gate. Preserve legacy source bytes. |
+| Module/preset/catalogue records | S0/S4, C-06; `Placa_Prueba`, `Placa_D1/D2`, catalogue workbook fields. #to-review | Fetcher supports the inspected manual capture layout; no workbook adapter. IN-01/02 retain preset and reference-temperature distinctions. #to-review | Producer-specific references; catalogue edition/hash/license and field semantics. #to-review |
+| Weather | S1, C-01; `Clima`/SmartNDH, site/year/interval and response metadata. #to-review | No modern acquisition or raw-response normalization. #to-review | Original response snapshots and per-response provenance/time contract. #to-review |
+| Solar geometry / POA | S2; `Solar_pos`/`Solar_pos_e`, weather index and orientation. #to-review | No modern integration or reference. WX-01 distinguishes returned pvlib geometry from unused manual terms. #to-review | Timestamp/length/orientation characterization and recorded inputs. #to-review |
+| Thermal | S3; `Temperature_sandia`, `Temperature_feinman`, `Temperature_NOCT`. #to-review | `thermal.py` / `thermal_contracts.py`: Faiman/NOCT point profiles, four parameter cases × five synthetic points. Legacy mutable wrappers are outside that numerical boundary. #to-review | Sandia UI 1–4, length gates and direct-helper failures; annual integration and empirical applicability. #to-review |
+| Annual electrical series | S4, C-02/03; `Factor_Idealidad`, PE families and selectors. #to-review | No modern annual workflow. AN-01/IN-02 identify effective parameter/temperature concerns. #to-review | Branch-specific captures of parameters, filtering, columns and all records; do not infer annual parity from IV_R. #to-review |
+| Summaries/extrema/condition generation | S5; resume/min/max helpers and consumed labels. #to-review | Unimplemented. Source-confirmed dictionary-rounding and Voc-column defects remain separate from intended selection rules. #to-review | Synthetic frame characterization of ties, labels, branches, errors and consumers. #to-review |
+| IV_R | S6, F-058; ordered module and supplied comparison-condition rows. #to-review | `model.py`, `compatibility.py`, application/API: two modules/six conditions/600 points per captured Windows/Linux x86-64 environment; fit/translation/solver/grid/table references. #to-review | Upstream condition generation and broader inputs; no full dashboard, scientific or empirical claim. #to-review |
+| Other detailed I–V | S6; IV_R1/2/VE and CI/simulation families. #to-review | Unimplemented profiles. VE hardcodes a different gamma; grids and return schemas vary. #to-review | Independent branch-specific captures before sharing kernels or changing grids. #to-review |
+| Measurement normalization / correction | C-05, S6/S7; Info records, positional sheets, both method/origin families. #to-review | No modern ingestion/evaluation/correction. EV-01 retains effective-temperature and fit-provenance chains. #to-review | Original bytes/permissions/module linkage and intermediate sensor/inferred/fitted values, then M2/M2N captures. #to-review |
+| Representative curve / statistics | S7; Bootstrap/Bootstrap2/Comprobacion. #to-review | Unimplemented. Current source and reported historical method differ. #to-review | Exact input lengths/order, legacy RNG state/draw order, fixed n/df and historical algorithm identity. #to-review |
+| Legacy I/O and presentation | C-02–05, S0/S8; file bus, upload rewriting and callbacks. #to-review | Explicit modern calls/results and isolated run paths replace selected incidental I/O. No general dashboard migration. #to-review | Inspect side effects and define observable boundaries; capture conditional failures before compatibility/correction decisions. #to-review |
 
-## Consequential discrepancies checked against source
-
-Static findings below were rechecked in the preserved source at task start
-(`cef03c2b9f73558c715d489f499d55ce26824a4c`). Execution status is established by
-capture manifests and tests, not by this section.
-
-- **Annual irradiance:** `PE:1508` uses `Vmax_F * Imax_F`; `Imax_F:1499` already
-  carries `G/1000`. Chapter 10 D-01's alternatives conflate `G/1000` with division
-  by `1000/G` (algebraically equal) and do not establish an extra irradiance factor.
-  The supplied summary also reports an inverse factor. Reconcile the selected
-  full branch and primary equation before any scientific correction.
-- **Coefficient semantics:** `IV_R:4273–4285` fits with percent-to-absolute
-  conversions (`alpha/100 * Isc`, `beta/100 * Voc`), forced `monoSi`, `temp_ref=25`.
-  `IV_R:4302` passes raw `Placa["alpha"]` to De Soto. Preserve both effective
-  values in compatibility records; a normalized coefficient contract must not
-  silently correct this inconsistency.
-- **VE is a separate profile:** `IV_R_VE:4574–4586` forces gamma `-0.36`, while
-  `IV_R` uses the supplied value. VE returns De Soto parameters; IV_R returns
-  rounded relative-error columns. A common function name for “I–V” is insufficient
-  to establish interchangeable behavior.
-- **Thermal length and selector behavior:** Sandia loops only over the four
-  recognized annual lengths. Faiman/NOCT repeat their calculation four times and
-  have no length predicate. Sandia has six `a/b` entries but only four `deltaT`
-  entries; selectors 5/6 index beyond the latter for accepted-length frames.
-  These are compatibility/failure cases, not supported scientific parameter sets.
-- **Preset and summary defects:** `Placa_Prueba:984–994` discards all arguments;
-  `resume_df:3128–3129` reads `Vmax_F` for its Voc values; `:3267` and `:3524`
-  call `round` on dictionaries. These corroborate B-06/B-04/B-07 statically.
-- **Measurements and metadata:** `IV_CI_cor:5893…5960` reads `Info` by name and
-  curve sheets by position, uses `Voc`, `Irrad1`, `Temp1`, `Temp2`, and averages
-  sensors as `(T1 + T2)/2`. Chapter 08 later lists `Voc` among ignored fields,
-  contradicting its own table and source. Preserve identifiers and mapping in a
-  future adapter; no identity can be inferred from row position alone.
-- **Campaign evidence:** chapter 08 reports 30 curves, CurveIDs 1–37 with gaps,
-  irradiance 860–1024 W/m², sensors up to about 63 °C and 13 minutes. The supplied
-  summary describes roughly twelve minutes and homogeneous conditions. Neither
-  report supplies raw records here. The inclusion/exclusion criteria, raw
-  sensor/curve pairing and applicability of homogeneity remain unverified.
-- **Bootstrap:** `Bootstrap:8366…8388` truncates arrays to the shortest curve,
-  then makes separate unseeded `np.random.choice` draws for voltage/current/power.
-  A fixed seed proposal is insufficient unless the RNG algorithm, state, draw
-  order, curve ordering and NumPy version are also controlled.
-- **Callback identities:** the two `electric_parameters` and two
-  `Voltaje_Corriente_Selector` definitions are decorated before reassignment.
-  Source lookup by bare name loses one registered callable. Baseline identity
-  includes function location/callback branch and effective arguments.
+Current capture identities live in [the registry](../tests/fixtures/legacy/capture_status.json)
+and manifests; executable comparisons live in the named model/thermal tests and
+replay owner. Frozen manifest review text describes capture time, not current
+approval. The [reproduction contract](reproduction.md) owns acceptance semantics.
+#to-review
 
 ## Ordered remaining reproduction work
 
-1. **Complete selected module/point capture profiles.** Preserve intermediate fit
-   and De Soto parameters, exact grids, curves, return schemas and failures.
-   Characterize IV_R module-two/VE differences before sharing their kernels.
-2. **Complete thermal and capture annual-summary boundaries independently.** Faiman
-   and NOCT point kernels are captured/compared; Sandia remains pending. Synthetic
-   conditions/frames are sufficient for software characterization and expose
-   Sandia selector/length behavior, B-04/B-07, ties, labels and missing columns.
-   Label them synthetic; they do not replace original weather or measurements.
-3. **Obtain source snapshots and settle time contracts for annual replay.** Need
-   original weather response/metadata, interval/timezone/leap-day conventions,
-   chosen POA/thermal inputs and catalog record if used. Manual module data avoids
-   only the catalog blocker. Implement and compare S1-normalization → S2 → S3
-   intermediates before claiming the S4 annual chain.
-4. **Capture and port S4/S5 branches.** Enumerate seven thermal selections, one/two
-   modules, source modes and callback conditions actually supported; preserve
-   numerical cleaning, failures, ties and source-record count. Review annual
-   coefficient/gamma interpretation separately from compatibility.
-5. **Recover the original measurement workbook/report and permissions.** Verify
-   sheet order, CurveID mapping, excluded curves, sensors/uncertainty and module
-   identity. Then capture CI, M2/M2N, coefficient fitting and extrapolation at
-   intermediate and final stages. Synthetic workbook tests cannot establish the
-   reported empirical campaign.
-6. **Capture representative-curve statistics with controlled original RNG state.**
-   Separate compatibility truncation/draw order from any reviewed alignment,
-   resampling, seeded-generator or confidence-interval changes.
-7. **Close full backend gate before new frontend functionality.** All intended
-   capabilities must have explicit supported input domains, source provenance,
-   independent references and successful comparisons (including failure behavior),
-   or an explicit reviewed scope exclusion. No silently untested branch, skipped
-   comparison, missing record or unresolved material discrepancy can count as
-   complete reproduction. Scientific, empirical and calibration gates retain
-   their separate statuses.
-
-When changing a row's status, update its implementation/contract, assumption and
-transformation links, reference manifest, comparator/tests and reproduction
-record together. Task command logs belong in the current ExecPlan; durable
-ownership and evidence belong in the canonical documents.
+1. Characterize Sandia's exposed selectors/lengths and separate helper failure
+   regimes, plus annual summary/condition-generation helpers with synthetic frames.
+   These are pending work, not missing-weather blockers. #to-review
+2. Recover recorded weather responses, time metadata and catalogue evidence where
+   used; compare source normalization, POA and thermal intermediates before annual
+   integration. Manual module input bypasses only the catalogue dependency. #to-review
+3. Capture S4/S5 supported combinations and the remaining I–V variants, retaining
+   module identity, branch-specific coefficients, columns, ordering and failures.
+   Review corrections separately from compatibility. #to-review
+4. Recover original report/workbook, permissions and module/sensor linkage; then
+   capture measurement normalization and correction with effective-temperature,
+   coefficient/fit and output-metadata provenance intact. #to-review
+5. Resolve current-versus-reported bootstrap identity and capture original RNG,
+   truncation/draw order and fixed statistical assumptions before any alternative.
+   #to-review
+6. Close the intended full backend coverage or obtain explicit reviewed exclusions
+   before new frontend functionality. Scientific support, empirical evaluation
+   and calibration remain separate assessments. #to-review

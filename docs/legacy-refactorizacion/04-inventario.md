@@ -1,20 +1,40 @@
+---
+title: Inventario de funciones legacy
+role: Localizador AST del autor, con comprobación de rangos y correcciones de alcance pendientes de revisión.
+retrieve_when: Resolver un identificador F- o localizar funciones de un estado.
+read_scope: La fila requerida; index.json permite la misma consulta sin leer el inventario completo.
+authority: Investigación estática del autor; no demuestra ejecución, paridad ni validez científica.
+verify: Contrastar símbolos y condiciones con legacy; consultar la cobertura canónica para capturas e implementación actuales.
+review_status: '#to-review'
+---
+
 # 04 — Inventario: las 109 funciones y en qué estado viven
 
-> Generado del AST sobre `legacy/`. Los `F-###` son estables y son los que usa [`index.json`](index.json).
-> Estados según [`00`](00-convenciones.md) §7.
+> Inventario AST del autor. Se contrastaron las 109 filas de [`index.json`](index.json): nombre,
+> fichero, inicio, fin y longitud coinciden con los dos ficheros principales; no faltan funciones
+> de nivel superior. Los estados son anotaciones estáticas, no resultados de ejecución. #to-review
 
 | Estado | Funciones | Líneas |
 |---|---:|---:|
 | S0 | 29 | 813 |
 | S1 | 3 | 136 |
+| S2 | 0 | 0 #to-review |
 | S3 | 3 | 35 |
 | S4 | 16 | 1814 |
 | S5 | 2 | 1979 |
 | S6 | 14 | 1231 |
 | S7 | 18 | 2596 |
 | S8 | 24 | 4912 |
+| **total** | **109** | **13516** #to-review |
 
-| **total** | **109** | **13516** |
+Las 13.516 líneas suman los rangos de funciones, no las 14.896 líneas brutas. S8 contiene
+24 funciones: 23 callbacks decorados y `parse_contents`, auxiliar. El grafo estático desde
+23 callbacks y 22 factorías del layout alcanza 103/109; las seis restantes coinciden con las
+filas «muerta». Alcanzable no equivale a ejecutable ni verificada. #to-review
+
+Las etiquetas originales se conservan para enlazar `index.json`. En particular, `IV_CI2`
+(`F-064`) no falla necesariamente al restar escalar/lista: depende del dtype (B-09);
+`df_creator_1` (`F-043`) tiene cinco ramas problemáticas que las llamadas actuales no seleccionan. #to-review
 
 ## S0 (29 funciones)
 
@@ -168,7 +188,8 @@
 ## Funciones fuera de los dos ficheros (5 módulos)
 
 S2 no aparece arriba porque **la irradiancia en el plano no vive en los dos ficheros grandes**:
-está en `Posicion_Solar.py`. Estas once funciones completan el mapa.
+está en `Posicion_Solar.py`. Los 11 localizadores externos también coinciden con la fuente:
+son **10 funciones y una clase**. Estos símbolos no están incluidos en los totales de arriba. #to-review
 
 | Estado | Fichero | Función | Líneas | Situación |
 |---|---|---|---|---|
@@ -184,5 +205,6 @@ está en `Posicion_Solar.py`. Estas once funciones completan el mapa.
 | — | `Parametros_Electricos.py` | `temperaturas` | 6-30 | muerta (pide input() por teclado) |
 | — | `CurvaIV.py` | `IV` | 14-98 | muerta |
 
-Nota: `Parametros_Electricos.temperaturas` llama a `input()` por teclado (`L21`); si alguna vez se
-ejecutara, la aplicación quedaría bloqueada esperando una respuesta en la terminal.
+Nota: `Parametros_Electricos.temperaturas` llama a `input()` (`L21`): una invocación interactiva
+puede esperar datos; en un entorno sin stdin puede fallar. No hay llamadas a los alias `pe`/`iv`
+en el panel analizado; «muerta» en estos módulos no acredita ausencia de consumidores externos. #to-review

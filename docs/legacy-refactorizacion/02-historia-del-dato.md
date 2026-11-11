@@ -1,8 +1,17 @@
+---
+title: Transformaciones del sistema legacy
+role: Trazado S0–S8 del autor, con correcciones auditadas pendientes de revisión.
+retrieve_when: Seguir una transformación legacy y sus dependencias.
+read_scope: Solo el estado afectado y los estados que producen o consumen sus datos.
+authority: Investigación estática del autor; no demuestra ejecución, paridad ni validez científica.
+verify: Contrastar símbolos y condiciones con legacy; consultar la cobertura canónica para capturas e implementación actuales.
+review_status: '#to-review'
+---
+
 # 02 — La historia del dato: de la coordenada a la curva
 
-> El espinazo del informe. Ocho estados, siempre contados igual: **qué entra, qué sale, qué
-> funciones trabajan, quién las manda a hablar y qué se rompe**. Si entiendes un estado, entiendes
-> los ocho.
+> El espinazo de la investigación: nueve estados, S0–S8, descritos por entradas, salidas,
+> funciones, llamadores y condiciones de fallo. No acredita una ejecución completa. #to-review
 
 **Convención de este documento:** todo lo que dice «línea» está en `legacy/`, y `el panel` es
 `GIU_Final_Presetacion.py` (6.043 líneas) mientras `el módulo` es `Input_File_DIV_Mac_Informe.py`
@@ -41,13 +50,14 @@ escuchando en `:8050`.
 | factorías de control | módulo `41-661` | `table_module`, `Dropdown_1..4`, `lat`, `lon`, `tilt`, `Azimuth`, `time_range`, `Data_filter`, `creador_de_filtros` |
 
 **Quién manda a hablar.** Nadie. Es el punto de entrada: `app.run(debug=True)` en el panel
-`6041-6042`, guardado por `if __name__ == '__main__'`. **No existe arranque programático**: no hay
-CLI, no hay función `main`, no hay forma de ejecutar un caso sin abrir la interfaz. Es el mayor
-obstáculo para congelar salidas (ver [11](11-por-donde-empezar.md)).
+`6041-6042`, guardado por `if __name__ == '__main__'`. No hay un ejecutor unificado de escenarios;
+sí existen helpers programáticos, incluido `Clima` con año y credenciales explícitos. La captura
+necesita aislar sus dependencias y efectos laterales (ver [reproducción](../reproduction.md)). #to-review
 
-**Qué se rompe.** `toggle_inputs` devuelve 1 valor donde el decorador declara 13 salidas (panel
-`689`), así que al arrancar sin selección salta `SchemaLengthMismatch`. La línea `678` parece un
-error y no lo es: esos nombres son globales del módulo (panel `92-102`).
+**Qué se rompe.** La salida de seguridad de `toggle_inputs` devuelve un dict para 13 salidas
+(panel `689`), alcanzable con selección vacía/no reconocida. El control arranca con `SELEC`
+(`143`): no se ha demostrado fallo al inicio normal. El error concreto depende de Dash. Los
+nombres de `678` sí son globales del panel (`92-102`). #to-review
 
 **Contrato que produce.** Ninguno de datos; produce **configuración**: once valores por defecto del
 módulo de prueba (`Pot=250`, `Vm=30.12`, `Voc=37.85`, …) y seis casos de irradiancia/temperatura.
@@ -56,11 +66,15 @@ módulo de prueba (`Pot=250`, `Vm=30.12`, `Voc=37.85`, …) y seis casos de irra
 
 ## S1 — Clima: de una coordenada a un diccionario de series
 
-**Qué entra.** Latitud, longitud, tipo de año (`SY` con años concretos, o `TMY`) y el intervalo.
+**Qué entra.** Latitud, longitud, `SY` con años concretos, un año directo o `TMY`; intervalos y
+credenciales explícitos o del entorno. TMY fija `time_step=60` e ignora el intervalo solicitado
+(`Primer_Funcion_Clima.py:64-173`). #to-review
 
-**Qué sale.** `NDH`: un diccionario cuyas **claves son la longitud de la serie** (`8760`, `17520`,
-`35040`, `105120`) y cuyos valores son listas de DataFrames con índice temporal y columnas
-`temp_air`, `wind_speed`, `ghi`, `dni`, `dhi`, `albedo`, `Year`, `Month`, `Day`, `Hour`, `Minute`.
+**Qué sale.** `SmartNDH`, subclase de dict con claves `float` de longitud y listas de DataFrames.
+Inicializa cuatro claves conocidas y agrega otras longitudes si las recibe. `.items()` mantiene
+la ruta del panel; la iteración devuelve `(df, metadata)` de la **última respuesta**, no un archivo
+de metadatos por año (`Primer_Funcion_Clima.py:43-56, 118-121, 173-183`). Las columnas consumidas
+incluyen `temp_air`, `wind_speed`, `ghi`, `dni`, `dhi`, `albedo` y componentes de fecha. #to-review
 
 | Función | Líneas | Qué hace |
 |---|---|---|
@@ -74,15 +88,16 @@ módulo de prueba (`Pot=250`, `Vm=30.12`, `Voc=37.85`, …) y seis casos de irra
 térmicos seleccionados. Dentro, el panel llama a `pf.Clima` y después a `cl.clc` y `ps.Solar_pos`
 (S2).
 
-**Qué garantiza.** Que exista una serie por resolución; que el CSV se llame `g_{año}_{n}.csv`.
+**Qué garantiza.** Agrupa cada respuesta descargada bajo su longitud; no garantiza datos en cada
+resolución. El escritor posterior nombra los CSV aceptados `g_{año}_{n}.csv`. #to-review
 
-**Qué no garantiza.** Nada sobre el contenido: si el año trae un número de filas distinto de la
-rejilla (bisiesto, hueco de datos), **el DataFrame no entra en ninguna rama y desaparece sin aviso**.
-Y el nombre del índice no lo fija quien escribe: lo hereda de pvlib (ver `00` §3).
+**Qué no garantiza.** No valida integridad temporal ni columnas. `Clima` conserva longitudes
+no estándar; consumidores como `Solar_pos`, `Temperature_sandia` y `creador_csv_clima` solo procesan
+las cuatro reconocidas. El nombre del índice se hereda del proveedor (ver `00` §3). #to-review
 
-**Qué se rompe.** Sin `NREL_API_KEY` y `NREL_API_EMAIL` en `.env`, `Clima` lanza `ValueError` y todo
-lo demás queda sin datos. Con el pvlib instalado en la máquina de análisis (0.11.0) la rama PSM4 no
-existe y siempre se usa el fallback PSM3.
+**Qué se rompe.** Si faltan credenciales tanto en argumentos como en el entorno, `Clima` lanza
+`ValueError` antes de descargar (`70-78`). El autor reporta pvlib 0.11.0/PSM3 en su entorno; el
+código selecciona PSM4/PSM3 por disponibilidad y cada captura debe registrar la rama efectiva. #to-review
 
 ---
 
@@ -106,15 +121,16 @@ existe y siempre se usa el fallback PSM3.
 1. **La comunicación es por efecto secundario.** El panel escribe
    `Effective_irradiance = ps.Solar_pos(...)` y esa variable vale `None`: nunca se usa. Quien consume
    la irradiancia no recibe un valor, sino los DataFrames mutados.
-2. **Hay un orden obligatorio que no está en ninguna firma**: `clc` lee `temp_air/ghi/wind_speed`,
-   `Solar_pos` añade `Poa_*`, y las funciones de S3 leen `Poa_global`. Invertir el orden no da error:
-   da resultados distintos.
+2. **S2 debe preceder a S3**: `Solar_pos` añade `Poa_*`; S3 lee `lista.Poa_global`. Ejecutar S3
+   antes de crear esa columna puede producir `AttributeError` inmediatamente. `clc` solo construye
+   su propio resultado a partir de clima y no es un productor de POA. #to-review
 3. **`clc` se ejecuta para nada**: su resultado se tira en las dos ramas (panel `906` y `910`),
    y es un recorrido completo de todas las series.
 
-**Qué se rompe.** `AMi = 1/cos(zenit)` sin acotar (`Posicion_Solar.py:84`), así que al amanecer y al
-anochecer produce valores negativos o enormes. Aguas abajo se limpian los `inf` de `Voc`/`Vmax` y los
-`NaN` de `Pmax`, **pero no** los de `Isc0`, `Imax` ni `Gamma`.
+**Qué revisar.** `AMi = 1/cos(zenit)` no está acotado (`Posicion_Solar.py:84, 164`): su signo y
+magnitud requieren control de dominio. La función pasa ese término a la transposición sin fijar
+el modelo; su efecto efectivo depende de pvlib y no se ha medido aquí. La limpieza posterior de
+`Voc`/`Vmax`/`Pmax` es desigual, pero no prueba por sí sola esa cadena causal. #to-review
 
 ---
 
@@ -132,9 +148,12 @@ anochecer produce valores negativos o enormes. Aguas abajo se limpian los `inf` 
 
 **Quién manda a hablar.** `clima`, panel `914-923`, según qué números haya en `checklist-input`.
 
-**Qué se rompe.** Nada propio; el estado es corto y limpio. Su riesgo es de contrato: si un modelo
-térmico se activa pero su columna no existe, el fallo aparece tres estados más allá, en S4, como
-`KeyError` de una columna que el usuario nunca pidió.
+**Qué revisar.** Los tres helpers requieren `Poa_global`, `temp_air` y `wind_speed`, aun cuando
+NOCT no usa el viento en su ecuación. Faiman y NOCT recalculan cuatro veces cada serie sin filtro
+de longitud; Sandia sí filtra las cuatro longitudes. Sandia tiene seis pares `a/b`, pero solo
+cuatro `deltaT`: la UI expone selectores 1–4 (`762-783`), mientras 5/6 fallarían al llamar al helper
+directamente. La ausencia de una columna puede fallar en S3 o después; no hay validación formal
+de estas fronteras. #to-review
 
 ---
 
@@ -151,7 +170,7 @@ usada, donde `*` es `F`, `S` o `NOCT`.
 | `electric_parameters` (callback 1) | panel `1148-1441` | orquesta: 35 llamadas a `df_creator`, elige motor, escribe CSV |
 | `df_creator` | módulo `1059-1129` | relee `g_*.csv`, pone índice `Time` |
 | `PE`, `PE_t`, `PE_t_S` | módulo `1376-2318` | módulo 1: un modelo, dos modelos, o Feinman+Sandia |
-| `PE_1`, `PE_t1`, `PE_t_S1` | módulo `2459-2761` | lo mismo para el módulo 2 |
+| `PE_1`, `PE_t1`, `PE_t_S1` | módulo `2320-2761` | variantes del módulo 2; rangos individuales en 04. #to-review |
 | `PE_NOCT` | módulo `1524-2011` | cualquier combinación que incluya NOCT (488 líneas) |
 | `Placa_Prueba`, `Placa_D1`, `Placa_D2` | módulo `982-1057` | construyen el diccionario de placa |
 | `creador_csv_PE`, `creador_csv_PE2` | módulo `859-911` | escriben los CSV tras borrar los anteriores |
@@ -159,16 +178,18 @@ usada, donde `*` es `F`, `S` o `NOCT`.
 **Quién manda a hablar.** El callback `electric_parameters@1148`, disparado por el clima, la placa y
 la selección de modelos. Dentro, llama al motor que corresponda **según la combinación**.
 
-**La estructura que hay que ver.** Siete funciones `PE*` no son siete cálculos: son **el mismo
-cálculo escrito siete veces**, una por combinación de modelos térmicos y por módulo. `PE` y `PE_1`
-difieren en el sufijo; `PE_t` y `PE_t1` también. Es el patrón P1 del diagnóstico: 2³−1 combinaciones
-desarrolladas a mano.
+**La estructura que hay que ver.** Siete funciones `PE*` repiten operaciones por combinación
+térmica y módulo; sus rangos suman 1.377 líneas. Esa semejanza orienta la consolidación, pero no
+acredita equivalencia de todas las ramas, errores y conversiones. Los contratos C-06 y las
+suposiciones canónicas mantienen las diferencias que requieren caracterización. #to-review
 
 **Qué se rompe.**
-- `PE_NOCT` evalúa `and 'NOCT':` (módulo `1663`), un literal siempre verdadero: si falta la columna,
-  revienta en la línea siguiente.
-- `Placa_Prueba` **sobrescribe sus once argumentos** con valores fijos (módulo `984-994`), así que
-  cualquier ruta que la use simula un módulo de 250 W distinto del elegido.
+- En `PE_NOCT`, solo el operando `'NOCT'` es siempre verdadero (`1663`). El acceso inválido
+  requiere que existan `Tsandia` y `TFeinman` pero no `NOCT`; las llamadas normales con selección
+  triple sí solicitan NOCT. Es una guarda defectuosa, no un fallo universal. #to-review
+- `Placa_Prueba` descarta los once valores suministrados y devuelve una placa fija de 250 W
+  (`982-1015`). Es consistente con el preset `SELEC`, pero las rutas `INSERT` que la reutilizan
+  ignoran la entrada manual (p. ej. panel `1188`). #to-review
 - El CSV de salida depende de dos cosas invisibles: que el DataFrame traiga índice `Time` y que el
   número de filas caiga en la rejilla.
 
@@ -191,15 +212,15 @@ desarrolladas a mano.
 `@1148`.
 
 **Qué se rompe.**
-- `round(d, 2)` sobre un diccionario en las ramas `[2]` (`3267`) y `[3]` (`3524`): `TypeError`, y la
-  tabla no se genera **siempre** que se elige solo Sandia o solo NOCT.
-- La fila llamada `"Temperatura minima"` contiene voltajes, en diez sitios, y ese rótulo llega a la
-  leyenda de la gráfica.
+- Si se alcanza `round(d, 2)` con el dict construido por las ramas `[2]`/`[3]` (`3267`, `3524`),
+  se produce `TypeError`. Las precondiciones anteriores todavía pueden fallar antes. #to-review
+- `resume_IV` etiqueta condiciones elegidas por voltaje máximo como temperatura mínima: diez
+  `"Temperatura minima"` y un `"Temperatura Minima"` (`4759`). Esas etiquetas llegan a la gráfica. #to-review
 - La rama `[1]` lee `Vmax_F` donde debería leer `Voc_F` (`3128-3129`); Sandia sí lee `Voc_S` (`3215`).
   La tabla de extremos de Feinman está mal y no da error.
-- **132 asignaciones nunca se leen**: como cada rama termina en `return`, las magnitudes que esa
-  rama no publica se calculan y se tiran (6 en `[1]`, 28 en `[1,2]`, 42 en `[1,2,3]`, 28 en
-  `[1,3]`, 28 en `[2,3]`).
+- El autor reporta **132 asignaciones no consumidas**: 6/28/42/28/28 en las ramas indicadas. La
+  suma es consistente; el análisis de liveness original no está disponible y no se ha reproducido
+  aquí. No eliminar cálculos solo por esa cifra. #to-review
 
 ---
 
@@ -220,29 +241,34 @@ desarrolladas a mano.
 `Metodo`; `IV_Corrct@3791` y `Tabla_R_Boots@4045` componen el resto.
 
 **Qué se rompe.**
-- `IV_CI2` resta `float − list` en sus siete ramas (módulo `6790-6848`): `TypeError` al comparar con
-  dos módulos.
-- Las ramas de comparación leen `pd.read_csv("Uploaded_.csv")` en 32 sitios, pero el único escritor
-  de ese `.csv` está comentado: `FileNotFoundError`. Solo funciona la rama que lee el `.xlsx`.
-- `tableC2` se calcula con la placa del módulo 1 en siete líneas (`5456 … 5903`): las dos tablas
-  resumen salen iguales y la comparación es falsa.
+- `IV_CI2` resta escalares medidos y listas en siete ramas (`6790-6848`). La excepción depende
+  del dtype: `numpy.float64` de una Series numérica sí resta una lista; un `float` de Python no.
+  Sin el libro/dtypes y una captura, B-09 no acredita fallo general. #to-review
+- Hay 32 lecturas de `Uploaded_.csv` sin escritor activo en el panel (`4344-5937`). Son rutas
+  alcanzables que requieren un archivo externo; si falta, fallan al leer. La rama `4289` lee el
+  primer sheet del `.xlsx`, pero su éxito completo tampoco queda demostrado. #to-review
+- Siete asignaciones `tableC2` llaman `IV_R2(Placa, resume)` en lugar de los datos del segundo
+  módulo (`5456, 5535, 5611, 5684, 5757, 5830, 5903`); la figura usa `Placa2/resume2`. La tabla 2
+  se construye con la entrada del módulo 1 y puede discrepar de su figura. #to-review
 
 ---
 
-## S7 — Corrección y estadística: la parte que valida la tesis
+## S7 — Corrección y estadística: el tramo asociado al informe
 
 **Qué entra.** El `.xlsx` de mediciones: una hoja por curva (`Volts`, `Amps`, `Watts`) y una hoja
 `Info` **al final** con `CurveID, Normalized, Date/Time, Power, Isc, Voc, Ipeak, Vpeak, Fill Factor,
 Irrad1, Temp1, Temp2`.
 
-**Qué sale.** Curvas corregidas a condiciones estándar, tablas comparativas simulación/medición, y
-una **curva representativa** con intervalo de confianza al 95 %.
+**Qué sale.** Curvas corregidas a condiciones estándar, tablas comparativas y una curva
+representativa con intervalo **nominal** al 95 %. Ese rótulo estadístico no demuestra cobertura
+empírica ni independencia de las observaciones; véase EV-01 en
+[suposiciones](../assumptions.md). #to-review
 
 | Función | Líneas | Qué hace |
 |---|---|---|
 | `IV_Corrct` (callback) | panel `3791-3963` | orquesta la corrección |
 | `IV_CI_cor` | módulo `5819-6648` | 830 líneas: lee `Info`, recorre curvas, corrige |
-| `correction_IV`, `correction_IV_s` | módulo `7304-7800` | métodos M2 y M2N (IEC 60891) |
+| `correction_IV`, `correction_IV_s` | módulo `7304-7800` | etiquetas M2/M2N del código; conformidad con IEC 60891 pendiente de contraste. #to-review |
 | `Rs_e`, `find_k_sweep`, `Temperature_coeffs`, `linear_fit` | módulo `7080-7301` | ajuste de la resistencia serie y coeficientes |
 | `minimos`, `minimos_s` | módulo `7803-8052` | extrapolan los extremos de la curva |
 | `Bootstrap`, `Bootstrap2` | módulo `8358-8761` | 3.000 muestras de tamaño 12, media recortada al 5 % |
@@ -251,20 +277,25 @@ una **curva representativa** con intervalo de confianza al 95 %.
 **Quién manda a hablar.** El callback `IV_Corrct`, que a su vez alimenta a `Tabla_select@3981` y
 `Tabla_R_Boots@4045` por los stores `Tabla_Info*`, `Tablarm` y `Tablars`.
 
-**El contrato real del fichero de mediciones** (verificado con un libro real de 30 curvas):
+**El contrato recuperado del código**; el autor reporta un libro de 30 curvas que no está
+disponible para esta revisión. No se confirmó aquí el contenido de ese artefacto. #to-review
 
-- **30 hojas** de curva y **una** `Info`, que debe ser **la última**: el código lee las curvas por
-  posición (`sheet_name=i`). Si `Info` va primero, todo se desplaza en silencio.
-- De las 12 columnas de `Info` se usan **cuatro**: `Voc`, `Irrad1`, `Temp1`, `Temp2`. La temperatura
-  de célula es el promedio `(Temp1 + Temp2)/2`.
+- El lector usa curvas por posición (`sheet_name=i`) y `Info` por nombre; espera que `Info`
+  quede al final. Si va antes, puede leer su estructura de 12 columnas como curva y fallar antes
+  de producir resultados. Las 30 curvas son el caso reportado, no un requisito fijo del lector. #to-review
+- La extracción inicial usa `Voc`, `Irrad1`, `Temp1` y `Temp2`. La media de sensores alimenta
+  primero De Soto (`5957`) y queda en tablas, pero `Tmod` se sobrescribe mediante una expresión
+  basada en Voc (`5985-5989`); ese valor derivado alimenta correcciones e `IV_sim`. Véanse
+  [08](08-tesis-a-codigo.md) y EV-01 en [suposiciones](../assumptions.md). #to-review
 - **No se comprueba que el libro corresponda al módulo simulado.** Se puede comparar un módulo de
   227 W con una simulación de 570 W sin un solo aviso.
 
 **Qué se rompe.**
-- Los stores de resultados se inicializan a `0`, no a `{}`: elegir una tabla antes de corregir lanza
-  `ValueError: DataFrame constructor not properly called`.
-- Tres ramas de `Tabla_R_Boots` devuelven `{"style": "block"}` donde Dash espera `{"display": ...}`:
-  los paneles no se muestran.
+- Los doce `dcc.Store` no declaran `data` inicial. `IV_Corrct` sí inicializa resultados locales a
+  cero (`3794-3797`) y puede publicarlos en retornos de guarda. Su posterior uso como tabla o
+  entrada de bootstrap puede fallar; no se observó la secuencia en navegador. #to-review
+- Cinco retornos de `Tabla_R_Boots` usan claves `style` en objetos ya destinados a la propiedad
+  `style` (`4092, 4100, 4110, 4119, 4127`), en vez de `display`. El efecto visual requiere captura. #to-review
 - La semilla del bootstrap no está fijada: dos corridas dan curvas representativas distintas.
 
 ---
@@ -283,15 +314,17 @@ una **curva representativa** con intervalo de confianza al 95 %.
 | Curvas | `electric_parameters@4182`, `Graph_filter_IV` | I-V, tablas, comparación |
 | Corrección | `IV_Corrct`, `Tabla_select`, `Tabla_R_Boots` | corrección, tabla, bootstrap |
 
-**Quién manda a hablar.** El navegador. Cada cambio de filtro dispara un callback, y ese callback
-**vuelve a leer del disco**.
+**Quién manda a hablar.** El navegador dispara callbacks por sus entradas. Los que consumen
+series releen el disco; otros solo gestionan controles o datos del store. No todo callback hace I/O. #to-review
 
 **Qué se rompe.**
-- El filtro de año de dos módulos compara **carácter a carácter** (`5428-5431`): da siempre verdadero.
-- Cuatro ramas quedaron fuera del filtro por una indentación de 20 espacios (`5662, 5735, 5808,
-  5881`): devuelven el primer año y se saltan el elegido.
-- Las etiquetas `"Año …"` y `"Year …"` no coinciden entre el desplegable y el consumidor: pantalla
-  vacía sin error.
+- El filtro de dos módulos compara caracteres (`5428-5431`); las etiquetas habituales comparten
+  dígitos y espacios, por lo que puede aceptar años no seleccionados (B-03). #to-review
+- Cuatro ramas están fuera de la guarda de año (`5662, 5735, 5808, 5881`), aunque dentro del
+  recorrido de datos. Con entradas no vacías pueden retornar el primer par antes del año deseado;
+  el caso exacto requiere captura (B-01). #to-review
+- Las etiquetas `"Año …"`/`"Year …"` no coinciden; su efecto depende del filtro defectuoso y
+  la rama elegida. No se observó una pantalla vacía universal. #to-review
 - `use_ndh` lee todos los CSV para devolver `None`.
 
 ---
@@ -303,5 +336,5 @@ una **curva representativa** con intervalo de confianza al 95 %.
    objetos compartidos y con ficheros en el directorio de trabajo.
 2. **Cada estado tiene su propio contrato implícito**, y ninguno está escrito en el código. Ese es el
    trabajo de [03](03-contratos.md).
-3. **El orden importa y no está declarado.** S2 después de S3, o `Info` antes de las curvas, no da
-   error: da otro resultado.
+3. **El orden importa y no está declarado.** S3 sin POA o un `Info` leído como curva pueden
+   fallar, además de producir resultados mal asociados. Hay que capturar tanto fallos como valores. #to-review

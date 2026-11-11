@@ -1,7 +1,22 @@
+---
+title: Por dónde empezar según la propuesta del autor
+role: Secuencia histórica de captura y refactorización con sus dependencias.
+retrieve_when: Se elige el siguiente flujo legacy que caracterizar o se recupera el orden propuesto.
+read_scope: El paso pertinente; contrastar sus prerrequisitos con cobertura y comandos actuales.
+authority: Propuesta de secuencia, no estado vigente ni receta de ejecución aprobada.
+verify: Confirmar artefactos, importaciones, efectos de llamada y capturas existentes antes de ejecutar.
+review_status: '#to-review'
+---
+
 # 11 — Por dónde empezar
 
 > El orden que minimiza riesgo. **Propuesta** con las dependencias reales del sistema: cada paso dice
 > qué desbloquea y qué lo bloquea.
+
+El congelado sigue siendo la prioridad. Esta propuesta antecede a las capturas
+parciales actuales; [cobertura](../legacy_backend_coverage.md) mantiene sus límites,
+el [README del proyecto](../../README.md) los comandos soportados y el plan activo
+el progreso de una tarea. No se ejecuta un pseudoflujo solo por aparecer aquí. #to-review
 
 ---
 
@@ -13,21 +28,26 @@ es el juez de todos los pasos siguientes: un módulo refactorizado entra solo si
 **Por qué va primero.** Sin él, cualquier refactor es una opinión. Con él, cada paso es comprobable en
 segundos y los defectos de [06](06-lo-que-esta-roto.md) pasan de deducciones a hechos.
 
-**Los tres bloqueos reales** (hay que resolverlos antes de escribir el arnés):
+**Dependencias de cada ruta**, no bloqueos de todo arnés: #to-review
 
 | Bloqueo | Qué falta | Cómo se resuelve |
 |---|---|---|
-| `NREL_API_KEY` + `NREL_API_EMAIL` | credenciales en `.env` | sin ellas S1 no corre; se puede congelar desde S4 con un `NDH` guardado |
-| `Libro1.xlsx` | el catálogo CEC | solo afecta al modo `CEC`; se puede empezar con placa manual |
-| Versión de `pvlib` | no está fijada | fijar la que se use y anotarla en el manifiesto |
+| `NREL_API_KEY` + `NREL_API_EMAIL` | credenciales para adquisición en vivo | bloquean esa adquisición; un snapshot o entradas sintéticas permiten otras caracterizaciones. #to-review |
+| `Libro1.xlsx` | catálogo del selector `CEC`, sin edición/origen confirmados | afecta ese modo; el módulo manual evita esa dependencia. #to-review |
+| Entorno histórico | versiones originales no establecidas | seleccionar y registrar un entorno reconstruido no prueba identidad histórica; las capturas actuales ya tienen locks propios. #to-review |
 
-**El arnés mínimo.** No hace falta `Dash`: se importan los módulos y se llaman las funciones
-directamente. Un script que:
+**El arnés propuesto.** Importar el helper completo sí requiere Dash y otras
+dependencias UI/científicas. Su nivel superior contiene importaciones y funciones,
+no borrados; los efectos de ficheros aparecen al llamar determinados helpers.
+Las capturas actuales seleccionan AST inspeccionado en procesos aislados. La
+lista siguiente es el alcance de un futuro flujo completo, no una rutina ya
+implementada: #to-review
 
 1. construya un `NDH` de prueba (o cargue uno guardado);
 2. llame a `df_creator`, `PE*`, `resume_df`, `resume_IV`, `IV_R`, `IV_CI_cor`;
-3. guarde cada salida como CSV + un `manifest.json` con versión de Python, `pvlib`, `pandas`, hash de
-   entradas y de salidas.
+3. conserve salidas crudas y un manifiesto con fuente/wrapper, entorno incluido
+   PySAM/SSC para ajuste CEC, entradas efectivas, unidades, rejillas, RNG y hashes;
+   no basta registrar solo pvlib/pandas. #to-review
 
 **Los tres casos mínimos:**
 
@@ -37,7 +57,9 @@ directamente. Un script que:
 | 2 módulos, `[1,2]`, `CEC`, método `PE` | `B-02`, `B-03`, S8 | donde están los bugs que rompen dato |
 | corrección con el libro de 30 curvas | S7 completo | es lo que valida la tesis |
 
-**Criterio de éxito:** los tres corren sin abrir la interfaz y dejan salidas con hash.
+**Criterio de este piloto propuesto:** los tres casos corren sin interfaz y dejan
+referencias con procedencia verificable. No es por sí solo el cierre de todas las
+capacidades del backend ni una validación científica. #to-review
 **Si no corren:** ese es el primer trabajo real, y probablemente el más largo. Vale la pena saberlo
 antes de prometer un refactor.
 
@@ -45,10 +67,10 @@ antes de prometer un refactor.
 
 ## Paso 1 — Cerrar tres decisiones
 
-`D-01` (factor de irradiancia), `D-02` (unidades de los coeficientes) y `D-06` (semilla del bootstrap).
-Sin ellas, S4 y S7 no tienen qué reproducir. Ver [10](10-decisiones-pendientes.md).
-
-Coste: una conversación. Bloquea: S4, S7.
+`D-01`, `D-02` y `D-06` condicionan formulaciones corregidas y controles nuevos.
+No impiden capturar el comportamiento actual, sus fallos o un estado RNG original
+controlado. Ver [10](10-decisiones-pendientes.md); no se estima su resolución como
+«una conversación» ni se detiene trabajo independiente por estas decisiones. #to-review
 
 ---
 
@@ -58,8 +80,9 @@ Escribir `C-01`…`C-06` como **tipos y validaciones**, no como documentación: 
 `AnnualSeries` con índice `Time` garantizado, una `Placa` con unidades normalizadas, una
 `MeasurementBook` que localiza `Info` por nombre.
 
-Coste: bajo. Desbloquea: todo lo demás. Es el paso que impide que el refactor herede los contratos
-implícitos.
+Los tipos deben formalizar las fronteras que se implementen, distinguiendo los
+contratos observados de propuestas como lectura por nombre o coeficientes corregidos.
+No se necesitan esquemas especulativos de rutas aún no implementadas. #to-review
 
 ---
 
@@ -98,8 +121,8 @@ Aquí desaparecen las clases enteras de defectos de presentación: `B-03`, `B-12
 
 | Tentación | Por qué no |
 |---|---|
-| Reescribir desde cero en otro repo | se pierde la física validada y los números de la tesis |
-| Migrar a FastAPI/Next ahora | duplica el trabajo sobre un sistema que aún no corre limpio |
+| Reescribir sin preservar fuente y referencias | se pierde la posibilidad de medir compatibilidad; la validez física necesita evidencia separada. #to-review |
+| Anteponer nueva UI a la reproducción | la arquitectura actual usa Python/FastAPI/Next, pero la funcionalidad nueva del frontend espera al backend; no se exige reconstruir Dash. #to-review |
 | Arreglar los 13 defectos antes del congelado | sin juez, no se puede demostrar que el arreglo no rompió otra cosa |
 | Borrar el código muerto como primer paso | ahorra 6 % y no cambia nada estructural |
 | Parametrizar sin casos de prueba | es la forma más rápida de cambiar resultados sin darse cuenta |
@@ -107,15 +130,15 @@ Aquí desaparecen las clases enteras de defectos de presentación: `B-03`, `B-12
 
 ---
 
-## Primera semana, en concreto
+## Orden orientativo, sin promesa de plazo
 
-1. Fijar `pvlib` y `pandas`, documentar versiones. *(1 h)*
-2. Resolver credenciales y localizar `Libro1.xlsx`. *(variable)*
-3. Escribir el arnés mínimo con el caso 1. *(1 día)*
-4. Congelar caso 1 y guardar el manifiesto. *(2 h)*
-5. Repetir con los casos 2 y 3. *(1–2 días según el libro de mediciones)*
-6. Cerrar `D-01`, `D-02`, `D-06`. *(una conversación)*
-7. Definir los tipos de contrato de S1–S3. *(1 día)*
+1. Revisar los entornos/capturas existentes y registrar el entorno de la ruta siguiente. #to-review
+2. Recuperar credenciales o fuentes solo para las rutas que las necesiten. #to-review
+3. Caracterizar el caso completo seleccionado, partiendo de límites ya capturados. #to-review
+4. Preservar manifiesto, referencias y diferencias antes de reemplazar ese comportamiento. #to-review
+5. Repetir para módulos, fuentes y correcciones que tengan sus entradas disponibles. #to-review
+6. Resolver decisiones corregidas cuando una implementación dependa de ellas. #to-review
+7. Formalizar contratos de las fronteras que se implementen y comprobar consumidores. #to-review
 
-Al final de esa semana se sabe, con datos, si el refactor es de semanas o de meses. Eso es lo que hoy
-no se sabe.
+El alcance y los siguientes pasos se ajustan con resultados ejecutados y huecos
+concretos, no con los plazos de esta propuesta histórica. #to-review

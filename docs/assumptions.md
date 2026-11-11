@@ -1,321 +1,232 @@
+---
+title: Modeling choices and transformation register
+role: Operation-level meanings, conversions, assumptions, support and unresolved decisions
+retrieve_when: Changing parameter interpretation, an equation, defaults, fitting or time and RNG semantics
+read_scope: Named operation and its direct source and implementation dependencies
+authority: Explicit compatibility decisions and pending scientific interpretation; not blanket model approval
+verify: Check exact source branch, units, primary formulation and independent evidence for the proposed change
+review_status: "#to-review"
+---
+
 # Modeling choices and transformation register
 
-Start with the [capability and reproduction map](legacy_backend_coverage.md), then
-follow the operation below to its owner. The [curated investigation](legacy-refactorizacion/README.md)
-is the primary locator for legacy behavior; its proposals and reported workbook
-observations remain supporting evidence. This register records current decisions
-and unresolved questions, without copying the investigation or its inventory.
-Read [evidence](evidence.md) for provenance and [reproduction](reproduction.md)
-for capture commands, executed comparisons and tolerances. [Flowcharts](flowcharts.md)
-show the boundaries. A compatibility choice is not an accepted scientific default.
-
-For changes affecting an operation, update its contract, implementation, capture
-coverage and this record together. Stable IDs below identify the decision, not a
-claim of scientific or empirical acceptance. Missing fields/records fail boundary
-validation; no imputation, interpolation, aggregation or calibration is implicit.
-
-## Ownership and authorities
-
-| Concern | Single owner | Meaning of the boundary |
-|---|---|---|
-| Original bytes and identity | `fetcher.py`; `catalog.py` retains its public snapshot reader | Load a local snapshot with an expected SHA-256; retain source and record identity. Refresh is explicit and creates another snapshot. Acquisition does no fitting or coefficient interpretation. |
-| Explicit source normalization | `fetcher.py` | Parse/map declared source field names to `compatibility.py` contracts. Preserve source coefficient units, case IDs/order and original evidence; do not silently fill or convert values. |
-| Compatibility input/output schema | `compatibility.py` | Pydantic owns `LegacyIVModule` and `LegacyIVRequest` for `legacy-iv-r-v1`; these source-shaped contracts are distinct from the reserved general simulator contract in `contracts.py`. |
-| Modeling and parameterization | `model.py` | `fit_legacy_iv` owns percentage-to-absolute conversions and the legacy overrides. `solve_legacy_iv` owns translation, solver and grid. Typed numerical internals are independent of HTTP and plotting. |
-| Thermal point profiles | `thermal.py` / `thermal_contracts.py` | `calculate_thermal` owns the captured Faiman and simplified NOCT equations. Pydantic owns explicit coefficient/point inputs and aligned results; no defaults, acquisition, missing-record filling or mutable NDH bus. |
-| Use case and transport | `application.reproduce_legacy_iv`; `api.py` | Orchestrate one explicitly versioned compatibility request; expose results at `/api/v1/compatibility/iv-r`. General `/api/v1/module-iv` remains unavailable. |
-| Source metadata / artifact locations | `config/sources.yaml` / `config/paths.yaml`, validated by `configuration.py` | Describe evidence and paths; neither selects model equations nor duplicates request schemas. |
-| Runtime settings | Server environment, only where consumed | Credentials stay server-side. No network access is necessary for this local compatibility pathway. |
-| Behavior / intended design / scientific support | Legacy source and independent captures / repository contracts and reviewed decisions / primary formulations and evaluation | These authorities answer different questions. Matching executable legacy behavior does not settle a scientific conflict. |
+Each operation records meaning/units, source behavior, modeling interpretation,
+owner and verification limits. The [legacy audit](legacy_backend_coverage.md) owns
+cross-chapter findings; [architecture](architecture.md) owns component/configuration
+placement. The [evidence assessment](evidence.md) distinguishes author reports,
+source execution, scientific formulations and observations. No entry is an accepted
+scientific default merely because it is documented. #to-review
 
 ## IV-01 — Source coefficients and reference conditions
 
-**Identity and domain.** Module nameplate points use A and V; source `alpha`,
-`beta` and `deltha` use percent/°C. `deltha` is passed as the power coefficient,
-not a voltage coefficient. Reference conditions in the selected legacy branch
-are 1000 W/m² and 25°C; operating inputs are effective in-plane irradiance
-and cell temperature, not ambient temperature. The supported domain and failure
-rules are executable in `compatibility.py`; schema validity does not guarantee
-that the numerical fit will converge.
+**Meaning and source.** Nameplate current/voltage are A/V; source alpha, beta and
+deltha are labeled percent/°C. `IV_R:4268–4307` fits with
+`alpha_fit = alpha_source/100*Isc`, `beta_fit = beta_source/100*Voc` and unconverted
+power coefficient deltha. It then supplies the raw alpha number to De Soto,
+which expects A/°C. These effective values must remain distinct. [Versioned CEC
+fit documentation](https://pvlib-python.readthedocs.io/en/v0.13.1/reference/generated/pvlib.ivtools.sdm.fit_cec_sam.html)
+defines the absolute alpha/beta and percent gamma inputs. #to-review
 
-**Evidence and transformation.** [C-06](legacy-refactorizacion/03-contratos.md#c-06--el-diccionario-de-placa)
-and [D-02](legacy-refactorizacion/10-decisiones-pendientes.md) locate
-[`IV_R`](../legacy/Input_File_DIV_Mac_Informe.py), lines 4268–4307. It fits with
-`alpha_fit = alpha_source / 100 * Isc`, `beta_fit = beta_source / 100 * Voc`
-and unconverted `deltha`. It then supplies the raw numerical `alpha_source`
-to De Soto. The two alpha values have different physical units and must remain
-separately identifiable. Official [CEC fit documentation](https://pvlib-python.readthedocs.io/en/stable/reference/generated/pvlib.ivtools.sdm.fit_cec_sam.html)
-requires A/°C and V/°C for alpha and beta, while gamma uses percent/°C.
-
-**Decision, owner and verification.** `model.fit_legacy_iv` preserves both values
-under `legacy-iv-r-v1`. A conversion applied once in the fetcher would change
-this behavior and conceal its defect. Independently captured fit inputs,
-parameters and off-reference conditions distinguish this defect from a porting
-regression; a 25°C-only check cannot reveal it. A future corrected model must
-have another model ID and its own scientific and empirical checks.
+**Choice, owner and coverage.** `model.fit_legacy_iv` preserves the fitting
+conversion and `solve_legacy_iv` preserves raw-alpha translation under
+`legacy-iv-r-v1`. The fetcher preserves source values instead of silently repairing
+them. Off-reference captured conditions expose this inconsistency; reference-only
+agreement cannot validate it. A corrected coefficient chain requires separate
+versioned behavior and scientific/empirical review. #to-review
 
 ## IV-02 — CEC extraction followed by De Soto translation
 
-**Evidence and effective choices.** The same `IV_R` body fits via
-`pvlib.ivtools.sdm.fit_cec_sam`, forces `celltype='monoSi'` and `temp_ref=25`,
-uses the first five returned parameters, and discards CEC `Adjust` from the
-translation. Supplied material/reference metadata cannot be represented as
-effective fit settings. This is a legacy hybrid pathway, not the full CEC model
-or proof of the Powell-Hybrid extraction described in the supplied summary.
-The [Dobos 2012 primary record](https://www.osti.gov/biblio/1043759) identifies
-the CEC six-parameter extraction method; its abstract does not establish
-SUNERGY's hybrid as accurate.
+**Behavior.** IV_R forces monoSi and 25 °C for fitting, then uses five of six fitted
+parameters with De Soto, omitting CEC Adjust. This hybrid is neither a complete
+CEC model nor proof of the report's described extraction procedure. Source
+material/reference values remain supplied metadata, not effective fit choices.
+`model.py` owns the chain; responses retain supplied module/cases, exact effective
+fit/translation inputs and all six fit results. #to-review
 
-**Formulation audit.** Official [De Soto documentation](https://pvlib-python.readthedocs.io/en/v0.13.1/reference/generated/pvlib.pvsystem.calcparams_desoto.html)
-defines `a_ref = n Ns Vth_ref` in V, `IL_ref`/`I0_ref` in A, and resistances
-in ohms. Translation uses `IL = G/Gref * (IL_ref + alpha * (Tc-Tref))`,
-`a = a_ref * Tk/Tref_k`, constant `Rs` and inverse-irradiance `Rsh`.
-Thus the raw-alpha use in IV-01 is dimensionally inconsistent with its source
-meaning. EgRef=1.121 eV and dEgdT=-0.0002677 K⁻¹ match the selected library's
-CEC convention; changing them solely to a material lookup could invalidate the
-fit's parameter convention. The official [CEC translation source](https://pvlib-python.readthedocs.io/en/stable/_modules/pvlib/pvsystem.html#calcparams_cec)
-additionally scales alpha by `(1-Adjust/100)`; legacy omits that operation.
+**Formulation and limits.** [De Soto documentation](https://pvlib-python.readthedocs.io/en/v0.13.1/reference/generated/pvlib.pvsystem.calcparams_desoto.html)
+defines a_ref=n*Ns*Vth_ref in V, IL/Io in A and resistances in ohms. It translates
+`IL=G/Gref*(IL_ref+alpha*(Tc-Tref))`, a with absolute temperature, constant Rs and
+inverse-irradiance Rsh. EgRef=1.121eV/dEgdT=-0.0002677K⁻¹ follow the fitted CEC
+parameter convention; material-specific replacement is not automatically valid.
+The [CEC translation](https://pvlib-python.readthedocs.io/en/v0.13.1/_modules/pvlib/pvsystem.html#calcparams_cec)
+also applies Adjust. Do not reinterpret nNsVth as a dimensionless ideality factor.
+#to-review
 
-**Decision and checks.** `model.py` owns these explicit compatibility choices.
-Capture the six fit results even though translation uses only five, plus each
-case's five translated parameters. Responses retain `supplied_module`,
-`supplied_cases`, exact `fit_inputs` and each case's `desoto_inputs`, alongside
-effective choices. Repeated legacy condition labels retain their original
-positions; a label alone is not unique record identity. Do not reinterpret `nNsVth` as dimensionless
-ideality factor. Fit and translation agreement establishes compatibility only.
-The [De Soto 2006 publisher record](https://www.sciencedirect.com/science/article/abs/pii/S0038092X05002410)
-reports validation of its model against NIST measurements; that does not validate
-SUNERGY's altered coefficient chain. Main-paper full equations were unavailable
-in this audit; re-derivation remains open.
+The [Dobos extraction record](https://www.osti.gov/biblio/1043759) and [De Soto
+publisher record](https://www.sciencedirect.com/science/article/abs/pii/S0038092X05002410)
+support their stated methods, not SUNERGY's altered chain. Full original-paper
+re-derivation and independent extraction verification remain open. Captured fit
+and translation agreement establishes compatibility only. #to-review
 
-## IV-03 — Solver, grid, equation and comparison metrics
+## IV-03 — Solver, grid and comparison meaning
 
-**Behavior.** `IV_R:4318–4367` solves with Lambert W, samples exactly 100 ordered
-voltages from 0 through calculated Voc, and obtains current at those voltages.
-It reports five electrical metrics and a table using
-`round(100 * abs(simulated - benchmark) / simulated, 2)`; the denominator is
-the simulated quantity. Benchmark fields are comparison inputs, not fitting
-evidence. Raw outputs must be retained before the legacy table rounding.
-The unused inverse-voltage calculation uses a separate fixed current grid;
-its existence and omission from the returned curve must remain visible in the
-capture method. `CurvaIV.IV`, `IV_CI` and `IV_CI_cor` use different methods or
-grids; IV_R coverage does not transfer to them. See curated D-04/D-07.
+IV_R solves with Lambert W, evaluates 100 ordered voltages from 0 through calculated
+Voc, and returns curve/MPP plot data plus five error metrics. The library supplies
+seven single-diode metrics; the modern response retains all seven. The error table
+uses `round(100*abs(simulated-benchmark)/simulated,2)`, with simulated values in the
+denominator. Benchmark values are comparison inputs, not necessarily observations.
+The unused inverse grid is retained in capture evidence but omitted from the modern
+returned numerical boundary. Other curve functions use different methods/grids.
+#to-review
 
-**Scientific checks and limits.** The [official single-diode equation](https://pvlib-python.readthedocs.io/en/v0.13.1/reference/generated/pvlib.pvsystem.singlediode.html)
-gives the independently evaluable residual
-`I - IL + I0*expm1((V + I*Rs)/a) + (V + I*Rs)/Rsh` in A. The primary
-[De Soto 2007 erratum](https://www.sciencedirect.com/science/article/pii/S0038092X06001691)
-corrects Eq. 6a to `Imp + Vmp * dI/dV|mp = 0`. Residual, endpoint and MPP
-checks test numerical/equation consistency; they do not validate extraction,
-thermal inputs or agreement with measurements. Quantity-specific software
-tolerances belong to each capture manifest, not manufacturer power tolerance
-or the campaign's percentage error. Exact ID/order/shape/unit checks accompany
-numerical comparisons; no sorting or grid replacement is allowed.
-
-An independent arithmetic audit of the six recorded cases in `iv_r/captured`
-and `iv_r/captured_alternate` evaluated the residual and analytic implicit
-derivative directly from stored parameters/points, without calling the modern
-model or pvlib. Maximum absolute equation residual was below 4.0e-14 A;
-maximum absolute MPP `dP/dV` was below 5.8e-7 A for the Windows captures. The
-Linux alternate STC case later exceeded the unchanged 1e-6 A review target;
-IV-04 preserves that unmet result. These finite-case observations
-support numerical consistency of these stored curves only. They do not resolve
-IV-01/IV-02, establish global solver behavior or constitute empirical evidence.
+The [single-diode equation](https://pvlib-python.readthedocs.io/en/v0.13.1/reference/generated/pvlib.pvsystem.singlediode.html)
+gives residual `I-IL+Io*expm1((V+I*Rs)/a)+(V+I*Rs)/Rsh` in A. The [De Soto
+erratum](https://www.sciencedirect.com/science/article/pii/S0038092X06001691)
+gives the MPP condition `Imp+Vmp*dI/dV=0`. Direct arithmetic can check numerical
+consistency; it does not validate coefficient extraction, temperature inputs or
+agreement with measurements. Comparison limits belong to capture manifests, not
+manufacturer tolerances or reported campaign errors. #to-review
 
 ## IV-04 — Numerical platform identity
 
-**Observed evidence.** Windows and Ubuntu original-source captures use identical
-effective fit inputs but differ first in fitted parameters for the preset module.
-MPP coordinates also differ for the alternate module. Each platform's original
-execution matches the modern implementation under the existing thresholds, and
-repeated original executions are byte-identical on that host. Raw references,
-workflow/artifact provenance and the [difference report](evidence/iv_r_platform_comparison.json)
-are linked from [reproduction](reproduction.md). No Windows output or acceptance
-threshold was replaced or relaxed.
+Original Windows/Linux captures have identical effective fit inputs but small
+fit/MPP-coordinate differences. `replay.iv_capture_names` chooses fixed references
+by captured OS/architecture, with no numerical fallback. Source/environment
+identity and unchanged quantity limits establish selected same-platform
+compatibility; they do not establish platform-invariant output. #to-review
 
-**Source audit and interpretation.** PySAM 7.1.0 uses SSC 303; the pinned
-[6parsolve source](https://raw.githubusercontent.com/NatLabRockies/ssc/2025.4.16.r1.ssc.303/ssc/cmod_6parsolve.cpp)
-invokes a nonlinear solve with maximum 300 iterations and tolerance 1e-7. That
-residual criterion is not a per-parameter portability guarantee. pvlib 0.13.1's
-[golden-section source](https://raw.githubusercontent.com/pvlib/pvlib-python/v0.13.1/pvlib/tools.py)
-compares candidate powers and stops at interior-point separation below 1e-8 V.
-This does not prove MPP coordinate accuracy to 1e-8 V. In the alternate STC case,
-the logged current shift implies a voltage shift about 1.05e-7 V and a quadratic
-power change about 2.85e-14 W, roughly half one ULP at 400 W. Thus power rounding
-can leave the optimizer's coordinate branch sensitive while Pmp agrees.
-These mechanisms explain plausible sensitivity; exact compiler/libm causality
-has not been established. Local SSC reports version 303, build
-`Windows 64 bit Visual C++ Aug 8 2025 12:37:54`, native DLL SHA-256
-`defd47245c271abdc20a18bc827ea0ad0a833794a6000f3d07d28a700d45ac4d`.
-Linux environment/package identities are captured; its separate native build/hash
-has not yet been recorded.
+The retained [platform diagnostic](evidence/iv_r_platform_comparison.json) records
+source differences and an unmet selected MPP stationarity target. That target is
+an agent-selected finite-case diagnostic, not a collaborator-approved scientific
+accuracy standard or a production prerequisite. Its failed observation remains
+visible; neither matching it nor passing characterization tests approves the
+model. Detailed experiment/native-build history belongs in the task record, not
+in standing model acceptance. #to-review
 
-**Decision and owner.** `replay.iv_capture_names` selects the fixed reference pair
-by OS and architecture, without checking which values pass. Unsupported environments
-fail the reproduction gate explicitly; general calculation availability is separate.
-Same-platform software compatibility, cross-platform numerical invariance and
-scientific/empirical accuracy remain different claims. Future solver/library/native
-build changes require a fresh independent capture and discrepancy review.
+## IN-01 — Preset and manual module identity
 
-**Unmet scientific audit target.** The independent Linux `STC-alt` reference has
-`abs(Imp + Vmp*dI/dV)` about 1.118e-6 A, above the selected strict `<1e-6 A`
-target. The target was retained, with `target_met: false` in the original-source
-audit report. Modern numeric outputs and audit outcome reproduce this limitation.
-The single-diode residual check still passes separately at 1e-10 A. A green
-characterization/reproduction suite therefore does not mean this scientific
-target passed; API capability status explicitly reports it unmet. This is an
-unmet solver audit target, not proof of a physical defect or a justification for
-a new accepted accuracy threshold. A power-precision criterion would require
-separate derivation/review and must supplement this preserved result.
+`Placa_Prueba:982–1015` returns fixed 250 W/polySi/60-cell/25 °C data regardless of
+arguments. A declared preset is valid functionality; silently discarding INSERT
+manual values is a separate defect. `Placa_D1/D2` retain supplied values. The
+current IV_R request uses explicit module input and does not reproduce those
+upstream selector/producer paths. Fetching preserves original identity; selecting
+a preset belongs to application/model behavior. #to-review
 
-## IN-01 — Preset and manual module paths
+## IN-02 — Catalogue NOCT versus fit reference temperature
 
-`Placa_Prueba:982–1015` replaces every supplied argument with fixed 250 W,
-30.12 V, 8.30 A, 37.85 V, 8.65 A, 0.01%/°C alpha, -0.31%/°C beta,
--0.5%/°C gamma, 60 cells, 25°C and polySi. `Placa_D1/D2` instead retain
-supplied values. Curated D-08 proposes an explicit preset, but that proposal
-does not turn discarded manual input into correct behavior. An IV_R request
-uses an explicit module; it does not reproduce all dashboard selector branches
-or `Placa_Prueba` argument-discard behavior. Capture those producer paths
-separately before claiming end-to-end reproduction. Input provenance belongs
-to acquisition; choosing a fixed preset belongs to the application/model.
+Dashboard `render_content:969–1080` places `Average NOCT` in record slot 9;
+`Placa_D1/D2:1017–1057` call it `temp_ref`; annual `PE:1390` passes it to CEC fitting.
+Detailed IV_R instead forces 25 °C. Source field identity, nominal operating thermal
+temperature and electrical fit reference temperature are distinct meanings. The
+mapping is statically confirmed; actual workbook values/edition are unavailable.
+#to-review
 
-## TH-01 — Sandia thermal selection
+Preserve the source field through acquisition and expose this interpretation at
+parameterization. Do not silently relabel NOCT as STC or correct the annual fit
+while claiming structural parity. Producer-specific capture and catalogue review
+are needed before an accepted alternative. No modern catalogue adapter exists.
+#to-review
 
-`Temperature_sandia:785–800` mutates `Tsandia` only for frames with legacy
-accepted lengths. It evaluates `Tm = E*exp(a+b*wind) + Ta`, then
-`Tc = Tm + E/1000*deltaT`. Its a/b arrays have six entries, while deltaT has
-four; applicable selectors 5/6 fail by indexing. The original
-[Sandia SAND2004-3535 report](https://www.osti.gov/servlets/purl/919131),
-thermal section pp.17–19, Eqs.11–12 and Table1, supports these equations
-and identifies module/mount and wind-height dependence. Its fifth/sixth
-deltaT values are 3°C/13°C. This supports a proposed correction, not silent
-compatibility repair. Sandia is unavailable in the modern thermal boundary;
-its selector/length regimes and failures need separate captures before a
-compatibility or corrected profile can be selected. The thermal model owns
-parameter selection and cell/back-surface distinction; the fetcher owns
-observed wind and metadata. Neither the implemented Faiman/NOCT kernels nor
-their captures establish Sandia or annual thermal reproduction.
+## TH-01 — Sandia temperature and selector domain
+
+`Temperature_sandia:785–800` computes module `Tm=E*exp(a+b*wind)+Ta`, then cell
+`Tc=Tm+E/1000*deltaT`, only for four accepted frame lengths. The a/b arrays contain
+six entries but deltaT four. `Sandia_options:762–783` exposes selectors 1–4; direct
+helper or externally supplied 5/6 need separate failure characterization. Missing
+POA can fail before any temperature result. #to-review
+
+[Sandia SAND2004-3535](https://www.osti.gov/servlets/purl/919131), pp. 17–19,
+Eqs. 11–12/Table 1, supports the formulation and mounting/wind-height dependence.
+Its additional deltaT values are evidence for a proposed correction, not permission
+to change compatibility. Modern Sandia/annual integration remains unimplemented.
+The model owns parameter/cell-versus-module interpretation; acquisition preserves
+observed wind and metadata. #to-review
 
 ## TH-02 — Faiman and simplified NOCT
 
-**Legacy and modern transformations.** `Temperature_feinman:805–814` passes
-`Poa_global`, air temperature, wind and explicit U0/U1 to pvlib Faiman;
-the equation is `T = Ta + E/(U0 + U1*wind)`. `Temperature_NOCT:817–825`
-uses `T = Ta + ((TNMOT-20)/800)*E`, reading wind without using it.
-The immutable point implementations are
-[`thermal.calculate_thermal`](../backend/src/sunergy/thermal.py), selected by
-`legacy-faiman-v1` or `legacy-noct-v1` through
-[`thermal_contracts.py`](../backend/src/sunergy/thermal_contracts.py).
-[`application.request_thermal`](../backend/src/sunergy/application.py) exposes
-the validated Python use case without requiring an HTTP route.
-E is total incident POA irradiance [W/m²], Ta and T are °C, and wind is m/s.
-U0 is W/(m² K); U1 is W/(m² K (m/s)); TNMOT is °C. Parameter interpretation
-and calculation belong to the thermal model. Source normalization must supply
-these units explicitly; no fitting, imputation or time interpretation occurs.
+The supported `thermal.calculate_thermal` point profiles retain Faiman
+`T=Ta+E/(U0+U1*wind)` and legacy NOCT `T=Ta+((TNMOT-20)/800)*E`.
+E is incident POA W/m², temperatures are °C and wind m/s. U0 is W/(m²K), U1 is
+W/(m²K(m/s)); NOCT ignores wind. Explicit parameter inputs are not calibrated or
+universal defaults. [Faiman documentation](https://pvlib-python.readthedocs.io/en/v0.13.1/reference/generated/pvlib.temperature.faiman.html)
+requires wind at the coefficient-estimation height. #to-review
 
-**Supported boundary and decisions.** Every ordered point requires a unique
-record ID, finite nonnegative E/wind and Ta above absolute zero. Faiman
-requires explicit finite positive U0/U1 and a finite positive combined loss
-factor. NOCT requires explicit TNMOT >20°C. These are restrictions of the
-supported modern boundary, not new claims about the full mathematical or
-scientifically valid domain; in particular, zero U1 is excluded by this
-profile rather than proved unphysical. Outputs must be finite and above
-absolute zero. The original functions return `None`, mutate an NDH frame,
-append `TFeinman`/`NOCT`, and repeat each calculation four times without a
-length predicate. Capture retains these operations, while the modern point
-boundary returns ordered values without mutation. Legacy missing irradiance
-raises `AttributeError`; the modern missing field fails Pydantic validation.
-These explicit boundary changes are separate from numerical compatibility.
+`thermal_contracts.py` requires ordered unique records, finite nonnegative E/wind,
+physical ambient temperatures, positive explicit U0/U1 or TNMOT>20°C. These are
+supported-boundary restrictions, not proof that zero U1 or every excluded value is
+unphysical. The original Faiman/NOCT helpers mutate frames, return None and repeat
+four times without Sandia's length predicate; modern results are immutable.
+[Captures](../tests/fixtures/legacy/thermal/README.md) preserve those differences.
+#to-review
 
-**Evidence and verification.** The
-[controlled capture](../tests/fixtures/legacy/thermal/README.md) executes both
-original AST bodies independently in the isolated locked environment. Four
-parameter cases × five synthetic points retain original input columns,
-record order, unrounded temperatures, return/mutation behavior and missing-field
-failures. Baseline values 25/6.84 and 43°C come from the legacy UI; alternate
-coefficients exercise explicit callers. They are not calibrated defaults.
-An isolated recapture produced byte-identical `outputs.json` on the capture
-host. [Thermal tests](../backend/tests/test_thermal.py) compare kernels using
-`abs(actual-reference) <= 1e-12°C + 1e-12*abs(reference)`, reject a 0.01°C
-perturbation and reordered IDs, and exercise zero irradiance, reference
-conditions, wind cooling/NOCT wind independence, invalid domains and overflow.
-The [manifest](../tests/fixtures/legacy/thermal/captured/manifest.json) pins
-source, wrapper, inputs, outputs, environment and tolerance provenance.
+The four parameter cases/five synthetic points establish numerical point-kernel
+coverage. Reference/zero-irradiance/wind checks support equation consistency, not
+measured cell temperature, mounting applicability or annual reproduction. The
+simplified NOCT expression is not every NOCT/NMOT model. #to-review
 
-**Scientific support and limitations.** Official
-[Faiman documentation](https://pvlib-python.readthedocs.io/en/stable/reference/generated/pvlib.temperature.faiman.html)
-requires wind at the coefficient estimation height and identifies context-specific
-origins for its default loss factors. No universal U0/U1 or mounting choice
-follows. The simplified NOCT equation is dimensionally coherent and returns
-TNMOT at E=800 W/m², Ta=20°C; it is not interchangeable with every NOCT/NMOT
-model. Labels do not establish measured cell versus module temperature.
-These captures cover the point kernels and inspected wrapper behavior, not
-annual weather orchestration, measured thermal accuracy or calibration.
+## AN-01 — Annual electrical parameters and missing records
 
-## AN-01 — Annual irradiance, power and missing-record behavior
+`PE:1488–1510` computes Pmax=Vmax*Imax; current already contains G/1000.
+G/1000 and division by 1000/G are algebraically equal where defined, but that does
+not prove equivalence of full annual branches. PE stores nNsVth[V] in AF, then
+forms AF*k*Tk/q[V²] before a dimensionless logarithmic factor; it also uses a
+power-coefficient field in Vmp and replaces selected nonfinite values with zero.
+These require branch-specific capture and reviewed interpretation. #to-review
 
-Curated S2–S5/C-01–C-03 and D-01 route to `Solar_pos`, `PE*` and summaries.
-The selected `PE:1488–1510` uses `Pmax = Vmax * Imax`; current already includes
-`G/1000`. Therefore the two generic expressions `G/1000` and `1/(1000/G)`
-are algebraically equivalent where defined, but that alone does not prove
-equivalence of whole annual branches. `PE` also stores `nNsVth` [V] in `AF`,
-then computes `gamma = AF * k * Tk / q` [V²] before using it in the
-dimensionless factor `1 + gamma*log(G/1000)`. This is a dimensional mismatch
-under the library's documented parameter meaning. The branch applies the
-power coefficient to Vmp and replaces selected non-finite results with zero.
-These operations need separate compatibility capture and reviewed corrected
-formulations, not a global irradiance-factor fix.
-Accepted frame lengths can exclude leap-year or incomplete records.
-Preserve that behavior as evidence; any repaired missing-record policy needs
-explicit versioning. Annual outputs remain outside implemented IV_R coverage.
+Accepted downstream frame lengths can omit leap-year/incomplete series. Preserve
+original record/selection behavior and identify any corrected missing-record
+policy explicitly. Annual fitting also depends on the catalogue reference issue
+IN-02. No annual numerical parity follows from the detailed IV_R point path.
+#to-review
 
-## WX-01 — Weather time, POA and effective irradiance
+## WX-01 — Weather, time and POA lineage
 
-`Primer_Funcion_Clima.obtener_utc_de_coordenadas:26–38` uses today's UTC
-offset; `Posicion_Solar.Solar_pos:36–114` combines pvlib position with manual
-seasonal terms using `Day` and a legacy default orientation. A raw weather
-snapshot is an acquisition artifact. Time-zone interpretation, irradiance
-transposition, spectral/reflection assumptions and thermal modeling are
-model operations. They must not be hidden in source normalization. A future
-weather boundary must preserve timestamps/intervals, DST/leap-day policy,
-wind height, irradiance basis and source metadata. No annual snapshot was
-provided, and a point IV_R capture does not audit this chain.
+`Clima:64–183` returns SmartNDH with source-length buckets and the last fetched
+frame/metadata. TMY forces 60-minute requests; specific-year calls can request
+multiple intervals. Downstream POA/Sandia/writers impose their own length gates.
+A future acquisition adapter must preserve each response, metadata, timestamps,
+intervals and source identity separately; the hybrid return is not a complete
+per-year metadata snapshot. #to-review
 
-## EV-01 — Correction, measurements and bootstrap
+`Solar_pos:36–112` computes manual Day/EoT terms, but those values are unused or
+overwritten in the returned POA chain. Actual solar zenith/azimuth and airmass
+come from pvlib position, with default tilt=latitude/azimuth=180. Unused earlier
+calculations can still require fields or fail. `Solar_pos_e` requires explicit
+numeric orientation; a None default is proposed behavior, not current equivalence.
+Review time zones, DST/leap-day, index alignment and wind height from recorded
+responses; do not hide those interpretations in normalization. #to-review
 
-The curated [thesis mapping](legacy-refactorizacion/08-tesis-a-codigo.md)
-reports examination of a real 30-curve workbook, including 13-minute timing,
-860–1024 W/m² irradiance and seven omitted CurveIDs. The preserved summary
-reports roughly twelve minutes. These are reported observations from different
-evidence artifacts; the original workbook, its hash, exclusion criteria,
-permissions and report are absent here. Do not overwrite one account with
-the other or treat them as a locally replayed campaign.
+## EV-01 — Measurements, correction and statistical synthesis
 
-`correction_IV:7304–7534` has an M2N branch with a squared log term;
-`get_corrected_IV_P2` is another, unconnected implementation. No IEC 60891
-conformance is established without the exact edition/formulation and test
-conditions. `Temperature_coeffs` and `find_k_sweep` fit against simulated
-curves, so their success is not held-out measurement validation.
-`Bootstrap:8358…` truncates to the shortest curve and independently resamples
-voltage/current/power with NumPy global randomness (3000 × 12 samples).
-Capture inputs/order and RNG implementation/state before changing the seed,
-alignment or estimator. A controlled seed supports a reproducible new
-experiment; it does not recreate an unknown historical draw.
+**Source identity.** Earlier workbook observations are author-reported; originals,
+permissions and module/sensor linkage are absent here. Positional sheet/Info-row
+association is an implicit contract. Legacy upload rewrites the workbook through
+pandas, so preserving original bytes is a deliberate modern safeguard, not a claim
+about legacy behavior. See C-05 and [evidence](evidence.md). #to-review
 
-## Assessment and next scientific work
+**Effective temperature.** `IV_CI_cor:5947–6015` reads Voc/Irrad1/Temp1/Temp2.
+It first translates De Soto at sensor mean `(T1+T2)/2`, then forms
+`delta_source=nNsVth*k*(Tmean+273.15)/q` and overwrites Tmod using Voc, beta and
+log(irradiance ratio). Corrections and IV_sim consume that inferred Tmod, while
+reported temperature metadata retain the sensor mean. The delta expression has
+the same dimensional concern as AN-01. Preserve sensor, inferred and reported
+values separately; no validated temperature correction is established. #to-review
 
-| Gate | Present evidence | What remains |
-|---|---|---|
-| Boundary validity | Executable Pydantic contracts and explicit ownership | Branch-specific source/measurement/weather boundaries as those paths migrate. |
-| Selected legacy reproduction | See current manifests, tests and [reproduction record](reproduction.md) | Complete the [coverage map](legacy_backend_coverage.md); no full-backend claim. |
-| Scientific verification | Checked coefficient units, selected equations, primary Sandia thermal formulation and De Soto MPP erratum | Independent extraction/formulation review, domain/limiting tests, reviewed corrected model and model selection. |
-| Empirical agreement | Supplied campaign descriptions only | Original records, uncertainty, exclusion criteria and independent comparisons. |
-| Calibration | Legacy fitting operations identified | Baseline retention, fitted identities/bounds/objective, fit-data provenance and held-out evaluation. |
+**Method and origin.** Both `correction_IV:7304–7534` and
+`correction_IV_s:7609…` dispatch M2/M2N. The latter handles simulated curve columns,
+not the normalized method alone. Measured M2N uses Temperature_coeffs, a 400–1100
+fit grid and optimized/clamped k; simulated M2N omits that coefficient call, uses
+a 200–1100 grid and ri_2/100. Both use a squared logarithmic irradiance term in fG.
+These method/origin/fit axes cannot be merged by suffix or formula similarity.
+No IEC 60891 conformity follows without exact edition/formulation/conditions.
+#to-review
 
-Sources above were accessed on 2026-11-10. Official stable pvlib pages resolved
-to 0.16.1 during the audit; explicitly versioned 0.13.1 pages establish the same
-listed coefficient/equation semantics, not historical environment identity.
-The capture manifest and lock establish the actual executed library versions.
-The 2018 SAM technical-reference PDF could not be retrieved from the cited
-NREL host (DNS failure); it was not used as formulation evidence.
+**Fitting and evaluation.** Temperature_coeffs derives coefficients from simulated
+curves. find_k_sweep fits k using measured voltage/current corrected against a
+simulated STC power curve: it minimizes the standard deviation of absolute
+pointwise power differences, then clamps k. This mixed fit is not held-out
+measurement validation. Keep the uncalibrated result, fit inputs/objective/bounds,
+parameter identities and independent evaluation status.
+The `Promedio` choice aggregates result tables, not sensor-temperature selection.
+No modern measurement/correction/calibration use case is implemented. #to-review
+
+**Bootstrap and reported method.** Current Bootstrap/Bootstrap2 truncate to minimum
+length and draw separately for voltage/current/power using global NumPy randomness
+(3,000 samples × 12). The supplied summary §4.10 reports 4,000 × 15 and 255 positions.
+The returned P3 is meanV × meanI. Vstd/Istd/Pstd are 5%-trimmed means of
+within-resample sample standard deviations (ddof=1), not standard deviations of
+resampled means. `Comprobacion` uses those spreads with fixed n=30 / df=29 and a
+95% t label. Historical algorithm linkage and statistical applicability remain
+unresolved; a label is not validation of confidence coverage. Capture exact
+order/lengths/RNG state and estimator before changing alignment, seed or sample
+rules. #to-review

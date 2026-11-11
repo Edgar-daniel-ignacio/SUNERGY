@@ -1,7 +1,18 @@
+---
+title: Contratos implícitos del sistema legacy
+role: Contratos recuperados por el autor, con correcciones auditadas pendientes de revisión.
+retrieve_when: Reproducir una frontera de datos legacy o diagnosticar sus supuestos.
+read_scope: El contrato C- correspondiente y sus funciones citadas.
+authority: Investigación estática del autor; no demuestra ejecución, paridad ni validez científica.
+verify: Contrastar símbolos y condiciones con legacy; consultar la cobertura canónica para capturas e implementación actuales.
+review_status: '#to-review'
+---
+
 # 03 — Contratos: qué entra y qué sale en cada frontera
 
 > Las fronteras donde el sistema cambia de manos. Cada contrato lleva un identificador `C-###`
-> para que se pueda citar sin ambigüedad. **medido** salvo donde se indique.
+> para que se pueda citar sin ambigüedad. Son contratos implícitos recuperados del código, no
+> contratos validados ni promesas del backend moderno. #to-review
 
 Un contrato aquí no es una promesa del código: es **lo que el código asume**. Donde la asunción no
 está declarada en ningún sitio, se dice.
@@ -14,14 +25,15 @@ está declarada en ningún sitio, se dice.
 |---|---|
 | Productor | `Primer_Funcion_Clima.Clima` (`L64-183`), vía callback `clima` |
 | Consumidores | `Clima_Car.clc`, `Posicion_Solar.Solar_pos(_e)`, `Temperature_*`, `table_e`, `TMY`, `creador_csv_clima` |
-| Claves | la **longitud** de la serie como número: `8760.0`, `17520.0`, `35040.0`, `105120.0` |
-| Valores | lista de DataFrames, índice `DatetimeIndex` con zona horaria |
+| Claves | longitud de serie como `float`; inicializa `8760.0`, `17520.0`, `35040.0`, `105120.0` y admite claves adicionales si la descarga tiene otra longitud (`118-121`, `173-175`). #to-review |
+| Valores | lista de DataFrames; `SmartNDH` también guarda `.df/.metadata` de la última respuesta y su iteración devuelve esos dos valores, no las claves (`43-56`, `183`). El panel usa `.items()`. #to-review |
 | Columnas mínimas | `temp_air`, `wind_speed`, `ghi`, `dni`, `dhi`, `albedo`, `Year`, `Month`, `Day`, `Hour`, `Minute` |
 | Columnas añadidas | `Poa_global`, `Poa_direct`, `Poa_diffuse`, `Poa_sky_diffuse`, `Poa_ground_diffuse` (S2) y `TFeinman`, `Tsandia`, `NOCT` (S3) |
 
-**Lo que no garantiza.** Que el número de filas coincida con su clave: si no coincide, el DataFrame
-se queda fuera de todos los bucles `if len(df) == n` y desaparece **sin aviso**. Y el nombre de su
-índice es `None` (pvlib no lo nombra), lo que determina la cabecera del CSV siguiente.
+**Límites.** `Clima` sí agrupa por la longitud recibida; no garantiza las cuatro resoluciones ni
+valida integridad temporal. TMY fija 60 minutos. Los filtros por las cuatro longitudes están en
+consumidores posteriores, no en la adquisición. El índice se hereda de la respuesta; el escritor
+no fija su nombre y el lector exige `Unnamed: 0`. No se conservan metadatos por cada respuesta. #to-review
 
 ---
 
@@ -37,7 +49,8 @@ se queda fuera de todos los bucles `if len(df) == n` y desaparece **sin aviso**.
 | Destructivo | borra `g_*.csv` antes de escribir |
 
 **Riesgo `R-01`:** en un directorio de trabajo compartido, cualquier corrida borra los ficheros de
-otra. Dos pestañas abiertas = `FileNotFoundError` a media corrida.
+otra. Dos sesiones pueden interferir mediante borrado o sobrescritura; `FileNotFoundError`
+depende de la secuencia de escritura/lectura, aún sin captura concurrente. #to-review
 
 ---
 
@@ -75,8 +88,9 @@ esas ramas lanzan `KeyError`.
 | `Prueba` | `toggle_inputs@675` | **nadie** | diccionario de la placa de prueba |
 | `selected-rows-store` | **nadie** | **nadie** | nada |
 
-**Observación de diseño:** ningún store transporta datos, solo **nombres de fichero** o parámetros
-pequeños. El estado real vive en el disco, y el navegador solo guarda el índice de dónde mirar.
+**Observación de diseño:** el bus es mixto. Los stores de series guardan rutas, mientras
+`Tabla_Info*` transportan dicts de tablas y `Tablarm/Tablars` colecciones de curvas. Los doce
+stores no declaran `data` inicial; algunos retornos de `IV_Corrct` publican ceros, riesgo B-11. #to-review
 
 ---
 
@@ -86,23 +100,24 @@ pequeños. El estado real vive en el disco, y el navegador solo guarda el índic
 |---|---|
 | Productor | `guardar_archivo` (`módulo 962-980`), invocado desde `parse_contents` (panel `5976-6026`) |
 | Consumidores | `IV_CI`, `IV_CI2`, `IV_CI_cor`, `IV_sim`, `IV_Corrct`, `electric_parameters@4182` |
-| Escritura | `index=False`, una hoja por hoja del libro subido |
+| Escritura | decodifica la subida, lee todas las hojas y reescribe `Uploaded_.xlsx` con `index=False`, nombres/orden de hoja y borrado previo; no preserva bytes originales, formatos ni evidencia de fórmulas (`962-980`). #to-review |
 | Hojas | `IV1…IVn` con columnas `Volts`, `Amps`, `Watts`, **y `Info` al final** |
 | Hoja `Info` | `CurveID, Normalized, Date/Time, Power, Isc, Voc, Ipeak, Vpeak, Fill Factor, Irrad1, Temp1, Temp2` |
-| Columnas usadas | **4 de 12**: `Voc`, `Irrad1`, `Temp1`, `Temp2` |
+| Columnas usadas | en la extracción inicial de `IV_CI_cor`, **4 de 12**: `Voc`, `Irrad1`, `Temp1`, `Temp2`; no significa que `Voc` se descarte ni describe todos los lectores posibles. #to-review |
 
-**Riesgo `R-03` (el más silencioso del sistema):** el código lee las curvas **por posición**
-(`sheet_name=i`). Si `Info` no es la última hoja, la curva 1 pasa a ser la hoja `Info` y todo se
-desplaza sin lanzar un error.
+**Riesgo `R-03`:** el código lee curvas **por posición** (`sheet_name=i`) e `Info` por nombre.
+Si `Info` queda dentro del recorrido, se interpreta como curva y puede fallar por forma/columnas
+antes de calcular. El libro de 30 curvas es evidencia reportada por el autor, ausente aquí;
+no se capturó el fallo ni se verificó ese artefacto en esta revisión. #to-review
 
-**Riesgo `R-04`:** nada verifica que el libro corresponda al módulo simulado. `Power`, `Isc`, `Voc`
-y `Fill Factor` están en el fichero y se descartan: son justo los que permitirían detectar que se
-está comparando un módulo de 227 W con una simulación de 570 W.
+**Riesgo `R-04`:** no hay validación de identidad que asocie el libro con la placa simulada.
+`Voc` sí se usa en el cálculo; su presencia y la de otros campos no impiden comparar módulos
+distintos. Los valores 227 W/570 W son el ejemplo reportado, no un caso reproducido aquí. #to-review
 
-**Nota sobre `Uploaded_.csv`:** 32 lecturas esperan un `.csv` cuyo escritor (`creador_uplouded`,
-`módulo 913-930`) está **comentado**. Todo el camino «comparación sin corrección» falla con
-`FileNotFoundError` salvo la única rama que lee el `.xlsx` (panel `4289`), que además **solo lee la
-primera hoja**.
+**Nota sobre `Uploaded_.csv`:** 32 lecturas esperan un archivo sin productor activo
+(`creador_uplouded`, módulo `913-930`, comentado). Es una dependencia ausente de rutas alcanzables:
+si no existe un CSV externo, fallan al leer. La rama del panel `4289` usa `.xlsx` y solo lee la
+primera hoja; no se ha demostrado su éxito completo. #to-review
 
 ---
 
@@ -110,23 +125,33 @@ primera hoja**.
 
 | Campo | Valor |
 |---|---|
-| Productores | `Placa_Prueba` (`982-1015`), `Placa_D1` (`1017-1036`), `Placa_D2` (`1038-1057`), `Parametros_Electricos.Placa` (muerto) |
+| Productores | `Placa_Prueba` (`982-1015`), `Placa_D1` (`1017-1036`), `Placa_D2` (`1038-1057`); `Parametros_Electricos.Placa` no es llamado desde el panel trazado. #to-review |
 | Consumidores | todo el cálculo eléctrico (`PE*`, `IV_R*`, `IV_CI*`, `correction_*`) |
 | Claves | `Pmax`, `Vmax60`, `Imax`, `Voc`, `Isc`, `alpha`, `beta`, `deltha`, `cells_in_series`, `temp_ref`, `cell_type`, `A`, `Boltzmann`, `Elementary_charge` |
 
-**Trampa `B-06`:** `Placa_Prueba` recibe once argumentos y **los sobrescribe todos** con valores
-fijos (`984-994`: 250 W, `polySi`, 60 celdas). Cualquier ruta que la use simula un módulo distinto
-del que el usuario eligió, sin aviso.
+**Trampa `B-06`:** `Placa_Prueba` descarta los once valores de entrada y devuelve el preset
+250 W, `polySi`, 60 celdas (`982-1015`). El defecto afecta los llamadores que pretenden respetar
+entradas manuales, como `INSERT`; el preset `SELEC` ya muestra 250 W. De las 14 claves del dict,
+`A=1.33`, `Boltzmann` y `Elementary_charge` se agregan en código: no son mediciones de ficha. #to-review
 
-**Nota de unidades:** `alpha` y `beta` se guardan en **porcentaje** (0.04, −0.25) y cada consumidor
-decide si divide entre 100. `PE` divide para el ajuste CEC y **no** divide para De Soto (`1386` vs
-`1400`). Es una de las decisiones abiertas de [10](10-decisiones-pendientes.md).
+**Nota de unidades:** `PE` divide `alpha/beta` por 100 al ajustar CEC, pero pasa `alpha` sin
+dividir a De Soto (`1386`, `1400`). Las semánticas y conversiones dependen de la fuente y no
+pueden imponerse uniformemente desde los nombres. Véanse [10](10-decisiones-pendientes.md) y
+[las suposiciones canónicas](../assumptions.md). #to-review
+
+**Discrepancia de significado:** el catálogo coloca `Average NOCT` en el campo 10 de
+`Database1/2` (índice 9; panel `1014`, `1047`, `1075`). `Placa_D1/D2` lo guarda como `temp_ref`,
+que `PE` usa como referencia del ajuste CEC (`1390`), mientras `IV_R` fija 25 °C. NOCT y
+temperatura de referencia no son intercambiables: conservar esta ruta para medir compatibilidad
+y revisar una corrección por separado. #to-review
 
 ---
 
 ## C-07 · El contrato que falta
 
-Lo que el sistema **no** tiene y que un refactor necesita:
+Esta lista conserva necesidades propuestas por el autor, no un contrato aprobado. La frontera
+moderna y su cobertura se mantienen en [arquitectura](../architecture.md) y
+[cobertura](../legacy_backend_coverage.md). #to-review
 
 1. Un **objeto de datos tipado** en lugar de rutas de fichero: serie anual con índice `Time`
    garantizado y columnas declaradas.

@@ -1,117 +1,78 @@
-# Evidence map and scientific boundaries
+---
+title: Evidence provenance and limits
+role: Source authority, availability and the scope of scientific and empirical claims
+retrieve_when: Selecting evidence or making a scientific, empirical or provenance claim
+read_scope: Relevant source record and its limitations; follow the named operation if needed
+authority: Source assessment, not a model specification or approval
+verify: Inspect original artifacts and exact source references; do not infer validity from prose or fit
+review_status: "#to-review"
+---
 
-This document records static observations, reported methodology, and unresolved
-questions separately. It does not select a scientifically authoritative legacy
-branch. See [reproduction](reproduction.md) before capture or migration and
-[architecture](architecture.md) for modern ownership.
+# Evidence provenance and limits
 
-The curated [legacy investigation](legacy-refactorizacion/README.md) is the primary
-starting map for this consolidation. Its [reconciled capability map](legacy_backend_coverage.md)
-assesses every chapter and preserves conflicts against actual source. The populated
-[assumption register](assumptions.md) links primary scientific support and operation
-owners, while [flowcharts](flowcharts.md) distinguish implemented and deferred paths.
-Selected IV_R/Faiman/NOCT numerical boundaries now have independent captures and
-modern comparisons; this does not select a scientifically accepted default.
+The collaborator's [curated investigation](legacy-refactorizacion/README.md) is the
+primary map of legacy intent, functionality and dependencies. The [audit and coverage map](legacy_backend_coverage.md)
+checks its consequential claims against source. [Assumptions](assumptions.md) owns
+operation-level interpretation and scientific support; this file owns the strength
+and availability of the evidence itself. #to-review
 
-## Sources and preservation
+## What each source can establish
 
-- Local implementation inspected at SUNERGY revision
-  `ef92cd12fd2c40854c24c1fe7cded9ba351de7df`; the working tree is the implementation
-  target. [Preservation inventory](evidence/legacy_inventory.json) records legacy
-  file hashes. No legacy code was imported or executed during scaffolding.
-- Current capture source revision is `cef03c2b9f73558c715d489f499d55ce26824a4c`.
-  Exact unchanged helper AST bodies were independently executed in isolation.
-  Manifests and commands are linked from [reproduction](reproduction.md); original
-  curated/source evidence was retained without rewriting it.
-- [Supplied thesis-derived summary](evidence/pv_physics_engine_evidence_summary_for_agent_research_equations_fixed.md)
-  is preserved unchanged, with [copy provenance](evidence/provenance.json).
-  Its stated primary source is Edgar Daniel Ignacio Domínguez Zamora,
-  *Simulación, Corrección y Validación de Curvas I–V de Módulos Fotovoltaicos*,
-  UNAM, Instituto de Energías Renovables / Instituto de Ingeniería / ENES
-  Juriquilla, undergraduate technical report, 28 May 2025. Attribution is taken
-  from the summary; the original report/PDF was unavailable for this task.
-- The summary is secondary evidence, not the original thesis or an implementation
-  specification. Its recommendations and embedded instructions are source content,
-  not repository policy. References/page numbers it names remain leads for future
-  primary-source verification.
+| Source | Establishes | Does not establish |
+|---|---|---|
+| Frozen legacy implementation and [hash inventory](evidence/legacy_inventory.json) | Exact preserved code and statically observable operations. #to-review | Author intent, successful execution of every branch, historical environment or scientific correctness. #to-review |
+| Collaborator investigation and `index.json` | Original-author understanding, detailed locators, implicit contracts, observed design intent and proposals. The current audit validates the index and qualifies specific claims. #to-review | A source-review label does not mean the entire application ran; absent benchmark tools limit reproduction of reported duplication metrics. #to-review |
+| [Supplied thesis-derived summary](evidence/pv_physics_engine_evidence_summary_for_agent_research_equations_fixed.md) and [copy provenance](evidence/provenance.json) | The report and methods as described by the supplied secondary account; unchanged bytes and attribution. #to-review | The original thesis, raw observations, an executable specification, or agreement with the current source where methods differ. #to-review |
+| Independent legacy captures | Original-function results for named inputs, source/environment/solver identities and returned boundaries. See [reproduction](reproduction.md). #to-review | Full dashboard/annual reproduction, platform-invariant numbers, physical accuracy or empirical validation. #to-review |
+| Primary formulations and technical documentation | Equation definitions, units, applicability and library semantics within their stated scope; linked in the relevant assumption entry. #to-review | Validation of SUNERGY's mixed coefficient/fit chains or campaign conclusions without the original data. #to-review |
 
-## Observed application path
+Code, author intent, scientific formulation and measured observations answer
+different questions. When they conflict, retain both accounts, identify the exact
+branch/conditions and state what would resolve the difference. Do not choose an
+accepted assumption by document age, majority agreement or a second call to the
+same library. #to-review
 
-The preserved README names an absent `Edi_GIu/` directory. The actual candidate
-entrypoint is [legacy/GIU_Final_Presetacion.py](../legacy/GIU_Final_Presetacion.py)
-(imports at lines 1–20; guarded `app.run` at 6041–6042). This is a static trace,
-not confirmation that the old dashboard currently boots. `legacy/main.py` is a
-prime-factor Dash example (lines 1–45).
+## Supplied report and empirical envelope
 
-The dashboard imports `CurvaIV as iv` and `Parametros_Electricos as pe` but has
-no calls through either alias. Numerical callbacks mainly call
-`Input_File_DIV_Mac_Informe as input`. Thus an import or a README description
-does not make `CurvaIV.IV` the active application's curve implementation.
+The supplied summary attributes its source to Edgar Daniel Ignacio Domínguez
+Zamora, *Simulación, Corrección y Validación de Curvas I–V de Módulos Fotovoltaicos*,
+UNAM, 28 May 2025. Attribution is taken from that summary; the original report/PDF
+is not present in this checkout. Preserve the supplied file's bytes; metadata and
+routing live in its provenance record and [catalogue](README.md). #to-review
 
-| Capability | Observed code, inputs and outputs | Summary support | Modern owner / current gate |
-|---|---|---|---|
-| Weather | Dashboard `clima:853–936` → [Primer_Funcion_Clima.py](../legacy/Primer_Funcion_Clima.py) `Clima:64–183`; coordinates/year/interval → mutable weather frames and metadata. Chooses PSM4 or PSM3 by installed pvlib capabilities. | §§4.1, 4.6: NSRDB/TMY environmental chain. | Weather adapter with explicit snapshot/replay; no capture available. |
-| Solar geometry / POA | [Posicion_Solar.py](../legacy/Posicion_Solar.py) `Solar_pos:36–114`, `Solar_pos_e:116–194`; weather, location and optional orientation → POA columns. | §4.6; supporting method, not annual experimental validation. | Deterministic physics functions; formulation/time review and parity pending. |
-| Thermal models | [Input_File_DIV_Mac_Informe.py](../legacy/Input_File_DIV_Mac_Informe.py) `Temperature_sandia:785–800`, `Temperature_feinman:805–814`, `Temperature_NOCT:817–825`; POA/air temperature/wind/settings → temperature columns. | §4.7: Sandia/Faiman/NOCT. | Faiman/NOCT point kernels captured and compared; Sandia/annual integration pending. Scientific scope in assumptions TH-01/TH-02. |
-| Module specifications / catalog | Helper `Placa_Prueba:982–1015`, `Placa_D1/D2:1017–1057`; dashboard catalog reads CWD `Libro1.xlsx:765`. | §§4.2, 7.2: datasheet/manual/CEC input workflow. | Boundary contracts plus catalog adapter; workbook and edition missing. |
-| Annual module estimates | Dashboard `electric_parameters:1148–1458` → helper `PE:1376–1519`, `PE_NOCT:1524–2011`, `PE_t:2013–2178`, `PE_t_S:2180–2318` and companions. Weather/module → named electrical time series. | §§4.8, 6.3: simplified annual branch; explicitly unvalidated experimentally. | Application/physics; branch-specific capture and scientific review pending. |
-| Active detailed I–V curves | Helper `IV_R:4268–4369`, `IV_CI:5607–5769`, `IV_sim:5771–5817`, `IV_CI_cor:5819…`; CEC/SAM fit → De Soto → Lambert W; 100, `len(df)`, or 250 points, depending on function. | §§4.3–4.5 report nonlinear reference extraction with Powell-Hybrid and Lambert W, rather than proving these exact CEC-fit calls. | IV_R numerical boundary captured/compared in model.py; other branches pending. Reproduction and assumptions IV-01–03 define the limits. |
-| Alternate detailed I–V | [CurvaIV.py](../legacy/CurvaIV.py) `IV:14–98`; CEC/SAM fit, six hardcoded conditions, De Soto, Newton, 100-point grid → Plotly figure and printed values. Imported but not called by candidate app. | Differs from detailed pathway and point counts reported in summary. | Separate baseline only if explicitly selected; not authoritative by filename. |
-| Measurements / correction | Dashboard `IV_Corrct:3791–3943`; helper upload `955–980`, `IV_CI_cor:5819…`, `correction_IV:7304–7534`, `correction_IV_s:7609…`; workbook curves/Info sheet → corrected curves and comparisons. | §§4.9, 5–6: narrow I–V/correction campaign. | Measurement ingestion/evaluation boundary; originals separate from normalized/corrected data; fixtures missing. |
-| Representative curve | Dashboard calls helper `Bootstrap`/`Bootstrap2:4087–4105`; helper `8358…`, `8565…` uses random resampling → representative curve/statistics. | §4.10: statistical synthesis. | Evaluation use case; seed/state, ordering and point handling must be captured. |
+The summary describes 30 outdoor I–V curves from one previously used Solartec
+250 W, 60-cell polycrystalline specimen. The collaborator reports inspecting a
+30-curve workbook, IDs with gaps and varying irradiance/sensor temperatures.
+Those original records are not supplied here. The accounts differ in duration
+and the description of environmental homogeneity; neither can currently be
+replayed or independently confirmed from original measurements. #to-review
 
-Line references refer to the preserved local source revision and inventory, not
-to a moving remote branch. Current reproduction is limited to the captured IV_R
-and Faiman/NOCT numerical boundaries, with partial equation checks, as recorded in
-[reproduction](reproduction.md). No complete scientific or empirical validation is
-claimed. The table above retains the source-level map; current owners/statuses
-are maintained in [coverage](legacy_backend_coverage.md).
+The reported campaign concerns module I–V simulation/correction, not annual yield,
+full PV systems or finance. Reported percentage errors, confidence labels and
+manufacturer tolerances are not software-reproduction limits or general product
+accuracy guarantees. Source-algorithm differences—including bootstrap sample rules
+and effective correction temperature—must be resolved before attributing current
+outputs to what the report evaluated. See EV-01 in [assumptions](assumptions.md).
+#to-review
 
-## Reported experimental envelope
+## Availability and unresolved evidence
 
-The summary (§§1, 5–6) reports 30 outdoor I–V curves from one previously used
-Solartec 250 W, 60-cell polycrystalline specimen, collected over roughly twelve
-minutes under homogeneous conditions. It describes module-level simulation,
-STC correction and comparison, not a validation of annual energy yield. Its
-reported errors and manufacturer tolerance describe that campaign; they are
-neither software-parity tolerances nor general product accuracy guarantees.
+Available: frozen source, the curated author investigation, the supplied secondary
+summary, selected manual/synthetic-input original-source captures, and primary
+references for specific formulations. Windows/Linux x86-64 same-platform I–V
+comparisons exist; cross-platform numerical invariance and other environments are
+not established. Current implementation/capture scope belongs in [coverage](legacy_backend_coverage.md).
+#to-review
 
-The annual/weather/thermal chain was not experimentally validated by that report.
-The evidence does not establish array mismatch, partial shading, bypass diodes,
-bifacial behavior, inverters, wiring, batteries, degradation models, AC yield,
-financial models, jurisdictional tariffs, or regulatory compliance. None is
-implemented by this scaffold. Original measurements and original thesis are
-unavailable, so the campaign itself cannot currently be independently replayed.
+Not supplied: original thesis/report and measurement workbook, measurement
+permissions/uncertainty and module linkage, original catalogue workbook with
+edition/license, recorded weather response/time metadata, and the historical
+runtime environment. The collaborator's earlier access is valuable reported
+evidence, but does not make those artifacts available in this checkout. Retrieve
+only what the selected next capability requires. #to-review
 
-## Open verification register
-
-These are questions or observed defects, not approved corrections:
-
-| Item | Evidence and required distinction |
-|---|---|
-| Annual irradiance factor | Summary §§4.8, 6.6 reports printed `1000/G`. Alternate `Parametros_Electricos.py:185–186,219–220` divides by `(1000/POA)`; active helper `PE:1508` instead multiplies Vmp by Imp. Identify the selected branch and verify against primary formulations; do not silently replace one with another. |
-| Temperature coefficients / parameter meaning | Summary §6.6 leaves gamma and coefficient units unresolved. Helper `PE:1386–1387` converts percent coefficients for fitting, then `:1400` passes raw alpha to De Soto; `:1488` reuses stored `nNsVth` in another gamma expression. Require explicit units and derivation. |
-| Updated correction function | Summary §§4.9, 6.6 reports ambiguous repeated logarithmic terms. Helper M2N `:7513–7524` uses a squared term; separate `get_corrected_IV_P2:7537–7607` is another function. Verify exact method/version and source before accepting any form. |
-| Residual equations / notation | Summary §§4.3, 6.6 reports ambiguous signs/parentheses and changing parameter symbols. Re-derive from primary sources; matching a second call into pvlib is not independent scientific validation. |
-| Curve grids | Summary §§4.5, 6.6 alternates 250/255 points. Actual branches use Newton/100, Lambert W/100, Lambert W/250 or measurement-length grids. Preserve the chosen grid and all records; do not normalize away differences. |
-| Discarded manual input | Observed helper `Placa_Prueba:982–1015` replaces every argument with hardcoded 250 W/polySi/60-cell/25 °C data. Dashboard uses it for preset and INSERT paths (`:1155–1276`). Reproducing this defect would not validate user-specified simulation. |
-| Fitting versus evaluation | M2N `:7397–7511` derives coefficients and k against simulated pvlib curves. `find_k_sweep:7177–7208` clamps k; this is not held-out experimental evidence or independent verification. Preserve the unfitted baseline and report fitting provenance. |
-| Time and numerical behavior | Weather helper `:35–38` uses today's UTC offset; solar-position code uses `Day` in seasonal formulas. Review field semantics, DST, timestamps, low irradiance, NaNs, convergence and material assumptions. Many fit calls force monoSi. |
-| Statistical reproducibility | Bootstrap `:8366–8388` truncates to minimum curve length and uses unseeded NumPy choice (3,000 samples × 12). Record exact source ordering, lengths, random state and outputs before any controlled alternative. |
-
-## Missing evidence and next retrieval
-
-Missing: original report/PDF, historical dependency environment, `Libro1.xlsx`
-and its license/edition, weather response snapshots/metadata, original uploaded
-measurement workbook and measurement permissions. Controlled IV_R/Faiman/NOCT
-raw outputs and provisional domain-specific software tolerances now exist;
-cross-platform behavior and all other capability references remain open.
-`Modules_Data_Base.py` is empty; no
-`retrieve_sam` call occurs in the traced active path. A future catalog adapter
-must explicitly select bundled or file/URL data and version each snapshot; a
-refresh cannot replace a saved run's data.
-
-Retrieve only the material needed for the selected next branch. Summary §6.6
-routes unresolved formulations; its final source map names De Soto (2006),
-Jain & Kapoor (2004), IEC 60891 and Zhang et al. (2024) as follow-up references.
-Those references were not independently verified by this static trace.
+The retained platform-comparison report is a limited developer diagnostic. Its
+selected MPP stationarity target is not a collaborator-approved accuracy standard
+or a universal scientific acceptance gate. Keep its unmet observation visible;
+use it only for that numerical investigation, not as a normal modeling input or
+production prerequisite. #to-review

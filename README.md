@@ -45,9 +45,7 @@ set server-only `SUNERGY_API_URL` before starting Next.js, or use
 If a restricted Windows environment has an unwritable uv cache, set
 `UV_CACHE_DIR` to a writable path, e.g. PowerShell
 `$env:UV_CACHE_DIR = Join-Path $PWD '.cache/uv'`; Unix
-`export UV_CACHE_DIR="$PWD/.cache/uv"`. A normal Node installation provides npm;
-the bundled Codex runtime on the implementation host lacked it, so verification
-used a temporary npm CLI without changing system installations.
+`export UV_CACHE_DIR="$PWD/.cache/uv"`. A normal Node installation provides npm.
 
 ## Checks and API synchronization
 
@@ -101,13 +99,14 @@ frontend/                   Next.js / TypeScript presentation and health control
 contracts/openapi.json      generated FastAPI schema
 config/                     small typed path/source registries
 scripts/                    offline export and repository-integrity checks
+docs/README.md              evidence catalogue and selective reading routes
 docs/architecture.md        ownership, data flow and deferred extension boundaries
-docs/evidence.md             runtime trace, scientific limits and open questions
+docs/evidence.md             source authority, availability and scientific limits
 docs/reproduction.md         independent capture requirements and separate gates
 docs/legacy_backend_coverage.md curated evidence → owners → reproduction backlog
 docs/assumptions.md          populated operation records and scientific audit
-docs/flowcharts.md           implemented and conditional transformation lineage
-docs/legacy-refactorizacion/ preserved collaborator investigation, primary locator
+docs/flowcharts.md           implemented and observed-legacy transformation lineage
+docs/legacy-refactorizacion/ original-author investigation, locally audited and tagged
 docs/evidence/              unchanged supplied summary, attribution and hashes
 tests/fixtures/legacy/      controlled original-source IV_R and thermal references
 config/legacy-capture/      separate hash-locked original-source capture environment
@@ -138,14 +137,14 @@ and weather snapshots are unavailable. Controlled numerical reference outputs no
 exist for IV_R and Faiman/NOCT only. The summary's narrow
 module I–V/correction campaign does not validate annual yield or a full PV system.
 
-Start at [AGENTS.md](AGENTS.md), then [coverage](docs/legacy_backend_coverage.md)
-for a capability, [assumptions](docs/assumptions.md) for a modeling decision,
-[flowcharts](docs/flowcharts.md) for ownership/lineage, and
-[reproduction](docs/reproduction.md) for exact replay and capture commands.
-The curated investigation remains supporting evidence; executable captures
-establish selected behavior, while primary formulations and observations answer
-different questions. [Architecture](docs/architecture.md) records the adapted
-CANOE practices and the single owner for each configuration/data concern.
+Start at [AGENTS.md](AGENTS.md) and the [evidence catalogue](docs/README.md).
+For legacy functionality, follow the relevant original-author chapter and its
+audited coverage entry. [Assumptions](docs/assumptions.md) owns modeling meanings;
+[flowcharts](docs/flowcharts.md) traces transformations;
+[architecture](docs/architecture.md) owns component and configuration boundaries.
+[Reproduction](docs/reproduction.md) defines preservation and comparison criteria.
+Executable captures establish selected behavior; primary formulations and original
+observations answer separate scientific and empirical questions.
 
 The first reproduction milestone passed for two modules/six I–V conditions/600
 curve points per captured platform (Windows/Linux x86-64), and four thermal
@@ -163,5 +162,45 @@ Plotly. Tests/replay need no credentials or external services after installation
 Loopback process smoke and frontend build commands are listed above; deployment
 packaging/startup verification is recorded in the task plan, with production
 hosting, TLS/secrets operation and other platform/build environments still pending.
-Scientific verification remains incomplete: the original Linux alternate-STC
-MPP stationarity audit target is unmet and preserved explicitly in the report.
+Scientific verification and empirical evaluation remain incomplete and separate
+from software replay. Their scope and unresolved questions are recorded in the
+evidence catalogue's owning documents.
+
+## Legacy reference replay
+
+After installing the locked application dependencies, compare modern outputs to
+the fixed, independently captured references without network access:
+
+```text
+uv run --locked --offline python scripts/replay_backend.py
+uv run --locked --offline pytest backend/tests/test_model.py backend/tests/test_thermal.py
+uv run --locked --offline python scripts/check_repository.py
+```
+
+Replay selects I–V references by captured OS/architecture, verifies source,
+environment and artifact identity, and reports case/point comparisons. Thermal
+tests compare every captured temperature. These commands do not regenerate the
+expected outputs. Their supported scope and comparison rules are in
+[reproduction](docs/reproduction.md); missing capabilities are in
+[coverage](docs/legacy_backend_coverage.md).
+
+Fresh original-source capture is a separate operation. Inspect the selected
+legacy body's side effects and wrapper first. Create the hash-locked capture
+environment once (Windows commands below; on Unix use `bin/python` in place of
+`Scripts/python.exe`):
+
+```text
+uv venv .local/legacy-iv-env --python 3.12
+uv pip sync --python .local/legacy-iv-env/Scripts/python.exe config/legacy-capture/requirements.txt --require-hashes
+.local/legacy-iv-env/Scripts/python.exe scripts/capture_legacy_iv.py --inputs tests/fixtures/legacy/iv_r/captured/inputs.json --output .local/runs/iv-r-replay
+.local/legacy-iv-env/Scripts/python.exe scripts/capture_legacy_iv.py --inputs tests/fixtures/legacy/iv_r/captured_alternate/inputs.json --output .local/runs/iv-r-alternate-replay
+.local/legacy-iv-env/Scripts/python.exe scripts/capture_legacy_thermal.py --inputs tests/fixtures/legacy/thermal/captured/inputs.json --output .local/runs/thermal-replay
+```
+
+Use a new output directory for each execution; runners refuse replacement. Initial
+installation needs network; sync can add `--offline` after dependencies are cached.
+Wrappers execute selected unchanged AST bodies in isolated subprocesses with
+Python networking blocked. Review the resulting manifests and raw-output hashes
+against the same-platform references; timestamps and output paths vary. Never
+replace a fixed oracle merely because a modern comparison fails. These limited
+kernel captures do not recover the historical runtime or original measurements.

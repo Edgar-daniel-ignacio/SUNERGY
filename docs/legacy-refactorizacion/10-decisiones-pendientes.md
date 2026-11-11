@@ -1,3 +1,13 @@
+---
+title: Decisiones pendientes del modelo y los contratos
+role: Opciones propuestas por el autor para discrepancias y cambios de comportamiento.
+retrieve_when: Se pretende corregir o seleccionar una ecuación, unidad, rejilla, lectura o control estadístico.
+read_scope: La decisión D pertinente, su función citada y el registro de supuestos vigente.
+authority: Propuestas abiertas; ninguna recomendación equivale a un valor científico o contrato aprobado.
+verify: Conservar la referencia observada y revisar formulación, unidades, fuentes y consecuencias del cambio.
+review_status: '#to-review'
+---
+
 # 10 — Decisiones pendientes
 
 > **Esto no lo puede decidir el refactor.** Son cuestiones donde el código hace algo, el informe dice
@@ -10,22 +20,26 @@
 
 ## `D-01` · El factor de irradiancia anual: `1000/G` o `G/1000`
 
-**Qué pasa hoy.** En `PE` (`módulo:1508`) la `Pmax` se obtiene multiplicando `Vmp × Imp`. En el módulo
-muerto `Parametros_Electricos` (`185-186`, `219-220`) se divide por `(1000/POA)`. El informe describe la
-formulación con `× (G/1000)`.
+**Qué pasa hoy.** `PE` (`1508`) calcula `Pmax=Vmp*Imp`. La función alternativa
+de `Parametros_Electricos` (`185-186`, `219-220`) divide otra fórmula por
+`1000/POA`. La síntesis suministrada reporta un factor impreso `1000/G`; el
+informe original y la cadena completa requieren contraste. #to-review
 
 | Opción | Consecuencia |
 |---|---|
-| **A** — multiplicar por `G/1000` (comportamiento del código vivo) | coherente con las otras magnitudes (`Isc`, `Voc`, `Imax`, `Vmax`) |
-| **B** — dividir por `1000/G` (versión anterior) | es algebraicamente lo mismo **solo si** el término va en el numerador; si está en el denominador invierte el sentido |
+| **A** — multiplicar por `G/1000` | es igual a dividir por `1000/G`, para G distinto de cero. No identifica por sí solo la fórmula completa. #to-review |
+| **B** — dividir por `1000/G` | no invierte el factor respecto a A; el término que se multiplica también debe compararse. #to-review |
 
-**Por qué importa:** es una diferencia de hasta el 20 % en `Pmax` a 800 W/m². No es redondeo.
+**Por qué importa:** `PE` ya incluye `G/1000` en `Imax` y calcula `Vmax*Imax`;
+la función alternativa traslada directamente la potencia de ficha. No se ha
+establecido una diferencia máxima del 20% ni la equivalencia de ambas fórmulas.
+Hay que comparar la cadena completa, sin añadir otro factor a `PE`. #to-review
 **Recomendación:** fijar la formulación primaria (De Soto 2006 o el texto de referencia del informe) y
 comprobar tres puntos a mano antes de tocar el código.
 
 ---
 
-## `D-02` · `alpha` y `beta` en porcentaje o en fracción
+## `D-02` · Significado y unidades de `alpha` y `beta`
 
 **Qué pasa hoy.** Se guardan como porcentaje (`0.04`, `−0.25`). `PE` divide entre 100 para el ajuste
 CEC (`1386-1387`) y **no** divide para De Soto (`1400`). El informe deja las unidades de `gamma`
@@ -33,26 +47,32 @@ abiertas.
 
 | Opción | Consecuencia |
 |---|---|
-| **A** — normalizar a fracción en la frontera (contrato de placa) | un solo sitio donde se divide; imposible equivocarse después |
-| **B** — dejarlo como está y documentar cada consumidor | el próximo que añada una fórmula repetirá el error |
+| **A** — definir unidades explícitas en el contrato del modelo corregido | no basta dividir entre 100: el ajuste CEC requiere alpha en A/°C y beta en V/°C; De Soto consume alpha absoluto. #to-review |
+| **B** — preservar valores y conversiones actuales en compatibilidad | permite medir el comportamiento observado; mantiene la inconsistencia documentada. #to-review |
 
-**Recomendación:** A. Es el cambio más barato del refactor y elimina una clase entera de bugs.
+**Propuesta del autor:** normalizar la interpretación para un modelo corregido.
+Debe conservarse el registro fuente y asignarse un único propietario de cada
+conversión. No se aplica silenciosamente a una referencia de compatibilidad. #to-review
 
 ---
 
 ## `D-03` · La forma del método 2 normalizado
 
-**Qué pasa hoy.** `correction_IV_s` (`7609-7800`) usa un término **al cuadrado** (`7513-7524`), y existe
-`get_corrected_IV_P2` (`7537-7607`) con otra forma, sin llamadores. El informe reconoce términos
-logarítmicos ambiguos.
+**Qué pasa hoy.** El término al cuadrado de `7513-7524` pertenece a
+`correction_IV`, no a `correction_IV_s`. Ambas funciones admiten M2 y M2N y
+usan el término cuadrático, pero ajustan parámetros de forma distinta para
+curvas medidas y simuladas. Existe `get_corrected_IV_P2` (`7537-7607`) sin
+llamadas directas en el panel/módulo inspeccionados. El informe reconoce
+ambigüedad logarítmica; ver el [mapa de métodos y orígenes](08-tesis-a-codigo.md). #to-review
 
 | Opción | Consecuencia |
 |---|---|
-| **A** — adoptar IEC 60891 tal cual | la corrección deja de ser «la del informe» y hay que re-validar contra las 30 curvas |
-| **B** — conservar la forma implementada y documentarla como variante | paridad con la tesis, pero se aleja de la norma |
+| **A** — implementar una formulación contrastada de IEC 60891 | requiere identificar edición, ecuaciones y condiciones, y evaluar sus diferencias con cada variante actual. #to-review |
+| **B** — conservar cada forma implementada como variante | puede establecer paridad con el código seleccionado; no demuestra por sí sola paridad con la tesis ni distancia de una norma no contrastada. #to-review |
 
-**Recomendación:** B para la primera versión (paridad con lo defendido), con la norma citada al lado y
-una nota de discrepancia.
+**Propuesta del autor:** conservar primero las variantes. Identificar edición y
+ecuaciones de la norma antes de afirmar conformidad o desviación; preservar
+capturas separadas de M2/M2N y de los ajustes medidos/simulados. #to-review
 
 ---
 
@@ -66,7 +86,9 @@ rutas) y `len(df)` (en las de medición).
 | **A** — una sola rejilla (100) para todo | comparaciones homogéneas; puede cambiar valores interpolados |
 | **B** — rejilla por método, declarada en el contrato | conserva el comportamiento actual |
 
-**Recomendación:** A para simulación, `len(df)` para medición (ahí la rejilla la pone el trazador).
+**Propuesta del autor:** A para un modelo posterior. La reproducción conserva la
+rejilla de cada rama; unificarla requiere otro contrato y comparación explícita.
+No se resamplean referencias para obtener un pase. #to-review
 
 ---
 
@@ -79,7 +101,9 @@ rutas) y `len(df)` (en las de medición).
 | **A** — leer por nombre (`IV1…IVn`) y localizar `Info` por nombre | robusto; deja de romperse si el usuario reordena |
 | **B** — mantener posición y documentar el requisito | cero cambios, cero mejoras |
 
-**Recomendación:** A, sin discusión. Es el riesgo silencioso `R-03`.
+**Propuesta del autor:** A, asociada al riesgo `R-03`. La lectura por nombre es
+un cambio respecto a la selección posicional actual y requiere preservar primero
+el libro original y capturar fallos/desalineación por rama. #to-review
 
 ---
 
@@ -89,11 +113,12 @@ rutas) y `len(df)` (en las de medición).
 
 | Opción | Consecuencia |
 |---|---|
-| **A** — fijar semilla y declararla en el resultado | reproducible; la curva representativa deja de variar entre corridas |
-| **B** — dejarlo aleatorio | más «honesto» estadísticamente, imposible de congelar |
+| **A** — fijar semilla y declararla en el resultado | propone un control explícito; debe identificar también generador, versión y orden de llamadas. #to-review |
+| **B** — preservar el RNG global actual | puede capturarse su estado y reponerse para reproducir una corrida controlada; sin estado no se recupera una corrida histórica desconocida. #to-review |
 
-**Recomendación:** A. Sin semilla no hay paridad posible en S7, y sin paridad no hay refactor
-verificable.
+**Propuesta del autor:** A para nuevas corridas controladas. La compatibilidad
+también puede registrar estado RNG sin editar la función; cambiar semilla por
+defecto, generador o reglas de muestreo es un cambio de comportamiento. #to-review
 
 ---
 
@@ -110,8 +135,10 @@ No existe una tolerancia única razonable.
 | Bootstrap | igualdad exacta con semilla fija | si no, no se compara |
 | Tablas de UI | igualdad de estructura, no de flotantes | es presentación |
 
-**Recomendación:** adoptarla y escribirla en el arnés. Una tolerancia global es una invitación a
-esconder diferencias.
+**Estado:** estos números son una propuesta histórica, no tolerancias aprobadas.
+Cada referencia necesita unidades, precisión, entorno, justificación y una prueba
+que detecte diferencias relevantes. Los manifiestos de captura actuales son la
+autoridad de su comparación; esta tabla no debe sustituirlos. #to-review
 
 ---
 
@@ -125,7 +152,9 @@ prueba».
 | **A** — conservarla como módulo de prueba **legítimo**, con sus valores fijos declarados | el modo sigue existiendo y deja de mentir |
 | **B** — eliminarla y usar el modo manual con valores por defecto | menos código, cambia la pantalla inicial |
 
-**Recomendación:** A, pero renombrada (`placa_de_prueba()`) y con los valores en una constante visible.
+**Propuesta del autor:** A, con un nombre y valores explícitos. Hacer que el modo
+manual respete argumentos antes descartados sigue siendo un cambio de conducta,
+no una simple limpieza de nombre. #to-review
 
 ---
 
@@ -142,5 +171,7 @@ prueba».
 | `D-07` | tolerancias de paridad | todas |
 | `D-08` | placa de prueba | S0, S4 |
 
-Sin `D-01`, `D-02` y `D-06` cerradas, el refactor no puede empezar S4 ni S7: se estaría reescribiendo
-sin saber qué debe reproducir.
+Estas decisiones bloquean las correcciones que dependan de ellas, no toda la
+captura o refactorización estructural. Puede reproducirse el comportamiento
+observado, incluidas sus inconsistencias y un estado RNG controlado, sin aprobar
+todavía una formulación corregida. #to-review

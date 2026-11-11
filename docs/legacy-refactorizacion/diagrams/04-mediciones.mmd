@@ -5,14 +5,25 @@ sequenceDiagram
     participant X as IV_CI_cor
     participant B as Bootstrap
     U->>P: sube libro de mediciones
-    P->>P: guardar_archivo a Uploaded_.xlsx
+    %% #to-review: reescritura de hojas, no preservación del archivo original.
+    P->>P: guardar_archivo reescribe Uploaded_.xlsx
     U->>P: elige metodo CI y correction
     P->>C: dispara callback
     C->>X: corrige curvas a STC
-    X->>X: lee Info (4 de 12 columnas)
-    X->>X: correction_IV M2 / M2N
+    %% #to-review: alcance de la extracción inicial del lector, no todo consumidor del libro.
+    X->>X: extrae Voc, Irrad1, Temp1, Temp2 de Info
+    %% #to-review: media de sensores para De Soto y tablas; Tmod efectivo se sobrescribe desde Voc (5957, 5985-5989).
+    X->>X: media Temp1/Temp2 para traslacion inicial y tablas
+    X->>X: deriva y sobrescribe Tmod desde Voc
+    %% #to-review: nombres de métodos en código; conformidad científica pendiente, no acreditada por el diagrama.
+    X->>X: correction_IV con Tmod derivado (M2 / M2N)
+    %% #to-review: IV_sim recibe el mismo Tmod derivado; ver capítulo08 y EV-01.
+    X->>X: IV_sim con Tmod derivado
+    %% #to-review: correction_IV_s recibe la curva simulada; conserva despacho M2/M2N propio.
+    X->>X: correction_IV_s con Tmod derivado (M2 / M2N)
     X-->>C: tablas corregidas
     C-->>P: escribe Tablarm, Tablars, Tabla_Info
     U->>P: pide curva representativa
-    P->>B: 3000 muestras, sin semilla
-    B-->>P: curva e intervalo al 95 por ciento
+    %% #to-review: fuente inspeccionada sin semilla local; el intervalo es nominal, no validación empírica.
+    P->>B: 3000 muestras, sin semilla local
+    B-->>P: curva e intervalo nominal al 95 por ciento
