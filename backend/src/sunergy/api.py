@@ -4,16 +4,18 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
 from sunergy import __version__
-from sunergy.application import capabilities, health, request_module_iv
+from sunergy.application import capabilities, health, reproduce_legacy_iv, request_module_iv
+from sunergy.compatibility import CalculationFailure, LegacyIVRequest, LegacyIVResponse
 from sunergy.contracts import (
     CapabilityResponse,
     HealthResponse,
     ModuleIVRequest,
     UnavailableResponse,
 )
+from sunergy.model import LegacyCalculationError
 from sunergy.physics import SimulationUnavailable
 
-app = FastAPI(title="SUNERGY scaffold", version=__version__)
+app = FastAPI(title="SUNERGY backend", version=__version__)
 
 
 @app.get("/health", response_model=HealthResponse, operation_id="getHealth")
@@ -39,3 +41,16 @@ def post_module_iv(request: ModuleIVRequest) -> JSONResponse:
     except SimulationUnavailable:
         pass
     return JSONResponse(status_code=501, content=UnavailableResponse().model_dump())
+
+
+@app.post(
+    "/api/v1/compatibility/iv-r",
+    response_model=LegacyIVResponse,
+    responses={400: {"model": CalculationFailure}},
+    operation_id="reproduceLegacyIV",
+)
+def post_legacy_iv(request: LegacyIVRequest) -> LegacyIVResponse | JSONResponse:
+    try:
+        return reproduce_legacy_iv(request)
+    except LegacyCalculationError:
+        return JSONResponse(status_code=400, content=CalculationFailure().model_dump())

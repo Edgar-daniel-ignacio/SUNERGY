@@ -1,0 +1,19 @@
+flowchart TD
+    A["5 dimensiones del problema"] --> B["Modelos termicos: 7 combinaciones"]
+    A --> C["Metodo de curva: PE, VE, CI"]
+    A --> D["Origen de placa: SELEC, INSERT, CEC"]
+    A --> E["Modulos: 1 o 2"]
+    A --> F["Correccion: si o no"]
+    %% conteos solo de electric_parameters@4182, no todo el panel.
+    B --> G["electric_parameters@4182<br/>84 if Metodo y 28 if Seleccion"]
+    C --> G
+    D --> G
+    E --> G
+    %% son ramas de retorno, todas de 13 salidas; el número no acredita casos ejecutados.
+    G --> H["113 return de 13 salidas"]
+    H --> I["Capturas y bloqueos por ruta<br/>ver cobertura canónica"]
+    %% propuesta original, no decisión vigente ni cobertura demostrada.
+    J["Diseno propuesto por el autor"] --> K["Una tabla por dimension"]
+    K --> L["Un motor que las recorre"]
+    %% #to-review: la parametrización requiere probar cada ruta; no implica cobertura completa.
+    L --> M["Objetivo pendiente de pruebas por ruta"]

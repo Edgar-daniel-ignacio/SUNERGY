@@ -1,0 +1,3 @@
+interface:
+  display_name: "Code Refactoring"
+  short_description: "Orchestrate refactoring across the development lifecycle"

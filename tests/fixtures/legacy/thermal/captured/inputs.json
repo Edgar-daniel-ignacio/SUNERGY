@@ -1,0 +1,17 @@
+{
+  "provenance": "Deliberately selected redistributable synthetic point conditions, not weather observations or empirical validation. Baseline parameters transcribed from legacy Feinman_options (25,6.84) and NOCT_In (43); alternate parameters exercise explicit caller inputs.",
+  "row_columns": ["record_id", "Poa_global", "temp_air", "wind_speed"],
+  "rows": [
+    ["dark-calm", 0.0, 15.0, 0.0],
+    ["low-cold", 200.0, -5.0, 0.5],
+    ["nominal", 800.0, 20.0, 1.0],
+    ["bright-hot", 1000.0, 35.0, 2.0],
+    ["windy", 650.0, 27.0, 7.5]
+  ],
+  "cases": [
+    {"case_id": "faiman-ui-parameters", "function": "Temperature_feinman", "arguments": [25.0, 6.84], "output_column": "TFeinman", "profile_id": "legacy-faiman-v1"},
+    {"case_id": "faiman-alternate-parameters", "function": "Temperature_feinman", "arguments": [29.432, 4.468], "output_column": "TFeinman", "profile_id": "legacy-faiman-v1"},
+    {"case_id": "noct-ui-parameter", "function": "Temperature_NOCT", "arguments": [43.0], "output_column": "NOCT", "profile_id": "legacy-noct-v1"},
+    {"case_id": "noct-alternate-parameter", "function": "Temperature_NOCT", "arguments": [47.0], "output_column": "NOCT", "profile_id": "legacy-noct-v1"}
+  ]
+}

@@ -3,3 +3,8 @@ legacy/** text eol=crlf
 
 # User-supplied evidence is byte-preserved regardless of host Git defaults.
 docs/evidence/pv_physics_engine_evidence_summary_for_agent_research_equations_fixed.md -text
+
+# Capture artifacts and their hashed wrappers/lock retain exact recorded bytes.
+tests/fixtures/legacy/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+config/legacy-capture/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/capture_legacy_*.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

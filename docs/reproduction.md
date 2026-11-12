@@ -1,117 +1,103 @@
+---
+title: Legacy reproduction contract
+role: Independent-reference requirements and compatibility comparison boundaries
+retrieve_when: Capturing, porting or comparing a named legacy capability
+read_scope: Relevant profile, environment, preservation boundary and comparison policy
+authority: Software reproduction contract; separate from scientific or empirical acceptance
+verify: Check manifests and actual assertions for every claimed branch and record
+---
+
 # Legacy reproduction contract
 
-Current status: **reference capture missing; parity has not been tested**.
-The scaffold supplies contracts/comparison plumbing, not migrated PV calculations
-or golden outputs. See [evidence map](evidence.md) for the actual calculation
-paths and suspected defects.
+Reproduction compares a named original implementation with a modern implementation
+under equivalent effective inputs. The [coverage map](legacy_backend_coverage.md)
+owns current capability status. A representative point calculation does not close
+the full backend gate, and a reproduced defect is not an accepted scientific
+choice.
 
-## Distinct gates
+## Separate acceptance questions
 
-| Gate | Question | Required evidence |
+| Assessment | Required evidence |
+|---|---|
+| Boundary validity | Explicit fields, units, domains, identity, missing-value and cross-field checks. Parsing success alone is not numerical validity. |
+| Reproduction | Independent original-source outputs, exact boundary/environment identity, complete structure/record checks and justified per-quantity comparison. |
+| Scientific verification | Applicable primary formulations, unit/parameter coherence and independent numerical/physical checks. |
+| Empirical comparison | Original observations, conditions, uncertainty, exclusions and normalization lineage. |
+| Calibration | Uncalibrated baseline, fitted identities/values, objective/bounds/method and separate fitting versus held-out evaluation evidence. |
+
+## Independent reference contract
+
+`CaptureManifest` in `regression.py` owns the executable metadata contract.
+Capture independently from unchanged legacy code, not from the replacement being
+judged. Inspect import dependencies and called-function side effects first; full
+UI imports and file-mutating helper calls are different risks. Isolated runners
+must make any extraction, interception or compatibility intervention inspectable
+without changing the numerical body.
+
+Each capture identifies source revision/files/hashes, exact entrypoint/branch,
+wrapper, dependency environment, supplied and effective inputs, raw outputs and
+hashes. Record source snapshots/permissions where applicable, units/conversions,
+model/fit/solver/settings, grids/endpoints/order, time conventions, missing/nonfinite
+behavior, and RNG algorithm/state/draw order for stochastic paths. Unknown
+historical metadata remains a limitation, not a license to infer it.
+
+Preserve original upload bytes and source identity separately from normalized or
+fitted data. Capture-time review metadata is historical; do not edit frozen
+manifests to report later progress. Current coverage assessment belongs in the
+maintained map. New captures use new isolated destinations and deliberately
+selected redistributable inputs.
+
+## Existing reference boundaries
+
+| Profile | What is compared | Scope and intentional boundary differences |
 |---|---|---|
-| Input/schema validation | Are boundary inputs structurally valid, typed and explicit? | Pydantic and boundary tests; no physical-accuracy claim. |
-| Reproduction | Does the modern implementation reproduce one named legacy branch under equivalent inputs/assumptions? | Independently captured legacy artifacts, manifest, exact structure checks and reviewed quantity-specific tolerances. |
-| Scientific verification | Are equations, units, physical assumptions and numerical behavior defensible? | Primary formulations, independent references/implementations where appropriate, limiting cases and meaningful physical tests. |
-| Measurement comparison | How do predictions compare with empirical observations? | Original measurement provenance, normalization history, conditions, uncertainty and comparison method. |
-| Calibration | Which explicit parameter changes are justified by fitting evidence? | Preserved uncalibrated run, fitted identities/values, objective/bounds, measurement links and held-out evaluation status. Good fit alone is not independent validation. |
+| `legacy-iv-r-v1` | Two modules, six ordered conditions and 600 voltage/current points per captured Windows/Linux x86-64 environment; fit arguments/six parameters, De Soto arguments/five parameters, seven solver metrics and exact rounded table. | Original IV_R numerical return boundary. Modern explicit input/output validation replaces implicit dataframe errors; positive irradiance is required. Plot styling and the discarded reverse-grid computation are captured evidence, not modern returned features. No upstream condition-generation or other-curve claim. |
+| `legacy-faiman-v1`, `legacy-noct-v1` | Four explicit parameter cases across five ordered synthetic points; all temperatures/identities and output-column meanings. | Immutable point results replace legacy frame mutation/None returns. Coefficients are explicit; supported domain is narrower and documented in TH-02. No annual/weather integration or empirical thermal claim. |
 
-A reproduced bug remains a bug. Keep a compatibility model/version separate from
-any reviewed corrected model and test both explicitly. Neither missing evidence
-nor exact numerical agreement authorizes a scientifically validated default.
+The [capture registry](../tests/fixtures/legacy/capture_status.json) links immutable
+manifests. Each pins source/wrapper/environment/input/output evidence. Existing
+capture environments are reconstructed, not the unknown historical runtime.
+Synthetic/manual inputs can characterize software; they are not original weather
+or measurements.
 
-## Capture and artifact locations
-
-- [`tests/fixtures/legacy/`](../tests/fixtures/legacy/) is reserved for deliberately
-  selected, small, redistributable legacy captures. There are no golden results.
-- [`capture_status.json`](../tests/fixtures/legacy/capture_status.json) records the
-  missing-capture state; a status declaration is not a fixture or a passing gate.
-- [`backend/src/sunergy/regression.py`](../backend/src/sunergy/regression.py) owns
-  the executable capture-manifest and numerical-comparison contract. Its tests
-  exercise plumbing using explicitly synthetic values only.
-- [`legacy_inventory.json`](evidence/legacy_inventory.json) records source-file
-  preservation hashes; it is not a numerical baseline.
-- [Unchanged supplied summary](evidence/pv_physics_engine_evidence_summary_for_agent_research_equations_fixed.md)
-  and [copy provenance](evidence/provenance.json) are attributed source evidence,
-  not golden outputs. Private uploads, caches and generated results use separate
-  ignored locations documented in [architecture](architecture.md).
-
-## Minimum independent capture record
-
-The next capture must record these items, extending the manifest deliberately
-where a selected branch requires more detail:
-
-1. Source revision, exact entrypoint/function/branch and hashes of inspected
-   source files, plus any controlled capture wrapper and invocation. Record dirty
-   source changes explicitly rather than substituting a remote revision.
-2. Python, platform/architecture, pvlib, PySAM/SSC, NumPy, SciPy and pandas versions
-   and a reproducible dependency environment. CEC `fit_cec_sam` requires PySAM;
-   full-system PySAM integration being deferred does not remove that requirement.
-3. Exact supplied and effective inputs, with keys/order/identifiers: manual module
-   specifications or catalog record, coordinates where relevant, orientation,
-   weather/temperature states, thermal parameters and model/material choices.
-4. Catalog/weather/measurement snapshot identity, origin, license/permission,
-   retrieval date, raw bytes and content hashes, relevant metadata, normalization
-   transforms and normalized-artifact hashes. Manual specifications remain a
-   supported alternative to a catalog. A refresh creates a new snapshot.
-5. Units and every coefficient conversion; irradiance/reference conventions,
-   temperature basis, timezone/UTC offset/DST, timestamp alignment, interval and
-   leap-day policy. Keep original measurements separate from derived values.
-6. Model identity, fit inputs/outputs, solver method/settings/tolerances, numerical
-   constants, convergence/failure handling and the exact voltage/current grid,
-   point count, endpoints, ordering and output schema. Preserve NaNs/infinities
-   and missing-record behavior as evidence; review how comparisons handle them.
-7. Seeds and RNG implementation/state for stochastic paths, input ordering and
-   sample dimensions. If absent historically, mark the limitation rather than
-   claiming deterministic reproduction.
-8. Unrounded raw output artifacts and hashes, quantity/unit definitions, capture
-   provenance/review status, comparator settings and an honest evidence-gap list.
-
-Capture outputs independently from the legacy implementation before the modern
-calculation is written. Never generate golden values from the modern code being
-tested. No capture runner or legacy execution is included in this task.
-
-## Safe capture procedure for the next task
-
-Inspect side effects first. Legacy dashboard imports construct Dash/layout,
-configure cufflinks/notebook output and suppress warnings; weather imports load
-`.env`. Callbacks can request live weather. Helpers delete CWD `g_*.csv`,
-`PE_*.csv`, `PE2_*.csv` and overwrite `Uploaded_.xlsx` (see evidence map).
-
-Use a separate legacy environment and isolated process/working directory with
-controlled inputs, explicit temporary output paths and blocked live acquisition
-during replay. Preserve the source and original upload bytes. Do not import the
-legacy UI into the new backend or silently patch its dependencies/calculations.
-Any necessary wrapper/interception must be inspectable and recorded, and must
-not alter numerical behavior. Keep credentials out of captures, logs and fixtures.
+IV_R reference selection is deterministic by captured OS/architecture. It does not
+choose whichever numbers pass. All four platform references are integrity checked;
+unsupported environments fail explicitly. Original Windows/Linux differences are
+retained, while same-platform comparisons use the unchanged quantity limits.
 
 ## Comparison policy
 
-Identifiers, branch/model identity, units, column names, timestamps, shapes,
-ordering and grid coordinates agree exactly unless the contract explicitly
-defines a numerical grid comparison. Every expected record must be accounted
-for. Numeric quantities use documented per-quantity absolute/relative tolerances,
-chosen from precision, units and measured platform/library behavior. State the
-formula, typically `abs(actual - expected) <= atol + rtol * abs(expected)`.
-For near-zero values the absolute term must have a defensible scale; unexplained
-NaNs, non-finite values, shape changes or missing records fail comparison.
+Compare branch/model identity, names, units, identifiers, count/order, shapes,
+columns, timestamps and declared grids. Account for every record and failure
+boundary. Numeric comparisons use each manifest's quantity-specific tolerance and
+rationale, normally `abs(actual-reference) <= atol + rtol*abs(reference)`.
+Near-zero floors need a scale in the stated units.
 
-There is no accepted universal tolerance yet. The thesis campaign's percent
-errors and manufacturer tolerance are not software-parity tolerances. Do not
-round, resample, drop records, change assumptions or loosen thresholds to obtain
-a pass. Report discrepant quantities and largest differences with provenance;
-decide explicitly whether the cause is implementation drift, platform behavior,
-source defect or an intentional versioned modeling change.
+Do not round, sort, resample, mask numbers, drop records or weaken thresholds to
+obtain agreement. Original table rounding is preserved behavior, not comparator
+rounding. Unexplained missing/nonfinite values fail. Diagnose source defects,
+implementation drift, platform behavior and intentional versioned corrections
+separately. Manufacturer tolerance and campaign percentage errors do not supply
+software limits.
 
-## First bounded milestone
+Reference-integrity and discrepancy-injection tests establish that the comparison
+can reject changed values/units/records/branches. Equation checks and developer
+precision diagnostics remain separate assessments. In particular, the selected
+MPP audit target and its unmet observation are not an approved scientific
+acceptance contract; IV-04 records that limitation.
 
-Select `Input_File_DIV_Mac_Informe.IV_R` as a candidate for review, independently
-capture its CEC/SAM → De Soto → Lambert W pathway with the original 100-point
-grid and explicit module/condition inputs, then port only that selected behavior.
-Confirm this choice before treating it as the reproduction authority.
+## Operation and completion
 
-`CurvaIV.IV` is a different Newton/100-point path with hardcoded conditions;
-`IV_CI_cor` uses 250 points. The summary reports a Powell-Hybrid extraction
-pathway and inconsistent 250/255 points. Do not merge these into one baseline.
-Record the helper's raw-alpha/material choices and `Placa_Prueba` hardcoding as
-defects, with any future corrected mode versioned separately. Annual and
-correction captures wait for their branch-specific source inputs and review.
+The supported offline replay and isolated original-capture recipes are in root
+[README](../README.md#legacy-reference-replay). `replay.py` and the named tests use
+recorded inputs/manifests; routine regression does not regenerate its own oracle.
+Capture tooling is an explicit evidence-generation operation, not a production
+simulation workflow or a prerequisite to reading documentation.
+
+Full backend reproduction requires each intended capability to have a supported
+input domain, provenance, independent intermediate/final references and successful
+numerical/structural/failure comparisons, or an explicit reviewed scope exclusion.
+No skipped comparison or unexplained discrepancy counts as complete. Follow the
+[ordered remaining work](legacy_backend_coverage.md#ordered-remaining-reproduction-work).
+Scientific, empirical and calibration acceptance remain separate; new frontend
+functionality waits for the full intended backend reproduction gate.

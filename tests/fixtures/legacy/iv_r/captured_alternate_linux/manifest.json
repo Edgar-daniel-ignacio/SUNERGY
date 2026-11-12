@@ -1,0 +1,123 @@
+{
+  "capture_id": "legacy-iv-r-manual-alternate-v1",
+  "captured_at": "2026-11-11T05:27:06.266109+00:00",
+  "source_revision": "e31f3c3305fa4267b221b8bb5df4584dceea6253",
+  "source_files": [
+    {
+      "path": "legacy/Input_File_DIV_Mac_Informe.py",
+      "sha256": "4c4ed36d0f8d1cd4cecfd1794ce0b99803aa8470bb0a7f3c096b992967d6702c",
+      "provenance": "Unchanged preserved helper; hash checked against legacy_inventory.json"
+    }
+  ],
+  "entrypoint": "Input_File_DIV_Mac_Informe.IV_R (lines 4268-4368), selected original function AST",
+  "python_version": "3.12.3",
+  "platform": "Linux-7.0.0-1017-azure-x86_64-with-glibc2.39; x86_64",
+  "dependencies": {
+    "pvlib": "0.13.1",
+    "nrel-pysam": "7.1.0",
+    "numpy": "2.3.4",
+    "pandas": "2.3.3",
+    "scipy": "1.16.3",
+    "plotly": "6.4.0",
+    "h5py": "3.16.0",
+    "certifi": "2026.10.23",
+    "charset-normalizer": "3.5.2",
+    "idna": "3.20",
+    "narwhals": "2.28.0",
+    "packaging": "26.3",
+    "python-dateutil": "4.0.0",
+    "pytz": "2026.6",
+    "requests": "2.34.2",
+    "tzdata": "2026.6",
+    "urllib3": "2.8.0"
+  },
+  "dependency_lock": {
+    "path": "config/legacy-capture/requirements.txt",
+    "sha256": "5267c793958aadcfc70cb8064dc30b12880c3f14c15e5768f925824b8bd9aeab",
+    "provenance": "Pinned reconstructed capture environment; historical environment unavailable"
+  },
+  "inputs": [
+    {
+      "path": "tests/fixtures/legacy/iv_r/captured_alternate_linux/inputs.json",
+      "sha256": "809c07500548a8ff0a5e5b89bb468fd0985a143e6202ed1388360a9065901448",
+      "provenance": "Deliberately selected synthetic 400 W manual module test input, not a manufacturer record or measurement. Supplied cell type CdTe and temp_ref 20 degC demonstrate IV_R forced monoSi/25 degC compatibility behavior. Comparison values are constructed, not observations."
+    }
+  ],
+  "outputs": [
+    {
+      "path": "tests/fixtures/legacy/iv_r/captured_alternate_linux/outputs.json",
+      "sha256": "605c97430e8d6ed32460e46892a5fdf99f9a07144f0f2d2f75a0cacac6b09e5a",
+      "provenance": "Independently executed original IV_R; no SUNERGY runtime imported"
+    }
+  ],
+  "catalog_snapshot": null,
+  "weather_snapshot": null,
+  "measurement_snapshot": null,
+  "units_and_coefficients": {
+    "module": "Vmax60,Voc: V; Imax,Isc: A; Pmax: W; alpha,beta,deltha: percent/degC; cells_in_series: count; temp_ref: degC",
+    "condition": "Geff: effective irradiance W/m2; Tcell: cell temperature degC; Isc,Im: A; Voc,Vm: V; Potencia: W",
+    "fit": "alpha_sc=(alpha/100)*Isc A/degC; beta_voc=(beta/100)*Voc V/degC; gamma_pmp=deltha percent/degC; forced monoSi and 25 degC",
+    "desoto": "alpha_sc is raw module alpha, interpreted by pvlib as A/degC (legacy inconsistency preserved); EgRef=1.121 eV,dEgdT=-0.0002677 1/K; default irrad_ref=1000 W/m2,temp_ref=25 degC",
+    "fit_parameters": "I_L_ref,I_o_ref: A; R_s,R_sh_ref: ohm; a_ref: V; Adjust: percent (unused by IV_R)",
+    "desoto_parameters": "photocurrent,saturation_current: A; resistance_series,resistance_shunt: ohm; nNsVth: V",
+    "curves": "voltage,reverse_voltage: V; current,reverse_current: A; singlediode i_sc,i_mp,i_x,i_xx: A; v_oc,v_mp: V;p_mp: W",
+    "table": "First five error columns are percentage rounded to 2 decimals; Irradiancia W/m2 and T_cell degC rounded to 2 decimals by legacy code"
+  },
+  "time_convention": "No time series or location: explicit ordered steady-state G/T points; no timezone, interval, DST or annual integration",
+  "model_solver_grid": {
+    "model": "legacy-IV_R-v1 CEC/SAM fit -> De Soto -> Lambert W",
+    "grid": "np.linspace(0,v_oc,100), endpoint=True; ordered current calculated at every voltage; no resampling",
+    "unused_reverse_grid": "np.linspace(15.948434,0,100) and v_from_i(method='lambertw'); retained as evidence though not returned by original function",
+    "solver_settings": "pvlib0.13.1 defaults, no additional tolerance supplied; PySAM7.1.0 SSC SixParsolve defaults",
+    "wrapper": {
+      "path": "scripts/capture_legacy_iv.py",
+      "sha256": "02f676f0835e197484c22071c550d92c6d8ad12b02dba172846ba92e2476ef7f",
+      "provenance": "Inspectable AST selection and transparent real-library call recording; no numerical source edit"
+    },
+    "function_source_sha256": "1d601bb3f318dcfb6f3eb63ee82885588a127a3315d07aac546e1a083a892bb1",
+    "isolation": "Fresh subprocess and temporary CWD; no full helper/UI import; socket connect/create_connection blocked; original source immutable",
+    "review_limits": "Representative selected function only; reconstructed dependency environment; manually supplied comparison values are not measurements; no full dashboard, annual, correction or empirical claim"
+  },
+  "random_seed": null,
+  "randomness_notes": "Selected IV_R path has no RNG calls; SSC fitting is deterministic under these pinned dependencies",
+  "capture_method": "scripts/capture_legacy_iv.py --inputs tests/fixtures/legacy/iv_r/captured_alternate_linux/inputs.json --output <new-directory-inside-checkout>",
+  "tolerances": {
+    "current": {
+      "unit": "A",
+      "absolute": 1e-09,
+      "relative": 1e-09,
+      "rationale": "Double-precision same-version deterministic replay; near-zero floor is 1 nA. Independent recapture is exact on capture host; cross-platform limits need CI evidence."
+    },
+    "voltage": {
+      "unit": "V",
+      "absolute": 1e-08,
+      "relative": 1e-09,
+      "rationale": "Double-precision same-version deterministic replay including Lambert W/Newton internal solves; 10 nV near-zero floor. Cross-platform limits need CI evidence."
+    },
+    "power": {
+      "unit": "W",
+      "absolute": 1e-07,
+      "relative": 1e-09,
+      "rationale": "Product of current and voltage, propagating the selected A/V floors at the selected 250/400 W module scales; no accuracy claim."
+    },
+    "saturation_current": {
+      "unit": "A",
+      "absolute": 1e-20,
+      "relative": 1e-09,
+      "rationale": "Dark currents are near 1e-10 A in these captures; a 1e-20 A floor retains sensitivity to relative changes. Same-host replay is exact; cross-platform limits need CI evidence."
+    },
+    "resistance": {
+      "unit": "ohm",
+      "absolute": 1e-09,
+      "relative": 1e-09,
+      "rationale": "Same pinned deterministic fit and algebraic rescaling; 1 nano-ohm floor. Cross-platform limits need CI evidence."
+    },
+    "adjust": {
+      "unit": "percent",
+      "absolute": 1e-09,
+      "relative": 1e-09,
+      "rationale": "Same pinned SSC deterministic fit; 1e-9 percentage-point floor. Adjust is captured despite legacy leaving it unused; cross-platform review pending."
+    }
+  },
+  "review_status": "Independently captured and replayed on the capture host; compatibility thresholds proposed for these cases, cross-platform verification pending; not scientific or empirical validation"
+}

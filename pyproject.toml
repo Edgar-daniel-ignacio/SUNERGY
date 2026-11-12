@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "sunergy"
 version = "0.1.0"
-description = "Evidence-first PV application scaffold; calculations pending reproduction"
+description = "Evidence-first PV backend with versioned legacy compatibility calculations"
 requires-python = ">=3.12,<3.14"
 dependencies = [
   "fastapi>=0.115,<1",
@@ -13,6 +13,12 @@ dependencies = [
   "pyyaml>=6,<7",
   "tzdata>=2025.1",
   "uvicorn>=0.34,<1",
+  # Compatibility dependencies are pinned to the independently captured environment.
+  "pvlib==0.13.1",
+  "NREL-PySAM==7.1.0",
+  "numpy==2.3.4",
+  "pandas==2.3.3",
+  "scipy==1.16.3",
 ]
 
 [dependency-groups]
@@ -59,4 +65,8 @@ select = ["E", "F", "I", "UP", "B"]
 files = ["backend/src", "backend/tests", "scripts"]
 strict = true
 mypy_path = "backend/src"
+
+[[tool.mypy.overrides]]
+module = ["pvlib.*"]
+ignore_missing_imports = true
 

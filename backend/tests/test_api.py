@@ -42,8 +42,9 @@ def test_health_is_liveness_and_capabilities_are_explicit() -> None:
         assert response.json() == {"status": "ok", "service": "sunergy", "version": "0.1.0"}
         assert client.get("/api/v1/capabilities").json() == {
             "module_iv": "not_implemented",
-            "legacy_reproduction": "missing_reference_outputs",
-            "scientific_verification": "not_performed",
+            "legacy_reproduction": "partial_iv_r_and_thermal",
+            "compatibility_models": ["legacy-iv-r-v1", "legacy-faiman-v1", "legacy-noct-v1"],
+            "scientific_verification": "incomplete_mpp_target_unmet",
             "measurement_comparison": "not_implemented",
             "calibration": "not_implemented",
         }

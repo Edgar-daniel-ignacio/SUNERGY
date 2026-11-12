@@ -85,8 +85,11 @@ class HealthResponse(BoundaryModel):
 
 class CapabilityResponse(BoundaryModel):
     module_iv: Literal["not_implemented"] = "not_implemented"
-    legacy_reproduction: Literal["missing_reference_outputs"] = "missing_reference_outputs"
-    scientific_verification: Literal["not_performed"] = "not_performed"
+    legacy_reproduction: Literal["partial_iv_r_and_thermal"] = "partial_iv_r_and_thermal"
+    compatibility_models: list[str] = Field(
+        default_factory=lambda: ["legacy-iv-r-v1", "legacy-faiman-v1", "legacy-noct-v1"]
+    )
+    scientific_verification: Literal["incomplete_mpp_target_unmet"] = "incomplete_mpp_target_unmet"
     measurement_comparison: Literal["not_implemented"] = "not_implemented"
     calibration: Literal["not_implemented"] = "not_implemented"
 

@@ -16,10 +16,15 @@ from urllib.error import HTTPError, URLError
 from urllib.request import ProxyHandler, Request, build_opener
 
 from sunergy import __version__
+from sunergy.fetcher import normalize_legacy_iv_input
 
 ROOT = Path(__file__).resolve().parents[1]
 # Local smoke requests never use an ambient HTTP proxy or any external resource.
 HTTP = build_opener(ProxyHandler({}))
+if sys.platform == "win32":
+    PROCESS_FLAGS = subprocess.CREATE_NO_WINDOW
+else:
+    PROCESS_FLAGS = 0
 
 
 def unused_port() -> int:
@@ -39,6 +44,18 @@ def request(url: str, *, data: bytes | None = None) -> tuple[int, bytes]:
 
 def stop(process: subprocess.Popen[bytes]) -> None:
     if process.poll() is None:
+        if sys.platform == "win32":
+            # uv-managed Python and Next can launch children. Terminating only
+            # the launcher leaves the service and its log handle alive.
+            subprocess.run(
+                ["taskkill", "/PID", str(process.pid), "/T", "/F"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False,
+                creationflags=PROCESS_FLAGS,
+            )
+            process.wait(timeout=10)
+            return
         process.terminate()
         try:
             process.wait(timeout=10)
@@ -60,7 +77,7 @@ def service(
             stdin=subprocess.DEVNULL,
             stdout=output,
             stderr=subprocess.STDOUT,
-            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+            creationflags=PROCESS_FLAGS,
         )
         try:
             yield process
@@ -127,7 +144,19 @@ def smoke_test(*, frontend: bool) -> None:
                 request(f"{api_url}/api/v1/module-iv", data=b"{}")[0] == 422,
                 "Invalid requests must return a schema error",
             )
-            print("PASS: actual Uvicorn launch, health, capability and schema-error responses")
+            compatibility_input = normalize_legacy_iv_input(
+                json.loads(
+                    (ROOT / "tests/fixtures/legacy/iv_r/captured/inputs.json").read_text("utf-8")
+                )
+            )
+            status, content = request(
+                f"{api_url}/api/v1/compatibility/iv-r",
+                data=compatibility_input.model_dump_json().encode("utf-8"),
+            )
+            curves = json.loads(content)
+            expect(status == 200 and len(curves["cases"]) == 4, "Compatibility launch failed")
+            expect(len(curves["cases"][0]["voltage_v"]) == 100, "Compatibility grid differs")
+            print("PASS: Uvicorn launch, health, capabilities, validation and IV_R calculation")
             if not frontend:
                 return
 

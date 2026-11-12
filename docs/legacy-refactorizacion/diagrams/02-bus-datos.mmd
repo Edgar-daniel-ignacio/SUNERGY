@@ -1,0 +1,19 @@
+flowchart TD
+    A["clima@853"] -->|"escribe g_*.csv"| F1[("g_ano_n.csv<br/>indice sin nombre")]
+    F1 -->|"df_creator lee"| B["electric_parameters@1148"]
+    B -->|"escribe PE_*.csv / PE2_*.csv"| F2[("PE y PE2<br/>indice Time")]
+    B -->|"Output"| S1["store Datos_PE"]
+    B -->|"Output"| S2["store Datos_PE2"]
+    S1 --> C["7 callbacks lectores"]
+    S2 --> C
+    C -->|"df_creator_1 lee"| F2
+    %% #to-review: guardar_archivo reescribe hojas; no conserva los bytes originales. Info fuera de posición puede fallar.
+    G["upload-data"] -->|"guardar_archivo reescribe"| F3[("Uploaded_.xlsx<br/>lector espera Info al final")]
+    F3 --> H["IV_Corrct y IV_CI_cor"]
+    %% #to-review: estos stores sí transportan datos de tablas y curvas, no solo rutas.
+    H -->|"Output de datos"| S3["Tablarm / Tablars / Tabla_Info*"]
+    S3 --> I["Tabla_select y Tabla_R_Boots"]
+    %% sin conexiones y con solo escritor son dos condiciones distintas.
+    J["selected-rows-store<br/>sin escritor ni lector"]:::huerfano
+    T["toggle_inputs"] --> K["Prueba<br/>sin lector"]:::huerfano
+    classDef huerfano fill:#7f1d1d,stroke:#ef4444,color:#fff

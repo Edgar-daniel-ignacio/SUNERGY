@@ -1,0 +1,224 @@
+{
+  "cases": [
+    {
+      "case_id": "faiman-ui-parameters",
+      "profile_id": "legacy-faiman-v1",
+      "identifiers": [
+        "dark-calm",
+        "low-cold",
+        "nominal",
+        "bright-hot",
+        "windy"
+      ],
+      "columns": [
+        "Poa_global",
+        "temp_air",
+        "wind_speed",
+        "TFeinman"
+      ],
+      "records": [
+        [
+          0.0,
+          15.0,
+          0.0,
+          15.0
+        ],
+        [
+          200.0,
+          -5.0,
+          0.5,
+          2.0372976776917655
+        ],
+        [
+          800.0,
+          20.0,
+          1.0,
+          45.12562814070352
+        ],
+        [
+          1000.0,
+          35.0,
+          2.0,
+          60.85315408479835
+        ],
+        [
+          650.0,
+          27.0,
+          7.5,
+          35.51900393184797
+        ]
+      ],
+      "return": null,
+      "mutation": "Original frame retained; original columns unchanged; output column appended",
+      "missing_irradiance_failure": {
+        "exception_type": "AttributeError",
+        "message": "'DataFrame' object has no attribute 'Poa_global'"
+      }
+    },
+    {
+      "case_id": "faiman-alternate-parameters",
+      "profile_id": "legacy-faiman-v1",
+      "identifiers": [
+        "dark-calm",
+        "low-cold",
+        "nominal",
+        "bright-hot",
+        "windy"
+      ],
+      "columns": [
+        "Poa_global",
+        "temp_air",
+        "wind_speed",
+        "TFeinman"
+      ],
+      "records": [
+        [
+          0.0,
+          15.0,
+          0.0,
+          15.0
+        ],
+        [
+          200.0,
+          -5.0,
+          0.5,
+          1.3159224404724315
+        ],
+        [
+          800.0,
+          20.0,
+          1.0,
+          43.59882005899705
+        ],
+        [
+          1000.0,
+          35.0,
+          2.0,
+          61.06338615512928
+        ],
+        [
+          650.0,
+          27.0,
+          7.5,
+          37.32696768453497
+        ]
+      ],
+      "return": null,
+      "mutation": "Original frame retained; original columns unchanged; output column appended",
+      "missing_irradiance_failure": {
+        "exception_type": "AttributeError",
+        "message": "'DataFrame' object has no attribute 'Poa_global'"
+      }
+    },
+    {
+      "case_id": "noct-ui-parameter",
+      "profile_id": "legacy-noct-v1",
+      "identifiers": [
+        "dark-calm",
+        "low-cold",
+        "nominal",
+        "bright-hot",
+        "windy"
+      ],
+      "columns": [
+        "Poa_global",
+        "temp_air",
+        "wind_speed",
+        "NOCT"
+      ],
+      "records": [
+        [
+          0.0,
+          15.0,
+          0.0,
+          15.0
+        ],
+        [
+          200.0,
+          -5.0,
+          0.5,
+          0.75
+        ],
+        [
+          800.0,
+          20.0,
+          1.0,
+          43.0
+        ],
+        [
+          1000.0,
+          35.0,
+          2.0,
+          63.75
+        ],
+        [
+          650.0,
+          27.0,
+          7.5,
+          45.6875
+        ]
+      ],
+      "return": null,
+      "mutation": "Original frame retained; original columns unchanged; output column appended",
+      "missing_irradiance_failure": {
+        "exception_type": "AttributeError",
+        "message": "'DataFrame' object has no attribute 'Poa_global'"
+      }
+    },
+    {
+      "case_id": "noct-alternate-parameter",
+      "profile_id": "legacy-noct-v1",
+      "identifiers": [
+        "dark-calm",
+        "low-cold",
+        "nominal",
+        "bright-hot",
+        "windy"
+      ],
+      "columns": [
+        "Poa_global",
+        "temp_air",
+        "wind_speed",
+        "NOCT"
+      ],
+      "records": [
+        [
+          0.0,
+          15.0,
+          0.0,
+          15.0
+        ],
+        [
+          200.0,
+          -5.0,
+          0.5,
+          1.75
+        ],
+        [
+          800.0,
+          20.0,
+          1.0,
+          47.0
+        ],
+        [
+          1000.0,
+          35.0,
+          2.0,
+          68.75
+        ],
+        [
+          650.0,
+          27.0,
+          7.5,
+          48.9375
+        ]
+      ],
+      "return": null,
+      "mutation": "Original frame retained; original columns unchanged; output column appended",
+      "missing_irradiance_failure": {
+        "exception_type": "AttributeError",
+        "message": "'DataFrame' object has no attribute 'Poa_global'"
+      }
+    }
+  ]
+}

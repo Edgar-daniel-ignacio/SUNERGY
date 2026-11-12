@@ -1,0 +1,8 @@
+# Deliberately separate from the application environment. Python 3.12.
+# Exact legacy dependency versions were not supplied; this is a reconstruction.
+pvlib==0.13.1
+nrel-pysam==7.1.0
+numpy==2.3.4
+pandas==2.3.3
+scipy==1.16.3
+plotly==6.4.0
